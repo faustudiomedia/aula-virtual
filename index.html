@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Aula Virtual de Programación</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .task-card {
+            transition: all 0.3s ease;
+        }
+        
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .completed-task {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.5s ease;
+        }
+
+        .phase-completed {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .hidden { display: none; }
+        .block { display: block; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Pantalla de Login -->
+    <div id="loginScreen" class="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div class="glass-effect rounded-3xl p-12 text-center max-w-2xl w-full">
+            <div class="text-6xl mb-6">🎓</div>
+            <h1 class="text-4xl font-bold text-white mb-4">
+                Aula Virtual de Programación
+            </h1>
+            <p class="text-xl text-white text-opacity-90 mb-8">
+                Tu plataforma personal para aprender a programar desde cero
+            </p>
+            
+            <!-- Stats -->
+            <div class="grid md:grid-cols-3 gap-6 mb-8 text-white">
+                <div class="glass-effect p-4 rounded-xl">
+                    <div class="text-3xl mb-2">👥</div>
+                    <div class="text-2xl font-bold">247</div>
+                    <div class="text-sm opacity-80">Estudiantes</div>
+                </div>
+                <div class="glass-effect p-4 rounded-xl">
+                    <div class="text-3xl mb-2">🎯</div>
+                    <div class="text-2xl font-bold">73%</div>
+                    <div class="text-sm opacity-80">Tasa de éxito</div>
+                </div>
+                <div class="glass-effect p-4 rounded-xl">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <div class="text-2xl font-bold">18</div>
+                    <div class="text-sm opacity-80">Activos hoy</div>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="glass-effect rounded-2xl p-6 mb-6 text-left">
+                <h3 class="text-xl font-semibold text-white mb-4 text-center">Acceso al Aula</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-1">Email</label>
+                        <input
+                            id="emailInput"
+                            type="email"
+                            class="w-full p-3 border border-white border-opacity-30 rounded-lg bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                            placeholder="tu.email@gmail.com"
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-1">Contraseña</label>
+                        <input
+                            id="passwordInput"
+                            type="password"
+                            class="w-full p-3 border border-white border-opacity-30 rounded-lg bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                            placeholder="••••••••"
+                        />
+                    </div>
+                    <button
+                        onclick="handleLogin()"
+                        class="w-full bg-white text-purple-900 py-3 rounded-lg hover:bg-opacity-90 transition-colors font-medium"
+                    >
+                        🚀 Ingresar al Aula
+                    </button>
+                    <button
+                        onclick="loginAsGuest()"
+                        class="w-full glass-effect text-white py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-colors text-sm"
+                    >
+                        🎮 Probar como invitado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aula Virtual Principal -->
+    <div id="mainApp" class="hidden min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
+        <!-- Header -->
+        <div class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-6xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-2xl">🎓</div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-800">Aula Virtual de Programación</h1>
+                            <p class="text-sm text-gray-600">Plan personalizado de aprendizaje</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 bg-indigo-50 px-4 py-2 rounded-lg">
+                            <span class="text-2xl">👨‍💻</span>
+                            <div class="text-sm">
+                                <div id="userName" class="font-medium text-gray-800">Usuario</div>
+                                <div id="userPoints" class="text-gray-600">0 puntos</div>
+                            </div>
+                        </div>
+                        <button
+                            onclick="handleLogout()"
+                            class="p-2 text-gray-600 hover:text-gray-800 rounded-lg hover:bg-gray-100"
+                        >
+                            🚪 Salir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto p-6">
+            <!-- Dashboard -->
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">Mi Progreso</h3>
+                        <span class="text-2xl">🏆</span>
+                    </div>
+                    <div id="progressPercentage" class="text-3xl font-bold text-indigo-600 mb-2">0%</div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div id="progressBar" class="progress-bar h-3 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" class="text-sm text-gray-600 mt-2">0/15 tareas completadas</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">Puntos</h3>
+                        <span class="text-2xl">⭐</span>
+                    </div>
+                    <div id="totalPointsDisplay" class="text-3xl font-bold text-green-600 mb-2">0</div>
+                    <p class="text-sm text-gray-600">de 375 puntos totales</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-800">Racha</h3>
+                        <span class="text-2xl">🔥</span>
+                    </div>
+                    <div id="streakDisplay" class="text-3xl font-bold text-orange-600 mb-2">0 días</div>
+                    <p class="text-sm text-gray-600">¡Sigue así!</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <!-- Selector de Ruta -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">Tu ruta de aprendizaje:</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div onclick="selectPath('python')" id="pythonPath" class="p-4 rounded-lg border-2 border-indigo-500 bg-indigo-50 cursor-pointer transition-all">
+                            <div class="w-4 h-4 rounded-full bg-blue-500 mb-2"></div>
+                            <h3 class="font-semibold text-gray-800">Python - Desarrollo General</h3>
+                            <p class="text-sm text-gray-600">Perfecto para principiantes. Sintaxis clara y versátil.</p>
+                        </div>
+                        <div onclick="selectPath('javascript')" id="javascriptPath" class="p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 cursor-pointer transition-all">
+                            <div class="w-4 h-4 rounded-full bg-yellow-500 mb-2"></div>
+                            <h3 class="font-semibold text-gray-800">JavaScript - Desarrollo Web</h3>
+                            <p class="text-sm text-gray-600">Ideal para crear sitios web interactivos desde el inicio.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fases del Plan -->
+                <div id="learningContent">
+                    <!-- Contenido generado dinámicamente -->
+                </div>
+
+                <!-- Recursos -->
+                <div class="mt-8 grid md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">📚 Recursos de Estudio</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-white rounded-lg border">
+                                <span class="text-xl mr-3">📖</span>
+                                <div>
+                                    <div class="font-medium text-gray-800">Python.org Tutorial</div>
+                                    <div class="text-sm text-gray-500">Documentación oficial</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 bg-white rounded-lg border">
+                                <span class="text-xl mr-3">💡</span>
+                                <div>
+                                    <div class="font-medium text-gray-800">freeCodeCamp</div>
+                                    <div class="text-sm text-gray-500">Cursos interactivos gratis</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-green-100 to-teal-100 rounded-xl p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">👥 Estudiantes Activos</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-white rounded-lg border">
+                                <span class="text-2xl mr-3">👩‍💻</span>
+                                <div class="flex-1">
+                                    <div class="font-medium text-gray-800">María García</div>
+                                    <div class="text-sm text-gray-500">45% completado</div>
+                                </div>
+                                <div class="w-12 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-green-500 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 bg-white rounded-lg border">
+                                <span class="text-2xl mr-3">👨‍🎓</span>
+                                <div class="flex-1">
+                                    <div class="font-medium text-gray-800">Carlos López</div>
+                                    <div class="text-sm text-gray-500">67% completado</div>
+                                </div>
+                                <div class="w-12 h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-green-500 rounded-full" style="width: 67%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consejos -->
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                    <h3 class="font-semibold text-gray-800 mb-3">💡 Tu plan de éxito personalizado:</h3>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div><strong>📅 Horario sugerido:</strong> 1-2 horas diarias, preferible misma hora</div>
+                        <div><strong>🎯 Meta semanal:</strong> Completar 1 fase cada 4 semanas</div>
+                        <div><strong>🏆 Recompensas:</strong> Celebra cada proyecto completado</div>
+                        <div><strong>🤝 Comunidad:</strong> Comparte tu progreso en redes sociales</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        let currentUser = null;
+        let completedTasks = new Set();
+        let currentPath = 'python';
+        let totalPoints = 0;
+
+        // Datos del plan de estudios
+        const learningPaths = {
+            python: {
+                name: 'Python - Desarrollo General',
+                phases: [
+                    {
+                        title: 'Fundamentos (Semanas 1-4)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'py1', text: 'Instalar Python y configurar VS Code', time: '1 día', points: 10 },
+                            { id: 'py2', text: 'Variables, tipos de datos y operaciones básicas', time: '3 días', points: 15 },
+                            { id: 'py3', text: 'Estructuras de control (if, for, while)', time: '4 días', points: 20 },
+                            { id: 'py4', text: 'Funciones y scope', time: '3 días', points: 15 },
+                            { id: 'py5', text: 'Listas, diccionarios y tuplas', time: '3 días', points: 20 },
+                            { id: 'py6', text: 'Proyecto: Calculadora básica', time: '2 días', points: 30 }
+                        ]
+                    },
+                    {
+                        title: 'Intermedio (Semanas 5-8)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'py7', text: 'Programación orientada a objetos (clases)', time: '5 días', points: 25 },
+                            { id: 'py8', text: 'Manejo de archivos y excepciones', time: '3 días', points: 20 },
+                            { id: 'py9', text: 'Módulos y paquetes', time: '2 días', points: 15 },
+                            { id: 'py10', text: 'Librerías populares (requests, datetime)', time: '4 días', points: 25 },
+                            { id: 'py11', text: 'Proyecto: Sistema de gestión simple', time: '4 días', points: 40 }
+                        ]
+                    },
+                    {
+                        title: 'Especialización (Semanas 9-12)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'py12', text: 'Elegir especialización (web, datos, o automatización)', time: '1 día', points: 10 },
+                            { id: 'py13', text: 'Aprender framework específico (Django/Flask/Pandas)', time: '10 días', points: 50 },
+                            { id: 'py14', text: 'Git y control de versiones', time: '2 días', points: 20 },
+                            { id: 'py15', text: 'Proyecto final integrador', time: '7 días', points: 60 }
+                        ]
+                    }
+                ]
+            },
+            javascript: {
+                name: 'JavaScript - Desarrollo Web',
+                phases: [
+                    {
+                        title: 'Fundamentos Web (Semanas 1-4)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'js1', text: 'HTML básico y estructura de páginas', time: '2 días', points: 10 },
+                            { id: 'js2', text: 'CSS para estilos y diseño responsivo', time: '4 días', points: 20 },
+                            { id: 'js3', text: 'JavaScript básico: variables y funciones', time: '4 días', points: 20 },
+                            { id: 'js4', text: 'DOM manipulation y eventos', time: '3 días', points: 25 },
+                            { id: 'js5', text: 'Proyecto: Página web interactiva', time: '3 días', points: 35 }
+                        ]
+                    },
+                    {
+                        title: 'JavaScript Intermedio (Semanas 5-8)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'js6', text: 'Arrays, objetos y métodos avanzados', time: '3 días', points: 20 },
+                            { id: 'js7', text: 'Asynchronous JavaScript (Promises, async/await)', time: '4 días', points: 30 },
+                            { id: 'js8', text: 'APIs y fetch para datos externos', time: '3 días', points: 25 },
+                            { id: 'js9', text: 'Introducción a frameworks (React básico)', time: '6 días', points: 35 },
+                            { id: 'js10', text: 'Proyecto: App web dinámica', time: '4 días', points: 40 }
+                        ]
+                    },
+                    {
+                        title: 'Desarrollo Avanzado (Semanas 9-12)',
+                        duration: '4 semanas',
+                        tasks: [
+                            { id: 'js11', text: 'React hooks y state management', time: '5 días', points: 30 },
+                            { id: 'js12', text: 'Node.js para backend básico', time: '5 días', points: 35 },
+                            { id: 'js13', text: 'Bases de datos y deployment', time: '4 días', points: 25 },
+                            { id: 'js14', text: 'Proyecto: Aplicación full-stack', time: '8 días', points: 50 }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Funciones de autenticación
+        function handleLogin() {
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            
+            if (email.includes('@')) {
+                currentUser = {
+                    email: email,
+                    name: email.split('@')[0],
+                    avatar: '👨‍💻'
+                };
+                
+                // Cargar progreso guardado
+                loadUserProgress();
+                showMainApp();
+            } else {
+                alert('Por favor ingresa un email válido');
+            }
+        }
+
+        function loginAsGuest() {
+            currentUser = {
+                email: 'invitado@demo.com',
+                name: 'Invitado',
+                avatar: '🎮'
+            };
+            showMainApp();
+        }
+
+        function handleLogout() {
+            // Guardar progreso antes de salir
+            if (currentUser) {
+                saveUserProgress();
+            }
+            currentUser = null;
+            completedTasks.clear();
+            totalPoints = 0;
+            showLoginScreen();
+        }
+
+        // Funciones de UI
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Actualizar datos del usuario
+            document.getElementById('userName').textContent = currentUser.name;
+            updateProgress();
+            renderLearningContent();
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        // Funciones de progreso
+        function loadUserProgress() {
+            const saved = localStorage.getItem(`progress_${currentUser.email}`);
+            if (saved) {
+                const progressData = JSON.parse(saved);
+                completedTasks = new Set(progressData.tasks || []);
+                totalPoints = progressData.points || 0;
+            }
+        }
+
+        function saveUserProgress() {
+            const progressData = {
+                tasks: Array.from(completedTasks),
+                points: totalPoints,
+                lastUpdate: new Date().toISOString()
+            };
+            localStorage.setItem(`progress_${currentUser.email}`, JSON.stringify(progressData));
+        }
+
+        function toggleTask(taskId, taskPoints) {
+            if (completedTasks.has(taskId)) {
+                completedTasks.delete(taskId);
+                totalPoints -= taskPoints;
+            } else {
+                completedTasks.add(taskId);
+                totalPoints += taskPoints;
+            }
+            
+            updateProgress();
+            renderLearningContent();
+            saveUserProgress();
+        }
+
+        function updateProgress() {
+            const path = learningPaths[currentPath];
+            const totalTasks = path.phases.reduce((sum, phase) => sum + phase.tasks.length, 0);
+            const completedCount = completedTasks.size;
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${completedCount}/${totalTasks} tareas completadas`;
+            document.getElementById('totalPointsDisplay').textContent = totalPoints;
+            document.getElementById('userPoints').textContent = totalPoints + ' puntos';
+            document.getElementById('streakDisplay').textContent = Math.min(completedCount, 7) + ' días';
+        }
+
+        function selectPath(pathName) {
+            currentPath = pathName;
+            
+            // Actualizar estilos de selección
+            document.getElementById('pythonPath').className = pathName === 'python' 
+                ? 'p-4 rounded-lg border-2 border-indigo-500 bg-indigo-50 cursor-pointer transition-all'
+                : 'p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 cursor-pointer transition-all';
+                
+            document.getElementById('javascriptPath').className = pathName === 'javascript'
+                ? 'p-4 rounded-lg border-2 border-indigo-500 bg-indigo-50 cursor-pointer transition-all'
+                : 'p-4 rounded-lg border-2 border-gray-200 hover:border-gray-300 cursor-pointer transition-all';
+            
+            renderLearningContent();
+            updateProgress();
+        }
+
+        function renderLearningContent() {
+            const path = learningPaths[currentPath];
+            const container = document.getElementById('learningContent');
+            
+            let html = '<div class="space-y-6">';
+            
+            path.phases.forEach((phase, phaseIndex) => {
+                const phaseCompleted = phase.tasks.every(task => completedTasks.has(task.id));
+                const phaseProgress = phase.tasks.filter(task => completedTasks.has(task.id)).length;
+                
+                html += `
+                    <div class="rounded-xl p-6 border-2 transition-all ${phaseCompleted ? 'phase-completed border-green-300' : 'bg-gray-50 border-gray-200'}">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3 text-white ${phaseCompleted ? 'bg-green-500' : 'bg-indigo-500'}">
+                                    ${phaseCompleted ? '✓' : phaseIndex + 1}
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800">${phase.title}</h3>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        📅 ${phase.duration}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-600">${phaseProgress}/${phase.tasks.length}</div>
+                                ${phaseCompleted ? '<div class="text-green-600 font-semibold text-sm">¡Completado! 🎉</div>' : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                `;
+                
+                phase.tasks.forEach((task, taskIndex) => {
+                    const isCompleted = completedTasks.has(task.id);
+                    html += `
+                        <div onclick="toggleTask('${task.id}', ${task.points})" 
+                             class="task-card flex items-center p-4 rounded-lg cursor-pointer border ${isCompleted ? 'completed-task border-green-300' : 'bg-white border-gray-200 hover:border-indigo-300'}">
+                            <span class="text-xl mr-3">${isCompleted ? '✅' : '⭕'}</span>
+                            <div class="flex-1">
+                                <span class="font-medium ${isCompleted ? 'line-through text-white' : 'text-gray-800'}">
+                                    ${task.text}
+                                </span>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span class="text-xs ${isCompleted ? 'text-white text-opacity-80' : 'text-gray-500'}">${task.time}</span>
+                                    <span class="text-xs px-2 py-1 rounded-full ${isCompleted ? 'bg-white bg-opacity-20 text-white' : 'bg-indigo-100 text-indigo-800'}">
+                                        +${task.points} pts
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="text-gray-400">→</span>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay usuario guardado
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loadUserProgress();
+                showMainApp();
+            }
+        });
+
+        // Guardar usuario en localStorage
+        function showMainApp() {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            updateProgress();
+            renderLearningContent();
+        }
+    </script>
+</body>
+</html>
