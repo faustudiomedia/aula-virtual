@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎓 Aula Virtual de Programación</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+    <!-- Corrección: usar <link> en vez de <script> para TailwindCSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -398,10 +399,10 @@
 
         // Funciones de UI
         function showMainApp() {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainApp').classList.remove('hidden');
             
-            // Actualizar datos del usuario
             document.getElementById('userName').textContent = currentUser.name;
             updateProgress();
             renderLearningContent();
@@ -547,17 +548,6 @@
                 showMainApp();
             }
         });
-
-        // Guardar usuario en localStorage
-        function showMainApp() {
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            
-            document.getElementById('userName').textContent = currentUser.name;
-            updateProgress();
-            renderLearningContent();
-        }
     </script>
 </body>
 </html>
