@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --mavic-navy: #050F1F;
+  --mavic-blue: #1A56DB;
+  --mavic-sky: #38BDF8;
+  --mavic-light: #BAE6FD;
+  --mavic-pale: #F0F9FF;
+  --background: var(--mavic-pale);
+  --foreground: var(--mavic-navy);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-mavic-navy: var(--mavic-navy);
+  --color-mavic-blue: var(--mavic-blue);
+  --color-mavic-sky: var(--mavic-sky);
+  --color-mavic-light: var(--mavic-light);
+  --color-mavic-pale: var(--mavic-pale);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* Institute CSS custom properties (set by middleware via headers → root) */
+:root {
+  --inst-primary: var(--mavic-blue);
+  --inst-secondary: var(--mavic-sky);
+  --inst-name: "MAVIC";
+}
