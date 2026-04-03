@@ -17,3 +17,5 @@ export function FormError({ message }: { message?: string | null }) {
                                             </div>
                 )
                 }
+
+                export default FormError

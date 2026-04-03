@@ -31,7 +31,7 @@ export default async function TeacherDashboard() {
                                                             .in('course_id', courseList.map((c) => c.id))
 
                                                               const countMap: Record<string, number> = {}
-                                                                ;(enrollmentCounts ?? []).forEach((e) => {
+                                                                ;(enrollmentCounts ?? []).forEach((e: { course_id: string }) => {
                                                                     countMap[e.course_id] = (countMap[e.course_id] ?? 0) + 1
                                                                       })
 
