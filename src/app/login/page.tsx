@@ -1,4 +1,4 @@
-import { login } from '@/app/actions/auth'
+import { LoginForm } from './LoginForm'
 
 interface Props {
   searchParams: Promise<{ error?: string }>
@@ -33,56 +33,7 @@ export default async function LoginPage({ searchParams }: Props) {
             Ingresá con tu cuenta institucional
           </p>
 
-          {errorMsg && (
-            <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-sm">
-              {errorMsg}
-            </div>
-          )}
-
-          <form action={login} className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="usuario@instituto.edu"
-                className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
-                           focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
-                           transition-all text-sm"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
-                           focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
-                           transition-all text-sm"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-[#1A56DB] to-[#38BDF8]
-                         text-white font-semibold text-sm shadow-lg shadow-[#1A56DB]/30
-                         hover:opacity-90 active:scale-[0.98] transition-all mt-2"
-            >
-              Ingresar
-            </button>
-          </form>
+          <LoginForm initialError={errorMsg} />
 
           {/* Role indicator */}
           <div className="mt-6 pt-6 border-t border-white/10">
