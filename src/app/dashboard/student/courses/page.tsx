@@ -82,9 +82,3 @@ export default async function StudentCoursesPage() {
                                                                                                                                                                                                                                           </div>
                                                                                                                                                                                                                                             )
                                                                                                                                                                                                                                             }
-                                                                                                                                                                                                                                                                                                                                                                                                                        )}
-                                                                                                                                                                                                                            )
-                                                                                                                                                                                                  })}
-                                                                                                                                                                          )
-                                                                                                                          )
-}

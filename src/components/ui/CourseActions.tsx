@@ -1,4 +1,11 @@
-── Edit Course Form ────────────────────────────────────────────
+'use client'
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import type { Course } from '@/lib/types'
+import { updateCourse, deleteCourse } from '@/app/actions/courses'
+import FormError from './FormError'
+
+// ── Edit Course Form ────────────────────────────────────────────
 export function EditCourseForm({ course, onClose }: { course: Course; onClose: () => void }) {
   const router = useRouter()
     const [isPending, startTransition] = useTransition()
