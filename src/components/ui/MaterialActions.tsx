@@ -2,12 +2,14 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import { deleteMaterial, updateMaterial } from '@/app/actions/courses'
 import type { Material } from '@/lib/types'
 import FormError from './FormError'
 
 export function DeleteMaterialButton({ materialId, materialTitle }: { materialId: string; materialTitle: string }) {
   const router = useRouter()
+  const queryClient = useQueryClient()
     const [isPending, startTransition] = useTransition()
       const [confirming, setConfirming] = useState(false)
         const [error, setError] = useState<string | null>(null)
@@ -16,6 +18,7 @@ export function DeleteMaterialButton({ materialId, materialTitle }: { materialId
               startTransition(async () => {
                     const result = await deleteMaterial(materialId)
                           if (!result.success) { setError(result.error); return }
+                                queryClient.invalidateQueries({ queryKey: ['materials'] })
                                 router.refresh()
                                     })
                                       }
@@ -53,6 +56,7 @@ export function DeleteMaterialButton({ materialId, materialTitle }: { materialId
 
                                                                                                                                                                                                                                                                           export function EditMaterialButton({ material }: { material: Material }) {
                                                                                                                                                                                                                                                                             const router = useRouter()
+  const queryClient = useQueryClient()
                                                                                                                                                                                                                                                                               const [editing, setEditing] = useState(false)
                                                                                                                                                                                                                                                                                 const [isPending, startTransition] = useTransition()
                                                                                                                                                                                                                                                                                   const [error, setError] = useState<string | null>(null)
@@ -69,7 +73,8 @@ export function DeleteMaterialButton({ materialId, materialTitle }: { materialId
                                                                                                                                                                                                                                                                                                                         startTransition(async () => {
                                                                                                                                                                                                                                                                                                                               const result = await updateMaterial(material.id, fd)
                                                                                                                                                                                                                                                                                                                                     if (!result.success) { setError(result.error); return }
-                                                                                                                                                                                                                                                                                                                                          router.refresh()
+                                                                                                                                                                                                                                                                                                                                          queryClient.invalidateQueries({ queryKey: ['materials'] })
+                                router.refresh()
                                                                                                                                                                                                                                                                                                                                                 setEditing(false)
                                                                                                                                                                                                                                                                                                                                                     })
                                                                                                                                                                                                                                                                                                                                                       }

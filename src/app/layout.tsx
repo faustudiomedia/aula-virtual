@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
+import { Providers } from '@/lib/providers'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -29,7 +30,9 @@ export default async function RootLayout({
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
       </head>
       <body className="min-h-full flex flex-col bg-[#F0F9FF] text-[#050F1F]">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
