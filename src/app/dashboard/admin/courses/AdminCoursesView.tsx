@@ -122,13 +122,13 @@ export default function AdminCoursesView() {
               <div className="flex gap-2">
                 {currentPage > 1 && (
                   <a href={buildUrl({ page: String(currentPage - 1) })}
-                    className="px-4 py-2 rounded-xl border border-black/10 text-sm hover:bg-black/5 transition">
+                    className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F]/70 font-medium hover:bg-black/5 transition">
                     ← Anterior
                   </a>
                 )}
                 {currentPage < totalPages && (
                   <a href={buildUrl({ page: String(currentPage + 1) })}
-                    className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm hover:opacity-90 transition">
+                    className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:opacity-90 transition">
                     Siguiente →
                   </a>
                 )}
