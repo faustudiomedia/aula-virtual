@@ -54,6 +54,16 @@ export interface Material {
   created_at: string
 }
 
+export interface EnrollmentCode {
+  id: string
+  course_id: string
+  code: string
+  max_uses: number | null
+  uses: number
+  expires_at: string | null
+  created_at: string
+}
+
 export interface InstituteTheme {
   name: string
   primaryColor: string
