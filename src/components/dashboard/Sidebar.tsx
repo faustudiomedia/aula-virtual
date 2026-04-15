@@ -59,7 +59,7 @@ export default function Sidebar({
           {logoUrl ? (
             <Image
               src={logoUrl}
-              alt={instituteName}
+              alt={instituteName ?? ""}
               width={32}
               height={32}
               className="w-8 h-8 rounded-lg object-cover"
