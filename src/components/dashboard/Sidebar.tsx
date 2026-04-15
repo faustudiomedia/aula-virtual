@@ -14,6 +14,7 @@ interface NavItem {
 const superAdminNav: NavItem[] = [
   { label: "Panel Global",  href: "/dashboard/super-admin",            icon: "\xf0\x9f\x8c\x90" },
   { label: "Institutos",    href: "/dashboard/super-admin/institutes", icon: "\xf0\x9f\x8f\xab" },
+  { label: "Cursos",        href: "/dashboard/super-admin/courses",    icon: "\xf0\x9f\x93\x9a" },
   { label: "Usuarios",      href: "/dashboard/super-admin/users",      icon: "\xf0\x9f\x91\xa5" },
   { label: "Estad\xc3\xadsticas", href: "/dashboard/super-admin/stats", icon: "\xf0\x9f\x93\x8a" },
 ];
