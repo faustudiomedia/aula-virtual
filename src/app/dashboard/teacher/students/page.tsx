@@ -15,15 +15,20 @@ export default async function AllStudentsPage() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "profesor") redirect("/dashboard");
+  if (profile?.role !== "profesor" && profile?.role !== "super_admin") redirect("/dashboard");
 
-  // Students from same institute
-  const { data: students } = await supabase
+  // super_admin sees all students across institutes; profesor sees only their institute
+  let studentsQuery = supabase
     .from("profiles")
     .select("id, full_name, email, created_at")
-    .eq("institute_id", profile.institute_id)
     .eq("role", "alumno")
     .order("full_name");
+
+  if (profile?.role === "profesor" && profile.institute_id) {
+    studentsQuery = studentsQuery.eq("institute_id", profile.institute_id);
+  }
+
+  const { data: students } = await studentsQuery;
 
   // Get enrollment stats for each student
   const studentIds = (students ?? []).map((s) => s.id);
@@ -51,7 +56,7 @@ export default async function AllStudentsPage() {
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
-        Alumnos del instituto
+        Alumnos
       </h1>
       <p className="text-[#050F1F]/50 mb-8">
         {students?.length ?? 0} alumno{(students?.length ?? 0) !== 1 ? "s" : ""}{" "}

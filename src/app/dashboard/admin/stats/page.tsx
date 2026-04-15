@@ -13,7 +13,7 @@ export default async function AdminStatsPage() {
     .select("role")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin") redirect("/dashboard/admin");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard/admin");
 
   // All counts done in the DB with exact count — no JS loops
   const [

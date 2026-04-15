@@ -15,7 +15,7 @@ export default async function AllMaterialsPage() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "profesor") redirect("/dashboard");
+  if (profile?.role !== "profesor" && profile?.role !== "super_admin") redirect("/dashboard");
 
   return <AllMaterialsView teacherId={user.id} />;
 }

@@ -15,11 +15,14 @@ export default async function StudentCoursesPage() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "alumno") redirect("/dashboard");
+  if (profile?.role !== "alumno" && profile?.role !== "super_admin") redirect("/dashboard");
+
+  // super_admin has no institute_id — the catalog will show empty (no institute selected)
+  const instituteId = profile?.institute_id ?? null;
 
   return (
     <StudentCoursesCatalogView
-      instituteId={profile.institute_id}
+      instituteId={instituteId}
       userId={user.id}
     />
   );
