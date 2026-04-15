@@ -19,7 +19,7 @@ export default async function StudentDashboard() {
     .eq("id", user.id)
     .single();
 
-  if (!profile || (profile.role !== "alumno" && profile.role !== "super_admin"))
+  if (!profile || profile.role !== "alumno")
     redirect(getDashboardPath(profile?.role ?? "alumno"));
 
   const { data: enrollments } = await supabase
