@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { login } from '@/app/actions/auth';
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { login } from "@/app/actions/auth";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -12,18 +12,18 @@ function SubmitButton() {
       disabled={pending}
       className={`w-full py-2.5 px-4 rounded-lg text-white font-semibold text-sm shadow-lg transition-all mt-2 ${
         pending
-          ? 'bg-white/20 cursor-not-allowed shadow-none'
-          : 'bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] shadow-[#1A56DB]/30 hover:opacity-90 active:scale-[0.98]'
+          ? "bg-white/20 cursor-not-allowed shadow-none"
+          : "bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] shadow-[#1A56DB]/30 hover:opacity-90 active:scale-[0.98]"
       }`}
     >
-      {pending ? 'Ingresando...' : 'Ingresar'}
+      {pending ? "Ingresando..." : "Ingresar"}
     </button>
   );
 }
 
 export function LoginForm({ initialError }: { initialError?: string }) {
   const [state, formAction] = useActionState(login, null);
-  
+
   const displayError = state?.error || initialError;
 
   return (
@@ -34,7 +34,10 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         </div>
       )}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-[#BAE6FD] mb-1.5"
+        >
           Correo electrónico
         </label>
         <input
@@ -48,12 +51,17 @@ export function LoginForm({ initialError }: { initialError?: string }) {
                      transition-all text-sm"
         />
         {state?.fieldErrors?.email && (
-          <p className="mt-1 text-xs text-red-400">{state.fieldErrors.email.join(', ')}</p>
+          <p className="mt-1 text-xs text-red-400">
+            {state.fieldErrors.email.join(", ")}
+          </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-[#BAE6FD] mb-1.5"
+        >
           Contraseña
         </label>
         <input
@@ -67,7 +75,9 @@ export function LoginForm({ initialError }: { initialError?: string }) {
                      transition-all text-sm"
         />
         {state?.fieldErrors?.password && (
-          <p className="mt-1 text-xs text-red-400">{state.fieldErrors.password.join(', ')}</p>
+          <p className="mt-1 text-xs text-red-400">
+            {state.fieldErrors.password.join(", ")}
+          </p>
         )}
       </div>
 

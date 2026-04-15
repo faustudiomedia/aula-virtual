@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useRef, useTransition } from 'react';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRef, useTransition } from "react";
 
 export function SearchInput({ placeholder }: { placeholder?: string }) {
   const router = useRouter();
@@ -17,11 +17,11 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
 
     timeoutRef.current = setTimeout(() => {
       const params = new URLSearchParams(searchParams);
-      params.set('page', '1');
+      params.set("page", "1");
       if (term) {
-        params.set('q', term);
+        params.set("q", term);
       } else {
-        params.delete('q');
+        params.delete("q");
       }
       startTransition(() => {
         router.replace(`${pathname}?${params.toString()}`);
@@ -33,8 +33,8 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
     <div className="relative">
       <input
         type="search"
-        placeholder={placeholder || 'Buscar...'}
-        defaultValue={searchParams.get('q')?.toString()}
+        placeholder={placeholder || "Buscar..."}
+        defaultValue={searchParams.get("q")?.toString()}
         onChange={(e) => handleSearch(e.target.value)}
         className="px-4 py-2 w-full max-w-sm text-sm bg-transparent border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
       />
