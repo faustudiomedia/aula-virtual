@@ -5,7 +5,7 @@ import { useCoursesForInstitute, useEnrollments } from "@/lib/hooks/use-data";
 import EnrollButton from "@/components/ui/EnrollButton";
 
 interface Props {
-  instituteId: string;
+  instituteId: string | null;
   userId: string;
 }
 

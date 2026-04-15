@@ -20,7 +20,7 @@ export default async function MaterialsPage({ params }: Props) {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "profesor") redirect("/dashboard");
+  if (profile?.role !== "profesor" && profile?.role !== "super_admin") redirect("/dashboard");
 
   return <CourseMaterialsView courseId={courseId} />;
 }

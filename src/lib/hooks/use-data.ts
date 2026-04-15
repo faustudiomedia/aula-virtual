@@ -58,7 +58,7 @@ export function useTeacherCourses(teacherId: string) {
 }
 
 // ─── Published courses for an institute (student catalog) ─────────
-export function useCoursesForInstitute(instituteId: string) {
+export function useCoursesForInstitute(instituteId: string | null) {
   return useQuery({
     queryKey: queryKeys.coursesForInstitute(instituteId),
     queryFn: async () => {

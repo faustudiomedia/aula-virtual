@@ -20,7 +20,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
     .select("role")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin") redirect("/dashboard/admin");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard/admin");
 
   async function handleCreate(formData: FormData) {
     "use server";

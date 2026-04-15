@@ -87,6 +87,7 @@ export async function login(
 
   const role = profile?.role ?? "alumno";
 
+  if (role === "super_admin") redirect("/dashboard/super-admin");
   if (role === "admin") redirect("/dashboard/admin");
   if (role === "profesor") redirect("/dashboard/teacher");
   redirect("/dashboard/student");

@@ -20,7 +20,7 @@ export async function createCourse(formData: FormData): Promise<ActionResult> {
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("institute_id")
+      .select("institute_id, role")
       .eq("id", user.id)
       .single();
     if (profileError || !profile)
@@ -29,11 +29,20 @@ export async function createCourse(formData: FormData): Promise<ActionResult> {
     const title = (formData.get("title") as string)?.trim();
     if (!title) return { success: false, error: "El título es requerido" };
 
+    // super_admin can provide explicit institute_id and teacher_id
+    const isSuperAdmin = profile.role === "super_admin";
+    const instituteId = isSuperAdmin
+      ? (formData.get("institute_id") as string) || null
+      : profile.institute_id;
+    const teacherId = isSuperAdmin
+      ? (formData.get("teacher_id") as string) || null
+      : user.id;
+
     const { error } = await supabase.from("courses").insert({
       title,
       description: (formData.get("description") as string)?.trim() || null,
-      teacher_id: user.id,
-      institute_id: profile.institute_id,
+      teacher_id: teacherId,
+      institute_id: instituteId,
       published: formData.get("published") === "on",
     });
     if (error) return { success: false, error: error.message };

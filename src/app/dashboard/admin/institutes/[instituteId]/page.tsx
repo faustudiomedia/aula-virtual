@@ -36,7 +36,7 @@ export default async function InstituteDetailPage({ params }: Props) {
     .select("role")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin") redirect("/dashboard/admin");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard/admin");
 
   const { data: institute } = await supabase
     .from("institutes")
