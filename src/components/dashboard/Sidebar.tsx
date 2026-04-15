@@ -102,6 +102,7 @@ export default function Sidebar({
             (item.href !== "/dashboard/admin" &&
               item.href !== "/dashboard/teacher" &&
               item.href !== "/dashboard/student" &&
+              item.href !== "/dashboard/super-admin" &&
               pathname.startsWith(item.href));
           return (
             <Link
