@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+// Force a fresh Supabase read on every request so a stale cached role
+// cannot cause infinite redirect loops when the user's role changes.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const supabase = await createClient();
   const {

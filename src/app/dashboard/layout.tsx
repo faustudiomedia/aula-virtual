@@ -22,7 +22,26 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
-  if (!profile) redirect("/login");
+  // If the profile read failed (e.g. RLS not yet configured in Supabase) but
+  // the user IS authenticated, do NOT redirect to /login.  Doing so would
+  // send the user through the proxy which redirects them back here, creating
+  // an infinite loop.  Show a recoverable error state instead.
+  if (!profile) {
+    return (
+      <div className="flex min-h-screen bg-[#F0F9FF]">
+        <main className="flex-1 overflow-auto flex items-center justify-center">
+          <div className="text-center p-8">
+            <p className="text-lg font-semibold text-[#050F1F]">
+              No se pudo cargar tu perfil
+            </p>
+            <p className="text-sm text-[#050F1F]/50 mt-2">
+              Por favor recargá la página o volvé a iniciar sesión.
+            </p>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   const headersList = await headers();
   const instituteName = headersList.get("x-institute-name") ?? "MAVIC";

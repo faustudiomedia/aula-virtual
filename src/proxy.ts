@@ -37,8 +37,11 @@ export async function proxy(request: NextRequest) {
   }
 
   // ── Redirect authenticated users away from login ──────────────────────────
+  // Send to / so the root page (force-dynamic) can re-read the role and
+  // redirect to the correct dashboard instead of pointing at /dashboard
+  // directly (which has no page.tsx and would 404).
   if (user && pathname === "/login") {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // ── Multi-institute branding via request header ───────────────────────────

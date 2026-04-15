@@ -18,8 +18,10 @@ export default async function StudentDashboard() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "alumno") redirect("/dashboard");
-
+  // Role enforcement is handled by the middleware (proxy.ts).
+  // Redirecting here to /dashboard would cause a loop because /dashboard
+  // has no page.tsx — the middleware is responsible for keeping users on
+  // their correct route.
   const { data: enrollments } = await supabase
     .from("enrollments")
     .select("*, courses(*)")

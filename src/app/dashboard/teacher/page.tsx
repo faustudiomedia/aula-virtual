@@ -15,9 +15,11 @@ export default async function TeacherDashboard() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "profesor") redirect("/dashboard");
-
+  // Role enforcement is handled by the middleware (proxy.ts).
+  // Redirecting here to /dashboard would cause a loop because /dashboard
+  // has no page.tsx — the middleware is responsible for keeping users on
+  // their correct route.
   return (
-    <TeacherDashboardView teacherId={user.id} teacherName={profile.full_name} />
+    <TeacherDashboardView teacherId={user.id} teacherName={profile?.full_name ?? user.email ?? ""} />
   );
 }
