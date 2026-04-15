@@ -35,7 +35,7 @@ export async function createCourse(formData: FormData): Promise<ActionResult> {
       ? (formData.get("institute_id") as string) || null
       : profile.institute_id;
     const teacherId = isSuperAdmin
-      ? (formData.get("teacher_id") as string) || user.id
+      ? (formData.get("teacher_id") as string) || null
       : user.id;
 
     const { error } = await supabase.from("courses").insert({
