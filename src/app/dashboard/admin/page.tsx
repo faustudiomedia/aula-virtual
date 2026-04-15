@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import type { Institute, UserRole } from "@/lib/types";
+import { getDashboardPath } from "@/lib/auth/getDashboardPath";
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -16,7 +17,8 @@ export default async function AdminDashboard() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "admin") redirect("/dashboard");
+  if (!profile || (profile.role !== "admin" && profile.role !== "super_admin"))
+    redirect(getDashboardPath(profile?.role ?? "alumno"));
 
   const { data: institutes } = await supabase
     .from("institutes")

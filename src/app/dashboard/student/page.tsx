@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ui/ProgressBar";
 import type { Enrollment, Course } from "@/lib/types";
+import { getDashboardPath } from "@/lib/auth/getDashboardPath";
 
 type EnrollmentWithCourse = Enrollment & { courses: Course };
 
@@ -18,7 +19,8 @@ export default async function StudentDashboard() {
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "alumno") redirect("/dashboard");
+  if (!profile || (profile.role !== "alumno" && profile.role !== "super_admin"))
+    redirect(getDashboardPath(profile?.role ?? "alumno"));
 
   const { data: enrollments } = await supabase
     .from("enrollments")
