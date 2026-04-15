@@ -1,23 +1,25 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function Home() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect("/login");
   }
 
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
-  const role = profile?.role ?? 'alumno'
+  const role = profile?.role ?? "alumno";
 
-  if (role === 'admin') redirect('/dashboard/admin')
-  if (role === 'profesor') redirect('/dashboard/teacher')
-  redirect('/dashboard/student')
+  if (role === "admin") redirect("/dashboard/admin");
+  if (role === "profesor") redirect("/dashboard/teacher");
+  redirect("/dashboard/student");
 }
