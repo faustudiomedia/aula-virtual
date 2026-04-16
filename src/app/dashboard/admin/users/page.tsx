@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Pagination } from "@/components/ui/Pagination";
+import Link from "next/link";
 
 interface ProfileWithInstitute {
   id: string;
@@ -29,19 +30,19 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, institute_id")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard/admin");
+  if (profile?.role !== "admin") redirect("/dashboard");
 
-  // Build query
+  // Build query – scoped to the admin's own institute
   let query = supabase
     .from("profiles")
     .select("*, institutes(name)", { count: "exact" })
+    .eq("institute_id", profile.institute_id)
     .order("created_at", { ascending: false });
 
   if (q) {
-    // using or to search both full_name and email
     query = query.or(`full_name.ilike.%${q}%,email.ilike.%${q}%`);
   }
 
@@ -55,10 +56,10 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
   const userList = (users as unknown as ProfileWithInstitute[]) ?? [];
   const totalPages = count ? Math.ceil(count / pageSize) : 1;
 
-  const roleColors: Record<string, string> = {
-    admin: "bg-purple-100 text-purple-700",
-    profesor: "bg-blue-100 text-blue-700",
-    alumno: "bg-green-100 text-green-700",
+  const roleLabels: Record<string, { label: string; color: string }> = {
+    alumno:   { label: "Alumno",   color: "bg-sky-50 text-sky-700" },
+    profesor: { label: "Profesor", color: "bg-blue-100 text-blue-700" },
+    admin:    { label: "Admin",    color: "bg-violet-100 text-violet-700" },
   };
 
   return (
@@ -67,10 +68,18 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Usuarios</h1>
           <p className="text-[#050F1F]/50">
-            {count ?? 0} usuarios encontrados.
+            {count ?? 0} usuarios en tu instituto.
           </p>
         </div>
-        <SearchInput placeholder="Buscar por nombre o correo..." />
+        <div className="flex items-center gap-3">
+          <SearchInput placeholder="Buscar por nombre o correo..." />
+          <Link
+            href="/dashboard/admin/users/new"
+            className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all shadow-lg shadow-[#1A56DB]/20 whitespace-nowrap"
+          >
+            + Nuevo usuario
+          </Link>
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden flex flex-col">
@@ -93,47 +102,50 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {userList.map((u) => (
-                <tr
-                  key={u.id}
-                  className="hover:bg-[#F0F9FF]/50 transition-colors"
-                >
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-inner">
-                        {(u.full_name || u.email || "?")
-                          .charAt(0)
-                          .toUpperCase()}
+              {userList.map((u) => {
+                const roleInfo = roleLabels[u.role] ?? { label: u.role, color: "bg-gray-100 text-gray-600" };
+                return (
+                  <tr
+                    key={u.id}
+                    className="hover:bg-[#F0F9FF]/50 transition-colors"
+                  >
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-inner">
+                          {(u.full_name || u.email || "?")
+                            .charAt(0)
+                            .toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-[#050F1F] truncate">
+                            {u.full_name || "Sin nombre"}
+                          </p>
+                          <p className="text-xs text-[#050F1F]/40 truncate">
+                            {u.email}
+                          </p>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <p className="font-medium text-[#050F1F] truncate">
-                          {u.full_name || "Sin nombre"}
-                        </p>
-                        <p className="text-xs text-[#050F1F]/40 truncate">
-                          {u.email}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-3.5">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${roleColors[u.role] ?? "bg-gray-100 text-gray-600"}`}
-                    >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3.5 text-[#050F1F]/60">
-                    {u.institutes?.name ?? (
-                      <span className="text-[#050F1F]/30">—</span>
-                    )}
-                  </td>
-                  <td className="px-5 py-3.5 text-[#050F1F]/40">
-                    {new Date(u.created_at).toLocaleDateString("es-AR", {
-                      dateStyle: "short",
-                    })}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium ${roleInfo.color}`}
+                      >
+                        {roleInfo.label}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-[#050F1F]/60">
+                      {u.institutes?.name ?? (
+                        <span className="text-[#050F1F]/30">—</span>
+                      )}
+                    </td>
+                    <td className="px-5 py-3.5 text-[#050F1F]/40">
+                      {new Date(u.created_at).toLocaleDateString("es-AR", {
+                        dateStyle: "short",
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
               {userList.length === 0 && (
                 <tr>
                   <td
@@ -152,3 +164,4 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
     </div>
   );
 }
+
