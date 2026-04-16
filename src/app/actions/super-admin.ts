@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
 
 // ── Schemas de validación ─────────────────────────────────────────────────────
@@ -128,5 +129,63 @@ export async function toggleInstituteStatus(id: string, active: boolean): Promis
     .eq('id', id)
 
   if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ── Crear usuario ─────────────────────────────────────────────────────────────
+
+const VALID_ROLES = ['alumno', 'profesor', 'admin', 'super_admin'] as const
+
+const createUserSchema = z.object({
+  email:        z.string().email('Email inválido'),
+  password:     z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+  full_name:    z.string().min(1, 'El nombre es requerido'),
+  role:         z.enum(VALID_ROLES, { message: 'Rol inválido' }),
+  institute_id: z.string().uuid().nullable().optional(),
+})
+
+export async function createUser(formData: FormData): Promise<ActionResult> {
+  const auth = await assertSuperAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  const raw = {
+    email:        (formData.get('email') as string)?.trim().toLowerCase(),
+    password:     formData.get('password') as string,
+    full_name:    (formData.get('full_name') as string)?.trim(),
+    role:         formData.get('role') as string,
+    institute_id: (formData.get('institute_id') as string) || null,
+  }
+
+  const parsed = createUserSchema.safeParse(raw)
+  if (!parsed.success) {
+    const msgs = parsed.error.issues.map((e) => e.message).join('. ')
+    return { success: false, error: msgs }
+  }
+
+  const adminClient = createAdminClient()
+
+  const { data: newUser, error: authError } = await adminClient.auth.admin.createUser({
+    email:         parsed.data.email,
+    password:      parsed.data.password,
+    email_confirm: true,
+    user_metadata: { full_name: parsed.data.full_name },
+  })
+
+  if (authError) return { success: false, error: authError.message }
+
+  const { error: profileError } = await adminClient
+    .from('profiles')
+    .update({
+      full_name:    parsed.data.full_name,
+      role:         parsed.data.role,
+      institute_id: parsed.data.institute_id ?? null,
+    })
+    .eq('id', newUser.user.id)
+
+  if (profileError) {
+    await adminClient.auth.admin.deleteUser(newUser.user.id)
+    return { success: false, error: profileError.message }
+  }
+
   return { success: true }
 }

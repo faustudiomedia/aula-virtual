@@ -49,6 +49,12 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           <h1 className="text-2xl font-bold text-[#050F1F]">Usuarios</h1>
           <p className="text-[#050F1F]/50 mt-1">{count ?? 0} usuarios en la plataforma</p>
         </div>
+        <Link
+          href="/dashboard/super-admin/users/new"
+          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all shadow-lg shadow-[#1A56DB]/20"
+        >
+          + Nuevo usuario
+        </Link>
       </div>
 
       {/* ── Filtros ── */}
