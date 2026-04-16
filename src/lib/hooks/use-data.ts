@@ -76,7 +76,7 @@ export function useCoursesForInstitute(instituteId: string | null) {
   });
 }
 
-// ─── Student enrollments (list of course_id) ─────────────────────
+// ─── Student enrollments ──────────────────────────────────────────
 export function useEnrollments(studentId: string) {
   return useQuery({
     queryKey: queryKeys.enrollments(studentId),
@@ -84,12 +84,38 @@ export function useEnrollments(studentId: string) {
       const supabase = createClient();
       const { data, error } = await supabase
         .from("enrollments")
-        .select("course_id")
+        .select("*")
         .eq("student_id", studentId);
       if (error) throw error;
-      return (data ?? []) as Pick<Enrollment, "course_id">[];
+      return (data ?? []) as Enrollment[];
     },
     enabled: !!studentId,
+  });
+}
+
+// ─── Completed material IDs for a student in a course ─────────────
+export function useMaterialCompletions(courseId: string, studentId: string) {
+  return useQuery({
+    queryKey: ["material_completions", courseId, studentId] as const,
+    queryFn: async () => {
+      const supabase = createClient();
+      // Get all material IDs for this course
+      const { data: materials } = await supabase
+        .from("materials")
+        .select("id")
+        .eq("course_id", courseId);
+      const materialIds = (materials ?? []).map((m: { id: string }) => m.id);
+      if (!materialIds.length) return new Set<string>();
+
+      const { data, error } = await supabase
+        .from("material_completions")
+        .select("material_id")
+        .eq("student_id", studentId)
+        .in("material_id", materialIds);
+      if (error) throw error;
+      return new Set((data ?? []).map((r: { material_id: string }) => r.material_id));
+    },
+    enabled: !!courseId && !!studentId,
   });
 }
 

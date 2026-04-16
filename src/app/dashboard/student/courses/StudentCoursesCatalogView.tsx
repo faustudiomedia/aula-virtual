@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useCoursesForInstitute, useEnrollments } from "@/lib/hooks/use-data";
 import EnrollButton from "@/components/ui/EnrollButton";
 
@@ -91,11 +92,8 @@ export default function StudentCoursesCatalogView({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map((course) => {
             const isEnrolled = enrolledCourseIds.has(course.id);
-            return (
-              <div
-                key={course.id}
-                className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm hover:shadow-md transition-shadow"
-              >
+            const cardContent = (
+              <>
                 <div className="flex items-start gap-4 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white font-bold flex-shrink-0 text-lg">
                     {course.title.charAt(0)}
@@ -116,11 +114,35 @@ export default function StudentCoursesCatalogView({
                     </p>
                   </div>
                 </div>
-                <EnrollButton
-                  courseId={course.id}
-                  courseTitle={course.title}
-                  isEnrolled={isEnrolled}
-                />
+                {!isEnrolled && (
+                  <EnrollButton
+                    courseId={course.id}
+                    courseTitle={course.title}
+                    isEnrolled={isEnrolled}
+                  />
+                )}
+                {isEnrolled && (
+                  <div className="w-full py-2.5 rounded-xl bg-[#EFF6FF] text-[#1A56DB] font-semibold text-sm text-center">
+                    Ir al curso →
+                  </div>
+                )}
+              </>
+            );
+
+            return isEnrolled ? (
+              <Link
+                key={course.id}
+                href={`/dashboard/student/courses/${course.id}`}
+                className="block bg-white rounded-2xl border border-black/5 p-5 shadow-sm hover:shadow-md transition-shadow"
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              <div
+                key={course.id}
+                className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm hover:shadow-md transition-shadow"
+              >
+                {cardContent}
               </div>
             );
           })}

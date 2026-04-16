@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ui/ProgressBar";
 import type { Enrollment, Course } from "@/lib/types";
@@ -94,8 +95,9 @@ export default async function StudentDashboard() {
       ) : (
         <div className="grid gap-4">
           {items.map((enrollment) => (
-            <div
+            <Link
               key={enrollment.id}
+              href={`/dashboard/student/courses/${enrollment.courses.id}`}
               className="bg-white rounded-2xl border border-black/5 p-5 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Cover placeholder */}
@@ -119,7 +121,7 @@ export default async function StudentDashboard() {
                 </p>
                 <ProgressBar value={enrollment.progress} />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
