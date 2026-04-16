@@ -9,7 +9,7 @@ export const queryKeys = {
   course: (id: string) => ["courses", id] as const,
   teacherCourses: (teacherId: string) =>
     ["courses", "teacher", teacherId] as const,
-  coursesForInstitute: (instituteId: string) =>
+  coursesForInstitute: (instituteId: string | null) =>
     ["courses", "institute", instituteId] as const,
   allCourses: (opts?: CoursesOptions) => ["courses", "all", opts] as const,
   enrollments: (studentId: string) =>
