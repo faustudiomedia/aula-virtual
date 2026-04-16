@@ -14,19 +14,3 @@ CREATE POLICY "Students manage own completions"
   FOR ALL
   USING (student_id = auth.uid())
   WITH CHECK (student_id = auth.uid());
-
--- Teachers and admins can read completions for their courses
-CREATE POLICY "Teachers read course completions"
-  ON material_completions
-  FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM materials m
-      JOIN courses c ON c.id = m.course_id
-      WHERE m.id = material_completions.material_id
-        AND (
-          c.teacher_id = auth.uid()
-          OR auth_role() IN ('admin', 'super_admin')
-        )
-    )
-  );
