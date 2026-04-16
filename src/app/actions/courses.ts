@@ -34,8 +34,9 @@ export async function createCourse(formData: FormData): Promise<ActionResult> {
     const instituteId = isSuperAdmin
       ? (formData.get("institute_id") as string) || null
       : profile.institute_id;
+    // Super admin: use provided teacher_id, or fallback to self (so they can create courses as a teacher)
     const teacherId = isSuperAdmin
-      ? (formData.get("teacher_id") as string) || null
+      ? (formData.get("teacher_id") as string) || user.id
       : user.id;
 
     const { error } = await supabase.from("courses").insert({

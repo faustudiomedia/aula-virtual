@@ -58,7 +58,7 @@ const superAdminSections: NavSection[] = [
     title: "Vista Alumno",
     items: [
       { label: "Panel Alumno",       href: "/dashboard/student",                icon: "🏠" },
-      { label: "Catálogo",           href: "/dashboard/student/courses",        icon: "🔍" },
+      { label: "Mis cursos",          href: "/dashboard/student/courses",        icon: "📚" },
       { label: "Mi progreso",        href: "/dashboard/student/progress",       icon: "📈" },
     ],
   },
@@ -91,7 +91,7 @@ const studentSections: NavSection[] = [
   {
     items: [
       { label: "Inicio",      href: "/dashboard/student",          icon: "🏠" },
-      { label: "Catálogo",    href: "/dashboard/student/courses",  icon: "🔍" },
+      { label: "Mis cursos",  href: "/dashboard/student/courses",  icon: "📚" },
       { label: "Mi progreso", href: "/dashboard/student/progress", icon: "📈" },
     ],
   },

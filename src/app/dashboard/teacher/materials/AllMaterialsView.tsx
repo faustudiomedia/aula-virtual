@@ -41,11 +41,29 @@ export default function AllMaterialsView({ teacherId }: Props) {
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
-        Todos los materiales
-      </h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-2xl font-bold text-[#050F1F]">
+          Todos los materiales
+        </h1>
+        {courses.length > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-[#050F1F]/50">Agregar en:</span>
+            <div className="flex gap-2 flex-wrap">
+              {courses.slice(0, 4).map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/dashboard/teacher/courses/${c.id}/materials`}
+                  className="px-3 py-1.5 rounded-lg bg-[#EFF6FF] text-[#1A56DB] text-xs font-medium hover:bg-[#DBEAFE] transition"
+                >
+                  + {c.title.length > 20 ? c.title.slice(0, 20) + "…" : c.title}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
       <p className="text-[#050F1F]/50 mb-8">
-        Materiales cargados en todos tus cursos.
+        Materiales cargados en todos tus cursos. Para agregar, seleccioná un curso arriba.
       </p>
 
       {isLoading ? (

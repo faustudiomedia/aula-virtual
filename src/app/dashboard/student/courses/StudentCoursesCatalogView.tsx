@@ -33,10 +33,10 @@ export default function StudentCoursesCatalogView({
       <div className="p-8 max-w-5xl mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-[#050F1F]">
-            Catálogo de cursos
+            Mis cursos
           </h1>
           <p className="text-[#050F1F]/50 mt-1">
-            Explorá y anotate en los cursos disponibles.
+            Explorá los cursos disponibles e inscribite.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -55,10 +55,10 @@ export default function StudentCoursesCatalogView({
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#050F1F]">
-          Catálogo de cursos
+          Mis cursos
         </h1>
         <p className="text-[#050F1F]/50 mt-1">
-          Explorá y anotate en los cursos disponibles.
+          Explorá los cursos disponibles e inscribite.
         </p>
       </div>
 
