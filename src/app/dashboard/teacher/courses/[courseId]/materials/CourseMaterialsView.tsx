@@ -1,16 +1,16 @@
 "use client";
 
-import { useTransition, useRef } from "react";
+import { useTransition, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCourse, useCourseMaterials, queryKeys } from "@/lib/hooks/use-data";
 import { addMaterial } from "@/app/actions/courses";
 import SubmitButton from "@/components/ui/SubmitButton";
 import FormError from "@/components/ui/FormError";
+import FileUpload from "@/components/ui/FileUpload";
 import {
   EditMaterialButton,
   DeleteMaterialButton,
 } from "@/components/ui/MaterialActions";
-import { useState } from "react";
 
 interface Props {
   courseId: string;
@@ -24,9 +24,13 @@ export default function CourseMaterialsView({ courseId }: Props) {
 
   const [_isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [fileUrl, setFileUrl] = useState("");
+  const [urlMode, setUrlMode] = useState<"url" | "file">("url");
   const formRef = useRef<HTMLFormElement>(null);
 
   function handleAddMaterial(formData: FormData) {
+    formData.set("file_url", fileUrl);
     setFormError(null);
     startTransition(async () => {
       const result = await addMaterial(courseId, formData);
@@ -35,6 +39,8 @@ export default function CourseMaterialsView({ courseId }: Props) {
         return;
       }
       formRef.current?.reset();
+      setFileUrl("");
+      setUploadError(null);
       queryClient.invalidateQueries({
         queryKey: queryKeys.courseMaterials(courseId),
       });
@@ -50,10 +56,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
           <div className="h-48 bg-white rounded-2xl border border-black/5 shadow-sm" />
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="h-16 bg-white rounded-xl border border-black/5 shadow-sm"
-              />
+              <div key={i} className="h-16 bg-white rounded-xl border border-black/5 shadow-sm" />
             ))}
           </div>
         </div>
@@ -72,10 +75,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-2">
-        <a
-          href="/dashboard/teacher"
-          className="text-[#1A56DB] hover:underline text-sm"
-        >
+        <a href="/dashboard/teacher" className="text-[#1A56DB] hover:underline text-sm">
           ← Mis cursos
         </a>
       </div>
@@ -84,9 +84,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
 
       {/* Add material form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
-        <h2 className="text-sm font-semibold text-[#050F1F] mb-4">
-          Agregar material
-        </h2>
+        <h2 className="text-sm font-semibold text-[#050F1F] mb-4">Agregar material</h2>
         <FormError message={formError} />
         <form ref={formRef} action={handleAddMaterial} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -107,17 +105,58 @@ export default function CourseMaterialsView({ courseId }: Props) {
               <option value="image">Imagen</option>
             </select>
           </div>
+
           <input
             name="description"
             placeholder="Descripción (opcional)"
             className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
           />
-          <div className="flex gap-3">
-            <input
-              name="file_url"
-              placeholder="URL del archivo o enlace"
-              className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
-            />
+
+          {/* URL vs Upload toggle */}
+          <div>
+            <div className="flex gap-1 mb-2">
+              {(["url", "file"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => { setUrlMode(mode); setFileUrl(""); setUploadError(null); }}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+                    urlMode === mode
+                      ? "bg-[#1A56DB] text-white"
+                      : "bg-black/5 text-[#050F1F]/60 hover:bg-black/10"
+                  }`}
+                >
+                  {mode === "url" ? "🔗 URL / Enlace" : "📎 Subir archivo"}
+                </button>
+              ))}
+            </div>
+
+            {urlMode === "url" ? (
+              <input
+                value={fileUrl}
+                onChange={(e) => setFileUrl(e.target.value)}
+                placeholder="https://... (Google Drive, YouTube, etc.)"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+              />
+            ) : (
+              <div>
+                <FileUpload
+                  folder={`courses/${courseId}`}
+                  accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.webm,.png,.jpg,.jpeg,.gif"
+                  onUpload={(url) => { setFileUrl(url); setUploadError(null); }}
+                  onError={(msg) => setUploadError(msg)}
+                />
+                {uploadError && (
+                  <p className="text-xs text-red-500 mt-1">{uploadError}</p>
+                )}
+                {fileUrl && urlMode === "file" && (
+                  <p className="text-xs text-green-600 mt-1">Archivo subido correctamente.</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3 items-center">
             <input
               name="order_index"
               type="number"
@@ -126,21 +165,15 @@ export default function CourseMaterialsView({ courseId }: Props) {
               placeholder="Orden"
               className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
             />
+            <SubmitButton label="Agregar" loadingLabel="Agregando..." className="px-5 py-2 rounded-lg" />
           </div>
-          <SubmitButton
-            label="Agregar"
-            loadingLabel="Agregando..."
-            className="px-5 py-2 rounded-lg"
-          />
         </form>
       </div>
 
       {/* Materials list */}
       {materials.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-          <p className="text-[#050F1F]/50">
-            Este curso aún no tiene materiales.
-          </p>
+          <p className="text-[#050F1F]/50">Este curso aún no tiene materiales.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -155,9 +188,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-[#050F1F] text-sm">{m.title}</p>
                 {m.description && (
-                  <p className="text-xs text-[#050F1F]/50 mt-0.5">
-                    {m.description}
-                  </p>
+                  <p className="text-xs text-[#050F1F]/50 mt-0.5">{m.description}</p>
                 )}
               </div>
               {m.file_type && (
@@ -177,10 +208,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
               )}
               <div className="flex gap-1 flex-shrink-0">
                 <EditMaterialButton material={m} />
-                <DeleteMaterialButton
-                  materialId={m.id}
-                  materialTitle={m.title}
-                />
+                <DeleteMaterialButton materialId={m.id} materialTitle={m.title} />
               </div>
             </div>
           ))}

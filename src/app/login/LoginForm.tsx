@@ -82,6 +82,15 @@ export function LoginForm({ initialError }: { initialError?: string }) {
       </div>
 
       <SubmitButton />
+
+      <div className="flex justify-between items-center pt-2">
+        <a href="/forgot-password" className="text-xs text-[#BAE6FD]/60 hover:text-[#BAE6FD] transition">
+          ¿Olvidaste tu contraseña?
+        </a>
+        <a href="/register" className="text-xs text-[#BAE6FD]/60 hover:text-[#BAE6FD] transition">
+          Crear cuenta
+        </a>
+      </div>
     </form>
   );
 }
