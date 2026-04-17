@@ -194,6 +194,7 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
       .from('profiles')
       .upsert({
         id:           newUser.user.id,
+        email:        parsed.data.email,
         full_name:    parsed.data.full_name,
         role:         parsed.data.role,
         institute_id: parsed.data.institute_id ?? null,
