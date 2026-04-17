@@ -7,6 +7,7 @@ const TABS = (courseId: string) => [
   { label: 'Materiales',  href: `/dashboard/teacher/courses/${courseId}/materials` },
   { label: 'Anuncios',    href: `/dashboard/teacher/courses/${courseId}/announcements` },
   { label: 'Tareas',      href: `/dashboard/teacher/courses/${courseId}/assignments` },
+  { label: 'Foro',        href: `/dashboard/teacher/courses/${courseId}/forum` },
   { label: 'Alumnos',     href: `/dashboard/teacher/courses/${courseId}/students` },
 ]
 

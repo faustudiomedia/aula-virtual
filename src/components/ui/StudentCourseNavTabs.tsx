@@ -7,6 +7,7 @@ const TABS = (courseId: string) => [
   { label: 'Materiales', href: `/dashboard/student/courses/${courseId}`,              exact: true },
   { label: 'Anuncios',   href: `/dashboard/student/courses/${courseId}/announcements`, exact: false },
   { label: 'Tareas',     href: `/dashboard/student/courses/${courseId}/assignments`,   exact: false },
+  { label: 'Foro',       href: `/dashboard/student/courses/${courseId}/forum`,         exact: false },
 ]
 
 export function StudentCourseNavTabs({ courseId }: { courseId: string }) {

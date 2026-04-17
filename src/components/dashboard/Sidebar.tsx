@@ -94,6 +94,7 @@ const teacherSections: NavSection[] = [
       { label: "Materiales",   href: "/dashboard/teacher/materials",    icon: "📁" },
       { label: "Alumnos",      href: "/dashboard/teacher/students",     icon: "👨‍🎓" },
       { label: "Calendario",   href: "/dashboard/teacher/calendar",     icon: "📅" },
+      { label: "Mensajes",     href: "/dashboard/messages",             icon: "✉️" },
     ],
   },
   {
@@ -110,6 +111,7 @@ const studentSections: NavSection[] = [
       { label: "Mis cursos",   href: "/dashboard/student/courses",   icon: "📚" },
       { label: "Mi progreso",  href: "/dashboard/student/progress",  icon: "📈" },
       { label: "Calendario",   href: "/dashboard/student/calendar",  icon: "📅" },
+      { label: "Mensajes",     href: "/dashboard/messages",          icon: "✉️" },
     ],
   },
   {
