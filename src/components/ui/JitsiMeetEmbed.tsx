@@ -36,8 +36,7 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle }: Props) {
 
   return (
     <div className="flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm text-[#050F1F]/50">Sala: <span className="font-mono text-xs bg-black/5 px-2 py-0.5 rounded">{roomName}</span></p>
+      <div className="flex items-center justify-end mb-3">
         <button
           onClick={() => setJoined(false)}
           className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all"

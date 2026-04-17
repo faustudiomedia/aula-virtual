@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/dashboard/Sidebar";
+import { MeetingNotifier } from "@/components/ui/MeetingNotifier";
 import type { UserRole } from "@/lib/types";
 
 export default async function DashboardLayout({
@@ -39,6 +40,7 @@ export default async function DashboardLayout({
         logoUrl={logoUrl}
       />
       <main className="flex-1 overflow-auto">{children}</main>
+      <MeetingNotifier />
     </div>
   );
 }
