@@ -16,13 +16,26 @@ interface NavSection {
   items: NavItem[];
 }
 
-// Root hrefs that should only be active on exact match (not prefix)
 const EXACT_MATCH_HREFS = new Set([
   "/dashboard/admin",
   "/dashboard/teacher",
   "/dashboard/student",
   "/dashboard/super-admin",
 ]);
+
+const roleLabel: Record<string, string> = {
+  alumno: "Alumno",
+  profesor: "Profesor",
+  admin: "Administrador",
+  super_admin: "Super Admin",
+};
+
+const roleBadgeClass: Record<string, string> = {
+  alumno:     "bg-blue-50 text-blue-600",
+  profesor:   "bg-violet-50 text-violet-600",
+  admin:      "bg-orange-50 text-orange-600",
+  super_admin:"bg-red-50 text-red-600",
+};
 
 const superAdminSections: NavSection[] = [
   {
@@ -58,7 +71,7 @@ const superAdminSections: NavSection[] = [
     title: "Vista Alumno",
     items: [
       { label: "Panel Alumno",       href: "/dashboard/student",                icon: "🏠" },
-      { label: "Mis cursos",          href: "/dashboard/student/courses",        icon: "📚" },
+      { label: "Mis cursos",         href: "/dashboard/student/courses",        icon: "📚" },
       { label: "Mi progreso",        href: "/dashboard/student/progress",       icon: "📈" },
     ],
   },
@@ -129,6 +142,7 @@ interface SidebarProps {
   logoUrl?: string | null;
   primaryColor?: string;
   userName?: string;
+  avatarUrl?: string | null;
 }
 
 export default function Sidebar({
@@ -137,6 +151,7 @@ export default function Sidebar({
   logoUrl,
   primaryColor,
   userName,
+  avatarUrl,
 }: SidebarProps) {
   const pathname = usePathname();
   const sections =
@@ -152,40 +167,51 @@ export default function Sidebar({
     return pathname.startsWith(href);
   }
 
+  const initial = (userName || "U").charAt(0).toUpperCase();
+
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-black/5 flex flex-col">
-      {/* Header */}
-      <div className="p-5 border-b border-black/5">
+      {/* Institute header */}
+      <div className="p-4 border-b border-black/5">
         <div className="flex items-center gap-3">
           {logoUrl ? (
-            <Image
-              src={logoUrl}
-              alt={instituteName ?? ""}
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-lg object-cover"
-            />
+            <Image src={logoUrl} alt={instituteName ?? ""} width={32} height={32} className="w-8 h-8 rounded-lg object-cover" />
           ) : (
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold"
-              style={{ background: color }}
-            >
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-sm font-bold" style={{ background: color }}>
               {instituteName?.charAt(0) ?? "M"}
             </div>
           )}
           <div>
-            <p className="text-sm font-semibold text-[#050F1F] leading-none">
-              {instituteName ?? "MAVIC"}
-            </p>
-            <p className="text-xs text-[#050F1F]/40 mt-0.5">
-              Plataforma Educativa
-            </p>
+            <p className="text-sm font-semibold text-[#050F1F] leading-none">{instituteName ?? "MAVIC"}</p>
+            <p className="text-xs text-[#050F1F]/40 mt-0.5">Plataforma Educativa</p>
           </div>
         </div>
       </div>
 
+      {/* User card */}
+      <Link href="/dashboard/profile" className="mx-3 mt-3 p-3 rounded-xl flex items-center gap-3 hover:bg-black/5 transition-all group">
+        <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white shadow-sm">
+          {avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-white text-sm font-bold" style={{ background: color }}>
+              {initial}
+            </div>
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-[#050F1F] truncate leading-none mb-1">
+            {userName ?? "Usuario"}
+          </p>
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${roleBadgeClass[role] ?? "bg-black/5 text-[#050F1F]/50"}`}>
+            {roleLabel[role] ?? role}
+          </span>
+        </div>
+      </Link>
+
       {/* Nav */}
-      <nav className="flex-1 p-3 overflow-y-auto">
+      <nav className="flex-1 p-3 overflow-y-auto mt-1">
         {sections.map((section, si) => (
           <div key={si} className={si > 0 ? "mt-4" : ""}>
             {section.title && (
@@ -217,13 +243,8 @@ export default function Sidebar({
         ))}
       </nav>
 
-      {/* Footer */}
+      {/* Footer — logout only */}
       <div className="p-3 border-t border-black/5">
-        {userName && (
-          <p className="px-3 py-1 text-xs font-medium text-[#050F1F]/50 truncate">
-            {userName}
-          </p>
-        )}
         <form action={logout}>
           <button
             type="submit"

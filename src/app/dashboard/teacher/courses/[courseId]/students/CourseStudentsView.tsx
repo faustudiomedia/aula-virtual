@@ -91,10 +91,13 @@ export default function CourseStudentsView({ courseId }: Props) {
                 >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                        {(e.profiles?.full_name || e.profiles?.email || "?")
-                          .charAt(0)
-                          .toUpperCase()}
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        {e.profiles?.avatar_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={e.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          (e.profiles?.full_name || e.profiles?.email || "?").charAt(0).toUpperCase()
+                        )}
                       </div>
                       <div>
                         <p className="font-medium text-[#050F1F]">

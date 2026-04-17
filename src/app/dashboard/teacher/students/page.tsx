@@ -20,7 +20,7 @@ export default async function AllStudentsPage() {
   // super_admin sees all students across institutes; profesor sees only their institute
   let studentsQuery = supabase
     .from("profiles")
-    .select("id, full_name, email, created_at")
+    .select("id, full_name, email, avatar_url, created_at")
     .eq("role", "alumno")
     .order("full_name");
 
@@ -101,10 +101,13 @@ export default async function AllStudentsPage() {
                   >
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold">
-                          {(student.full_name || student.email)
-                            .charAt(0)
-                            .toUpperCase()}
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                          {student.avatar_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={student.avatar_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            (student.full_name || student.email).charAt(0).toUpperCase()
+                          )}
                         </div>
                         <div>
                           <p className="font-medium text-[#050F1F]">
