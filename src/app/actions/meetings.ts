@@ -1,0 +1,56 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+
+function generateSlug(name: string): string {
+  const base = name
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 30)
+  const suffix = Math.random().toString(36).slice(2, 7)
+  return `mavic-${base}-${suffix}`
+}
+
+export async function createMeeting(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const { data: profile } = await supabase
+    .from('profiles').select('role, institute_id').eq('id', user.id).single()
+  if (!profile || !['profesor','admin','super_admin'].includes(profile.role)) return
+
+  const displayName = (formData.get('display_name') as string)?.trim()
+  if (!displayName) return
+
+  await supabase.from('meetings').insert({
+    display_name: displayName,
+    room_slug: generateSlug(displayName),
+    host_id: user.id,
+    institute_id: profile.institute_id,
+  })
+
+  revalidatePath('/dashboard/meetings')
+}
+
+export async function endMeeting(id: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  await supabase.from('meetings').update({ active: false }).eq('id', id)
+  revalidatePath('/dashboard/meetings')
+}
+
+export async function deleteMeeting(id: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  await supabase.from('meetings').delete().eq('id', id)
+  revalidatePath('/dashboard/meetings')
+}
