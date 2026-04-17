@@ -23,7 +23,7 @@ export default async function MeetingRoomPage({ params }: Props) {
   if (!meeting) redirect('/dashboard/meetings')
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto">
       <div className="flex items-center gap-3 mb-6">
         <Link href="/dashboard/meetings" className="text-[#050F1F]/40 hover:text-[#050F1F] transition-colors text-sm">
           ← Reuniones
@@ -39,6 +39,8 @@ export default async function MeetingRoomPage({ params }: Props) {
         roomName={meeting.room_slug}
         displayName={profile?.full_name ?? 'Usuario'}
         courseTitle={meeting.display_name}
+        meetingId={meeting.id}
+        userId={user.id}
       />
     </div>
   )

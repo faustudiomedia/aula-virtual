@@ -1,14 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import { MeetingChatPanel } from './MeetingChatPanel'
 
 interface Props {
   roomName: string
   displayName: string
   courseTitle: string
+  meetingId: string
+  userId: string
 }
 
-export function JitsiMeetEmbed({ roomName, displayName, courseTitle }: Props) {
+export function JitsiMeetEmbed({ roomName, displayName, courseTitle, meetingId, userId }: Props) {
   const [joined, setJoined] = useState(false)
 
   if (!joined) {
@@ -35,7 +38,7 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle }: Props) {
   const src = `https://meet.jit.si/${roomName}#userInfo.displayName="${encodeURIComponent(displayName)}"&config.prejoinPageEnabled=false`
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 120px)' }}>
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 160px)' }}>
       <div className="flex items-center justify-end mb-3">
         <button
           onClick={() => setJoined(false)}
@@ -44,12 +47,17 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle }: Props) {
           Salir de la reunión
         </button>
       </div>
-      <iframe
-        src={src}
-        allow="camera; microphone; fullscreen; display-capture; autoplay; clipboard-write"
-        className="flex-1 rounded-2xl border border-black/10 shadow-sm"
-        style={{ border: 'none' }}
-      />
+      <div className="flex gap-4 flex-1 min-h-0">
+        <iframe
+          src={src}
+          allow="camera; microphone; fullscreen; display-capture; autoplay; clipboard-write"
+          className="flex-1 rounded-2xl border border-black/10 shadow-sm"
+          style={{ border: 'none' }}
+        />
+        <div className="w-72 flex-shrink-0">
+          <MeetingChatPanel meetingId={meetingId} userId={userId} displayName={displayName} />
+        </div>
+      </div>
     </div>
   )
 }

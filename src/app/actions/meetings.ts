@@ -27,13 +27,29 @@ export async function createMeeting(formData: FormData) {
   const displayName = (formData.get('display_name') as string)?.trim()
   if (!displayName) return
 
+  const scheduledAt = (formData.get('scheduled_at') as string) || null
+  const isScheduled = scheduledAt && new Date(scheduledAt) > new Date()
+
   await supabase.from('meetings').insert({
     display_name: displayName,
     room_slug: generateSlug(displayName),
     host_id: user.id,
     institute_id: profile.institute_id,
+    scheduled_at: scheduledAt || null,
+    active: !isScheduled,
   })
 
+  revalidatePath('/dashboard/meetings')
+  revalidatePath('/dashboard/teacher/calendar')
+  revalidatePath('/dashboard/student/calendar')
+}
+
+export async function startMeeting(id: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  await supabase.from('meetings').update({ active: true }).eq('id', id)
   revalidatePath('/dashboard/meetings')
 }
 
@@ -53,4 +69,6 @@ export async function deleteMeeting(id: string) {
 
   await supabase.from('meetings').delete().eq('id', id)
   revalidatePath('/dashboard/meetings')
+  revalidatePath('/dashboard/teacher/calendar')
+  revalidatePath('/dashboard/student/calendar')
 }

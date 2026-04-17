@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { CalendarView } from '@/components/ui/CalendarView'
-import type { CalendarAssignment } from '@/components/ui/CalendarView'
+import type { CalendarAssignment, CalendarMeeting } from '@/components/ui/CalendarView'
 import type { Assignment, Submission } from '@/lib/types'
 
 export default async function StudentCalendarPage() {
@@ -10,7 +10,7 @@ export default async function StudentCalendarPage() {
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
-    .from('profiles').select('role').eq('id', user.id).single()
+    .from('profiles').select('role, institute_id').eq('id', user.id).single()
   if (profile?.role !== 'alumno' && profile?.role !== 'super_admin') redirect('/dashboard')
 
   // All courses the student is enrolled in
@@ -68,11 +68,24 @@ export default async function StudentCalendarPage() {
     }
   })
 
+  const { data: meetings } = await supabase
+    .from('meetings')
+    .select('id, display_name, scheduled_at')
+    .eq('institute_id', profile?.institute_id)
+    .not('scheduled_at', 'is', null)
+    .order('scheduled_at')
+
+  const calendarMeetings: CalendarMeeting[] = (meetings ?? []).map(m => ({
+    id: m.id,
+    displayName: m.display_name,
+    scheduledAt: m.scheduled_at,
+  }))
+
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Calendario</h1>
-      <p className="text-[#050F1F]/50 mb-8">Tus entregas y fechas límite.</p>
-      <CalendarView assignments={calendarAssignments} role="student" />
+      <p className="text-[#050F1F]/50 mb-8">Tus entregas, fechas límite y reuniones.</p>
+      <CalendarView assignments={calendarAssignments} role="student" meetings={calendarMeetings} />
     </div>
   )
 }
