@@ -8,6 +8,7 @@ const TABS = (courseId: string) => [
   { label: 'Anuncios',    href: `/dashboard/teacher/courses/${courseId}/announcements` },
   { label: 'Tareas',      href: `/dashboard/teacher/courses/${courseId}/assignments` },
   { label: 'Foro',        href: `/dashboard/teacher/courses/${courseId}/forum` },
+  { label: 'Reunión',     href: `/dashboard/teacher/courses/${courseId}/meeting` },
   { label: 'Alumnos',     href: `/dashboard/teacher/courses/${courseId}/students` },
 ]
 
