@@ -23,7 +23,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
     .eq("id", user.id)
     .single();
   if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard");
-  if (!profile.institute_id) redirect("/dashboard/admin");
+  if (!profile.institute_id) redirect("/dashboard/super-admin/users/new");
 
   // Fetch the admin's institute name to display
   const { data: institute } = await supabase
