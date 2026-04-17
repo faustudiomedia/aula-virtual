@@ -89,10 +89,11 @@ const adminSections: NavSection[] = [
 const teacherSections: NavSection[] = [
   {
     items: [
-      { label: "Panel",      href: "/dashboard/teacher",                 icon: "🏠" },
-      { label: "Mis cursos", href: "/dashboard/teacher/courses/new",     icon: "📚" },
-      { label: "Materiales", href: "/dashboard/teacher/materials",       icon: "📁" },
-      { label: "Alumnos",    href: "/dashboard/teacher/students",        icon: "👨‍🎓" },
+      { label: "Panel",        href: "/dashboard/teacher",              icon: "🏠" },
+      { label: "Mis cursos",   href: "/dashboard/teacher/courses/new",  icon: "📚" },
+      { label: "Materiales",   href: "/dashboard/teacher/materials",    icon: "📁" },
+      { label: "Alumnos",      href: "/dashboard/teacher/students",     icon: "👨‍🎓" },
+      { label: "Calendario",   href: "/dashboard/teacher/calendar",     icon: "📅" },
     ],
   },
   {
@@ -105,9 +106,10 @@ const teacherSections: NavSection[] = [
 const studentSections: NavSection[] = [
   {
     items: [
-      { label: "Inicio",      href: "/dashboard/student",          icon: "🏠" },
-      { label: "Mis cursos",  href: "/dashboard/student/courses",  icon: "📚" },
-      { label: "Mi progreso", href: "/dashboard/student/progress", icon: "📈" },
+      { label: "Inicio",       href: "/dashboard/student",           icon: "🏠" },
+      { label: "Mis cursos",   href: "/dashboard/student/courses",   icon: "📚" },
+      { label: "Mi progreso",  href: "/dashboard/student/progress",  icon: "📈" },
+      { label: "Calendario",   href: "/dashboard/student/calendar",  icon: "📅" },
     ],
   },
   {
