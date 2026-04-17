@@ -145,47 +145,68 @@ const createUserSchema = z.object({
 })
 
 export async function createUser(formData: FormData): Promise<ActionResult> {
-  const auth = await assertSuperAdmin()
-  if (!auth.ok) return { success: false, error: auth.error }
+  try {
+    const auth = await assertSuperAdmin()
+    if (!auth.ok) return { success: false, error: auth.error }
 
-  const raw = {
-    email:        (formData.get('email') as string)?.trim().toLowerCase(),
-    password:     formData.get('password') as string,
-    full_name:    (formData.get('full_name') as string)?.trim(),
-    role:         formData.get('role') as string,
-    institute_id: (formData.get('institute_id') as string) || null,
-  }
+    const raw = {
+      email:        (formData.get('email') as string)?.trim().toLowerCase(),
+      password:     formData.get('password') as string,
+      full_name:    (formData.get('full_name') as string)?.trim(),
+      role:         formData.get('role') as string,
+      institute_id: (formData.get('institute_id') as string) || null,
+    }
 
-  const parsed = createUserSchema.safeParse(raw)
-  if (!parsed.success) {
-    const msgs = parsed.error.issues.map((e) => e.message).join('. ')
-    return { success: false, error: msgs }
-  }
+    const parsed = createUserSchema.safeParse(raw)
+    if (!parsed.success) {
+      const msgs = parsed.error.issues.map((e) => e.message).join('. ')
+      return { success: false, error: msgs }
+    }
 
-  const adminClient = createAdminClient()
+    let adminClient: ReturnType<typeof createAdminClient>
+    try {
+      adminClient = createAdminClient()
+    } catch {
+      return {
+        success: false,
+        error: 'Falta configurar SUPABASE_SERVICE_ROLE_KEY en .env.local. Obtené la clave de servicio en Settings > API de tu proyecto Supabase.',
+      }
+    }
 
-  const { data: newUser, error: authError } = await adminClient.auth.admin.createUser({
-    email:         parsed.data.email,
-    password:      parsed.data.password,
-    email_confirm: true,
-    user_metadata: { full_name: parsed.data.full_name },
-  })
-
-  if (authError) return { success: false, error: authError.message }
-
-  const { error: profileError } = await adminClient
-    .from('profiles')
-    .update({
-      full_name:    parsed.data.full_name,
-      role:         parsed.data.role,
-      institute_id: parsed.data.institute_id ?? null,
+    const { data: newUser, error: authError } = await adminClient.auth.admin.createUser({
+      email:         parsed.data.email,
+      password:      parsed.data.password,
+      email_confirm: true,
+      user_metadata: { full_name: parsed.data.full_name },
     })
-    .eq('id', newUser.user.id)
 
-  if (profileError) {
-    await adminClient.auth.admin.deleteUser(newUser.user.id)
-    return { success: false, error: profileError.message }
+    if (authError) {
+      if (authError.message === 'User not allowed') {
+        return {
+          success: false,
+          error: 'Sin permisos para crear usuarios. Verificá que SUPABASE_SERVICE_ROLE_KEY en .env.local sea la clave "service_role" (no la clave anon/pública).',
+        }
+      }
+      return { success: false, error: authError.message }
+    }
+
+    const { error: profileError } = await adminClient
+      .from('profiles')
+      .upsert({
+        id:           newUser.user.id,
+        full_name:    parsed.data.full_name,
+        role:         parsed.data.role,
+        institute_id: parsed.data.institute_id ?? null,
+      })
+
+    if (profileError) {
+      await adminClient.auth.admin.deleteUser(newUser.user.id)
+      return { success: false, error: profileError.message }
+    }
+
+    return { success: true }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Error inesperado'
+    return { success: false, error: msg }
   }
-
-  return { success: true }
 }
