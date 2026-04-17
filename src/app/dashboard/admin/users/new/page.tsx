@@ -22,7 +22,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
     .select("role, institute_id")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin") redirect("/dashboard");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard");
   if (!profile.institute_id) redirect("/dashboard/admin");
 
   // Fetch the admin's institute name to display
