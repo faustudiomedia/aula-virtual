@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCourseMaterials, useMaterialCompletions } from "@/lib/hooks/use-data";
 import { toggleMaterialCompletion } from "@/app/actions/courses";
 import ProgressBar from "@/components/ui/ProgressBar";
+import { StudentCourseNavTabs } from "@/components/ui/StudentCourseNavTabs";
 import type { Course } from "@/lib/types";
 
 interface Enrollment {
@@ -105,6 +106,8 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
           </div>
         </div>
       </div>
+
+      <StudentCourseNavTabs courseId={course.id} />
 
       {/* Materials */}
       <h2 className="text-base font-semibold text-[#050F1F] mb-3">Contenido del curso</h2>
