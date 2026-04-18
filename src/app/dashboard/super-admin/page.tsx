@@ -175,15 +175,3 @@ export default async function SuperAdminDashboard() {
     </div>
   )
 }
-                      style={{ width: `${pct}%`, background: color }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
