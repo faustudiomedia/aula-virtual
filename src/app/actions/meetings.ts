@@ -44,28 +44,43 @@ export async function createMeeting(formData: FormData) {
   revalidatePath('/dashboard/student/calendar')
 }
 
-export async function startMeeting(id: string) {
+async function assertMeetingHost(meetingId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return null
+
+  const { data: profile } = await supabase
+    .from('profiles').select('role').eq('id', user.id).maybeSingle()
+  const { data: meeting } = await supabase
+    .from('meetings').select('host_id').eq('id', meetingId).maybeSingle()
+  if (!meeting) return null
+
+  const isHost = meeting.host_id === user.id
+  const isPrivileged = profile?.role === 'admin' || profile?.role === 'super_admin'
+  if (!isHost && !isPrivileged) return null
+
+  return supabase
+}
+
+export async function startMeeting(id: string) {
+  const supabase = await assertMeetingHost(id)
+  if (!supabase) return
 
   await supabase.from('meetings').update({ active: true }).eq('id', id)
   revalidatePath('/dashboard/meetings')
 }
 
 export async function endMeeting(id: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const supabase = await assertMeetingHost(id)
+  if (!supabase) return
 
   await supabase.from('meetings').update({ active: false }).eq('id', id)
   revalidatePath('/dashboard/meetings')
 }
 
 export async function deleteMeeting(id: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const supabase = await assertMeetingHost(id)
+  if (!supabase) return
 
   await supabase.from('meetings').delete().eq('id', id)
   revalidatePath('/dashboard/meetings')
