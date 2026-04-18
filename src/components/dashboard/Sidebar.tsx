@@ -22,6 +22,7 @@ import {
   Mail,
   LogOut,
   BookMarked,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -143,6 +144,7 @@ interface SidebarProps {
   primaryColor?: string;
   userName?: string;
   avatarUrl?: string | null;
+  onClose?: () => void;
 }
 
 export default function Sidebar({
@@ -152,6 +154,7 @@ export default function Sidebar({
   primaryColor,
   userName,
   avatarUrl,
+  onClose,
 }: SidebarProps) {
   const pathname = usePathname();
   const sections =
@@ -170,7 +173,7 @@ export default function Sidebar({
   const initial = (userName || "U").charAt(0).toUpperCase();
 
   return (
-    <aside className="w-64 min-h-screen bg-white border-r border-black/5 flex flex-col">
+    <aside className="w-64 h-full min-h-screen bg-white border-r border-black/5 flex flex-col">
 
       {/* Institute header */}
       <div className="p-4 border-b border-black/5">
@@ -191,18 +194,29 @@ export default function Sidebar({
               {instituteName?.charAt(0) ?? "M"}
             </div>
           )}
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-[#050F1F] leading-none truncate">
               {instituteName ?? "MAVIC"}
             </p>
             <p className="text-xs text-[#050F1F]/40 mt-0.5">Plataforma Educativa</p>
           </div>
+          {/* Close button — only on mobile */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="md:hidden p-1.5 rounded-lg hover:bg-black/5 transition-colors text-[#050F1F]/50 flex-shrink-0"
+              aria-label="Cerrar menú"
+            >
+              <X size={18} />
+            </button>
+          )}
         </div>
       </div>
 
       {/* User card */}
       <Link
         href="/dashboard/profile"
+        onClick={onClose}
         className="mx-3 mt-3 p-3 rounded-xl flex items-center gap-3 hover:bg-black/5 transition-all group"
       >
         <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white shadow-sm">
@@ -249,13 +263,13 @@ export default function Sidebar({
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={onClose}
                     className={`relative flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                       active
                         ? "text-[#050F1F] bg-black/[0.04]"
                         : "text-[#050F1F]/55 hover:bg-black/[0.03] hover:text-[#050F1F]"
                     }`}
                   >
-                    {/* Active indicator bar */}
                     {active && (
                       <span
                         className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full"
