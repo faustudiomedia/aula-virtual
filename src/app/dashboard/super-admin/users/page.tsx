@@ -154,20 +154,6 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           </table>
         )}
       </div>
-
-      {/* ── Paginación ── */}
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-6">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <Link key={p} href={`?q=${q}&role=${role}&page=${p}`}
-              className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
-                p === currentPage ? 'text-white bg-[#050F1F]' : 'text-[#050F1F]/60 hover:bg-black/5'
-              }`}>
-              {p}
-            </Link>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

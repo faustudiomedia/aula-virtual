@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { Building2, Users, BookOpen, ClipboardList, GraduationCap, UserCog, ShieldCheck } from 'lucide-react'
 
 export default async function SuperAdminDashboard() {
   const supabase = await createClient()
@@ -46,14 +47,14 @@ export default async function SuperAdminDashboard() {
   }, {})
 
   const stats = [
-    { label: 'Institutos',    value: totalInstitutes ?? 0,    icon: '🏫', href: '/dashboard/super-admin/institutes', color: '#1A56DB' },
-    { label: 'Usuarios',      value: totalUsers ?? 0,          icon: '👥', href: '/dashboard/super-admin/users',      color: '#0EA5E9' },
-    { label: 'Cursos',        value: totalCourses ?? 0,        icon: '📚', href: '#',                                 color: '#6366F1' },
-    { label: 'Inscripciones', value: totalEnrollments ?? 0,    icon: '📝', href: '#',                                 color: '#10B981' },
+    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: '#1A56DB' },
+    { label: 'Usuarios',      value: totalUsers ?? 0,          Icon: Users,          href: '/dashboard/super-admin/users',      color: '#0EA5E9' },
+    { label: 'Cursos',        value: totalCourses ?? 0,        Icon: BookOpen,       href: '#',                                 color: '#6366F1' },
+    { label: 'Inscripciones', value: totalEnrollments ?? 0,    Icon: ClipboardList,  href: '#',                                 color: '#10B981' },
   ]
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
 
       {/* ── Encabezado ── */}
       <div className="mb-8">
@@ -72,10 +73,10 @@ export default async function SuperAdminDashboard() {
             className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:shadow-md transition-shadow group"
           >
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3"
+              className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
               style={{ background: s.color + '18' }}
             >
-              {s.icon}
+              <s.Icon size={20} style={{ color: s.color }} />
             </div>
             <p className="text-3xl font-bold text-[#050F1F]">{s.value.toLocaleString()}</p>
             <p className="text-sm text-[#050F1F]/50 mt-1">{s.label}</p>
@@ -142,11 +143,11 @@ export default async function SuperAdminDashboard() {
           </div>
           <div className="space-y-4">
             {[
-              { role: 'alumno',      label: 'Alumnos',    icon: '🎓', color: '#10B981' },
-              { role: 'profesor',    label: 'Profesores', icon: '👨‍🏫', color: '#1A56DB' },
-              { role: 'admin',       label: 'Admins',     icon: '⚙️',  color: '#6366F1' },
-              { role: 'super_admin', label: 'Super Admin',icon: '👑',  color: '#F59E0B' },
-            ].map(({ role, label, icon, color }) => {
+              { role: 'alumno',      label: 'Alumnos',    Icon: GraduationCap, color: '#10B981' },
+              { role: 'profesor',    label: 'Profesores', Icon: UserCog,       color: '#1A56DB' },
+              { role: 'admin',       label: 'Admins',     Icon: ShieldCheck,   color: '#6366F1' },
+              { role: 'super_admin', label: 'Super Admin',Icon: ShieldCheck,   color: '#F59E0B' },
+            ].map(({ role, label, Icon, color }) => {
               const count = roleCounts[role] ?? 0
               const total = totalUsers ?? 1
               const pct   = total > 0 ? Math.round((count / total) * 100) : 0
@@ -155,13 +156,25 @@ export default async function SuperAdminDashboard() {
                 <div key={role}>
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-sm text-[#050F1F] flex items-center gap-1.5">
-                      <span>{icon}</span> {label}
+                      <Icon size={14} style={{ color }} /> {label}
                     </span>
                     <span className="text-sm font-semibold text-[#050F1F]">{count}</span>
                   </div>
                   <div className="h-2 bg-black/5 rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all"
+                      style={{ width: `${pct}%`, background: color }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
                       style={{ width: `${pct}%`, background: color }}
                     />
                   </div>
