@@ -15,7 +15,7 @@ export default async function DashboardLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (\!user) redirect("/login");
+  if (!user) redirect("/login");
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
-  if (\!profile) redirect("/login");
+  if (!profile) redirect("/login");
 
   const headersList = await headers();
   const instituteName = headersList.get("x-institute-name") ?? "MAVIC";
