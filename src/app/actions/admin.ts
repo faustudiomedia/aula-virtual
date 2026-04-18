@@ -1,5 +1,6 @@
 'use server'
 
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
@@ -28,9 +29,87 @@ async function assertAdmin(): Promise<
   return { ok: true, supabase, institute_id: profile.institute_id }
 }
 
-// ── Crear usuario (solo alumno / profesor del propio instituto) ───────────────
+// ── Actualizar usuario (solo alumno / profesor del propio instituto) ─────────
 
 const ALLOWED_ROLES = ['alumno', 'profesor'] as const
+
+const updateUserSchema = z.object({
+  full_name: z.string().min(1, 'El nombre es requerido'),
+  role:      z.enum(ALLOWED_ROLES, { message: 'Rol inválido' }),
+})
+
+export async function updateUser(userId: string, formData: FormData): Promise<ActionResult> {
+  const auth = await assertAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  // Verify the target user belongs to the admin's institute
+  const { data: target } = await auth.supabase
+    .from('profiles')
+    .select('institute_id')
+    .eq('id', userId)
+    .single()
+
+  if (target?.institute_id !== auth.institute_id) {
+    return { success: false, error: 'No tenés permisos para editar este usuario' }
+  }
+
+  const raw = {
+    full_name: (formData.get('full_name') as string)?.trim(),
+    role:      formData.get('role') as string,
+  }
+
+  const parsed = updateUserSchema.safeParse(raw)
+  if (!parsed.success) {
+    const msgs = parsed.error.issues.map((e) => e.message).join('. ')
+    return { success: false, error: msgs }
+  }
+
+  const { error } = await auth.supabase
+    .from('profiles')
+    .update({ full_name: parsed.data.full_name, role: parsed.data.role })
+    .eq('id', userId)
+
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ── Eliminar usuario ──────────────────────────────────────────────────────────
+
+export async function deleteUser(userId: string): Promise<ActionResult> {
+  const auth = await assertAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  // Verify the target user belongs to the admin's institute
+  const { data: target } = await auth.supabase
+    .from('profiles')
+    .select('institute_id')
+    .eq('id', userId)
+    .single()
+
+  if (target?.institute_id !== auth.institute_id) {
+    return { success: false, error: 'No tenés permisos para eliminar este usuario' }
+  }
+
+  let adminClient: ReturnType<typeof createAdminClient>
+  try {
+    adminClient = createAdminClient()
+  } catch {
+    return { success: false, error: 'Falta configurar SUPABASE_SERVICE_ROLE_KEY en .env.local.' }
+  }
+
+  const { error } = await adminClient.auth.admin.deleteUser(userId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function deleteUserAction(_prevState: unknown, formData: FormData): Promise<void> {
+  const userId = formData.get('userId') as string
+  if (!userId) return
+  await deleteUser(userId)
+  redirect('/dashboard/admin/users')
+}
+
+// ── Crear usuario (solo alumno / profesor del propio instituto) ───────────────
 
 const createUserSchema = z.object({
   email:     z.string().email('Email inválido'),

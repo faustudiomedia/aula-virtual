@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { deleteUserAction } from "@/app/actions/admin";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Pagination } from "@/components/ui/Pagination";
+import DeleteUserButton from "@/components/ui/DeleteUserButton";
 import Link from "next/link";
 
 interface ProfileWithInstitute {
@@ -100,6 +102,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                 <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
                   Registro
                 </th>
+                <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
@@ -144,13 +147,24 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                         dateStyle: "short",
                       })}
                     </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2 justify-end">
+                        <Link
+                          href={`/dashboard/admin/users/${u.id}/edit`}
+                          className="px-3 py-1 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                        >
+                          Editar
+                        </Link>
+                        <DeleteUserButton userId={u.id} action={deleteUserAction} />
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
               {userList.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={5}
                     className="px-5 py-12 text-center text-[#050F1F]/40"
                   >
                     No se encontraron usuarios.

@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { deleteUserAction } from '@/app/actions/super-admin'
+import DeleteUserButton from '@/components/ui/DeleteUserButton'
 import Link from 'next/link'
 
 interface Props {
@@ -105,6 +107,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Rol</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Instituto</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Registrado</th>
+                <th className="px-4 py-3.5" />
               </tr>
             </thead>
             <tbody>
@@ -134,6 +137,17 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                     </td>
                     <td className="px-4 py-4 text-[#050F1F]/60 text-sm">{instituteName}</td>
                     <td className="px-4 py-4 text-[#050F1F]/40 text-xs">{date}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2 justify-end">
+                        <Link
+                          href={`/dashboard/super-admin/users/${u.id}/edit`}
+                          className="px-3 py-1 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                        >
+                          Editar
+                        </Link>
+                        <DeleteUserButton userId={u.id} action={deleteUserAction} />
+                      </div>
+                    </td>
                   </tr>
                 )
               })}
