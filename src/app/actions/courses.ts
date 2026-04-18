@@ -282,6 +282,79 @@ export async function updateMaterialProgress(
   }
 }
 
+// ─── MATERIAL COMPLETIONS ───────────────────────────────────────
+
+export async function toggleMaterialCompletion(
+  materialId: string,
+  courseId: string,
+): Promise<ActionResult & { nowCompleted: boolean }> {
+  const fallback = { success: false as const, error: "", nowCompleted: false };
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (authError || !user)
+      return { ...fallback, error: "No autenticado" };
+
+    // Check if already completed
+    const { data: existing } = await supabase
+      .from("material_completions")
+      .select("student_id")
+      .eq("student_id", user.id)
+      .eq("material_id", materialId)
+      .maybeSingle();
+
+    let nowCompleted: boolean;
+
+    if (existing) {
+      const { error } = await supabase
+        .from("material_completions")
+        .delete()
+        .eq("student_id", user.id)
+        .eq("material_id", materialId);
+      if (error) return { ...fallback, error: error.message };
+      nowCompleted = false;
+    } else {
+      const { error } = await supabase
+        .from("material_completions")
+        .insert({ student_id: user.id, material_id: materialId });
+      if (error) return { ...fallback, error: error.message };
+      nowCompleted = true;
+    }
+
+    // Recalculate and persist enrollment progress
+    const { data: totalData } = await supabase
+      .from("materials")
+      .select("id")
+      .eq("course_id", courseId);
+
+    const { data: doneData } = await supabase
+      .from("material_completions")
+      .select("material_id")
+      .eq("student_id", user.id)
+      .in(
+        "material_id",
+        (totalData ?? []).map((m: { id: string }) => m.id),
+      );
+
+    const total = totalData?.length ?? 0;
+    const done = doneData?.length ?? 0;
+    const progress = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    await supabase
+      .from("enrollments")
+      .update({ progress, completed: progress >= 100 })
+      .eq("student_id", user.id)
+      .eq("course_id", courseId);
+
+    return { success: true, nowCompleted };
+  } catch (_e) {
+    return { ...fallback, error: "Error inesperado" };
+  }
+}
+
 // ─── INSTITUTES ─────────────────────────────────────────────────
 
 export async function createInstitute(

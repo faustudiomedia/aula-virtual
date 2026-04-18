@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/dashboard/Sidebar";
+import { MeetingNotifier } from "@/components/ui/MeetingNotifier";
 import type { UserRole } from "@/lib/types";
 
 export default async function DashboardLayout({
@@ -18,7 +19,7 @@ export default async function DashboardLayout({
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role, institute_id")
+    .select("full_name, role, institute_id, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -37,8 +38,10 @@ export default async function DashboardLayout({
         userName={profile.full_name || user.email || "Usuario"}
         primaryColor={primaryColor}
         logoUrl={logoUrl}
+        avatarUrl={profile.avatar_url ?? null}
       />
       <main className="flex-1 overflow-auto">{children}</main>
+      <MeetingNotifier />
     </div>
   );
 }

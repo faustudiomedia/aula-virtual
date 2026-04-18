@@ -1,12 +1,13 @@
 import { LoginForm } from "./LoginForm";
 
 interface Props {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: Props) {
   const params = await searchParams;
   const errorMsg = params.error;
+  const successMsg = params.message;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050F1F] px-4">
@@ -37,6 +38,11 @@ export default async function LoginPage({ searchParams }: Props) {
             Ingresá con tu cuenta institucional
           </p>
 
+          {successMsg && (
+            <div className="mb-4 px-4 py-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-300 text-sm">
+              {successMsg}
+            </div>
+          )}
           <LoginForm initialError={errorMsg} />
 
           {/* Role indicator */}

@@ -33,7 +33,8 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
     .select("role, institute_id")
     .eq("id", user.id)
     .single();
-  if (profile?.role !== "admin") redirect("/dashboard");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") redirect("/dashboard");
+  if (!profile?.institute_id) redirect("/dashboard/super-admin/users");
 
   // Build query – scoped to the admin's own institute
   let query = supabase
