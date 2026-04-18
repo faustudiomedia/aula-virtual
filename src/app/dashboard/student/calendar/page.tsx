@@ -22,10 +22,10 @@ export default async function StudentCalendarPage() {
   const courseIds = (enrollments ?? []).map((e: { course_id: string }) => e.course_id)
 
   const courseMap = new Map(
-    (enrollments ?? []).map((e: { course_id: string; courses: { id: string; title: string } | null }) => [
-      e.course_id,
-      e.courses?.title ?? 'Sin nombre',
-    ]),
+    (enrollments ?? []).map((e) => {
+      const c = (e as unknown as { course_id: string; courses: { id: string; title: string } | null })
+      return [c.course_id, c.courses?.title ?? 'Sin nombre']
+    })
   )
 
   // Assignments for all enrolled courses (with due_date only)

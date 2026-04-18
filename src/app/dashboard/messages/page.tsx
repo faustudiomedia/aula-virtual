@@ -65,7 +65,7 @@ export default async function MessagesInboxPage() {
         .in('course_id', courseIds)
       const seen = new Set<string>()
       for (const e of enrollments ?? []) {
-        const p = e.profiles as { id: string; full_name: string; role: string } | null
+        const p = e.profiles as unknown as { id: string; full_name: string; role: string } | null
         if (p && !seen.has(p.id)) {
           seen.add(p.id)
           contactSuggestions.push(p)
@@ -79,7 +79,7 @@ export default async function MessagesInboxPage() {
       .eq('student_id', user.id)
     const seen = new Set<string>()
     for (const e of enrollments ?? []) {
-      const c = e.courses as { teacher_id: string; profiles: { id: string; full_name: string; role: string } | null } | null
+      const c = e.courses as unknown as { teacher_id: string; profiles: { id: string; full_name: string; role: string } | null } | null
       if (c?.profiles && !seen.has(c.profiles.id)) {
         seen.add(c.profiles.id)
         contactSuggestions.push(c.profiles)

@@ -66,7 +66,7 @@ export default async function MeetingsPage() {
       {/* Active */}
       <Section title="En curso" empty="No hay reuniones activas ahora.">
         {active.map(m => {
-          const host = m.profiles as { full_name: string } | null
+          const host = m.profiles as unknown as { full_name: string } | null
           return (
             <MeetingRow key={m.id} m={m} host={host} userId={user.id} isTeacher={isTeacher} status="active" />
           )
@@ -77,7 +77,7 @@ export default async function MeetingsPage() {
       {scheduled.length > 0 && (
         <Section title="Programadas">
           {scheduled.map(m => {
-            const host = m.profiles as { full_name: string } | null
+            const host = m.profiles as unknown as { full_name: string } | null
             return (
               <MeetingRow key={m.id} m={m} host={host} userId={user.id} isTeacher={isTeacher} status="scheduled" />
             )
@@ -89,7 +89,7 @@ export default async function MeetingsPage() {
       {past.length > 0 && (
         <Section title="Finalizadas">
           {past.map(m => {
-            const host = m.profiles as { full_name: string } | null
+            const host = m.profiles as unknown as { full_name: string } | null
             return (
               <MeetingRow key={m.id} m={m} host={host} userId={user.id} isTeacher={isTeacher} status="past" />
             )

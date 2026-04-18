@@ -32,7 +32,7 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
       .eq('meeting_id', meetingId)
       .order('created_at')
       .then(({ data }) => {
-        if (data) setMessages(data as Message[])
+        if (data) setMessages(data as unknown as Message[])
       })
 
     const channel = sb
@@ -42,8 +42,8 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
         { event: 'INSERT', schema: 'public', table: 'meeting_messages', filter: `meeting_id=eq.${meetingId}` },
         async (payload) => {
           const row = payload.new as { id: string; sender_id: string; content: string; created_at: string }
-          const { data: profile } = await sb.from('profiles').select('full_name').eq('id', row.sender_id).single()
-          setMessages(prev => [...prev, { ...row, profiles: profile }])
+          const { data: profile } = await sb.from('profiles').select('full_name').eq('id', row.sender_id).maybeSingle()
+          setMessages(prev => [...prev, { ...row, profiles: profile ?? null }])
         }
       )
       .subscribe()

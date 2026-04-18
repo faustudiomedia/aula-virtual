@@ -52,7 +52,7 @@ export default async function TeacherForumPage({ params }: Props) {
       ) : (
         <div className="space-y-3">
           {threads.map((t) => {
-            const author = t.profiles as { full_name: string } | null
+            const author = t.profiles as unknown as { full_name: string } | null
             return (
               <div key={t.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 flex items-start gap-4">
                 <div className="flex-1 min-w-0">

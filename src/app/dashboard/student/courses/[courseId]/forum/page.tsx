@@ -77,7 +77,7 @@ export default async function StudentForumPage({ params }: Props) {
       ) : (
         <div className="space-y-3">
           {threads.map((t) => {
-            const author = t.profiles as { full_name: string } | null
+            const author = t.profiles as unknown as { full_name: string } | null
             return (
               <Link
                 key={t.id}

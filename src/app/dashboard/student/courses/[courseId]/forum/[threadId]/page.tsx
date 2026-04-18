@@ -33,7 +33,7 @@ export default async function StudentThreadPage({ params }: Props) {
     .eq('thread_id', threadId)
     .order('created_at')
 
-  const threadAuthor = thread.profiles as { full_name: string } | null
+  const threadAuthor = thread.profiles as unknown as { full_name: string } | null
 
   async function handleReply(formData: FormData) {
     'use server'
@@ -67,7 +67,7 @@ export default async function StudentThreadPage({ params }: Props) {
       {/* Replies */}
       <div className="space-y-3 mb-6">
         {(replies ?? []).map(r => {
-          const author = r.profiles as { full_name: string } | null
+          const author = r.profiles as unknown as { full_name: string } | null
           const canDelete = r.author_id === user.id
           return (
             <div key={r.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
