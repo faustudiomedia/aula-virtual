@@ -2,7 +2,7 @@
 
 interface DeleteUserButtonProps {
   userId: string
-  action: (prevState: unknown, formData: FormData) => Promise<void>
+  action: (formData: FormData) => void | Promise<void>
 }
 
 export default function DeleteUserButton({ userId, action }: DeleteUserButtonProps) {

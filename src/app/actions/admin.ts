@@ -100,7 +100,7 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
   return { success: true }
 }
 
-export async function deleteUserAction(_prevState: unknown, formData: FormData): Promise<void> {
+export async function deleteUserAction(formData: FormData): Promise<void> {
   const userId = formData.get('userId') as string
   if (!userId) return
   await deleteUser(userId)
