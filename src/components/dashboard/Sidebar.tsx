@@ -75,11 +75,6 @@ const superAdminSections: NavSection[] = [
       { label: "Mi progreso",        href: "/dashboard/student/progress",       icon: "📈" },
     ],
   },
-  {
-    items: [
-      { label: "Mi perfil", href: "/dashboard/profile", icon: "👤" },
-    ],
-  },
 ];
 
 const adminSections: NavSection[] = [
@@ -90,11 +85,6 @@ const adminSections: NavSection[] = [
       { label: "Cursos",       href: "/dashboard/admin/courses",    icon: "📚" },
       { label: "Usuarios",     href: "/dashboard/admin/users",      icon: "👥" },
       { label: "Estadísticas", href: "/dashboard/admin/stats",      icon: "📊" },
-    ],
-  },
-  {
-    items: [
-      { label: "Mi perfil", href: "/dashboard/profile", icon: "👤" },
     ],
   },
 ];
@@ -111,11 +101,6 @@ const teacherSections: NavSection[] = [
       { label: "Mensajes",     href: "/dashboard/messages",             icon: "✉️" },
     ],
   },
-  {
-    items: [
-      { label: "Mi perfil", href: "/dashboard/profile", icon: "👤" },
-    ],
-  },
 ];
 
 const studentSections: NavSection[] = [
@@ -127,11 +112,6 @@ const studentSections: NavSection[] = [
       { label: "Calendario",   href: "/dashboard/student/calendar",  icon: "📅" },
       { label: "Reuniones",    href: "/dashboard/meetings",          icon: "🎥" },
       { label: "Mensajes",     href: "/dashboard/messages",          icon: "✉️" },
-    ],
-  },
-  {
-    items: [
-      { label: "Mi perfil", href: "/dashboard/profile", icon: "👤" },
     ],
   },
 ];
