@@ -29,14 +29,13 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'super_admin') redirect('/dashboard')
 
-  // Query de usuarios con su instituto
   let query = supabase
     .from('profiles')
     .select('*, institutes(name)', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
 
-  if (q.trim())    query = query.or(`full_name.ilike.%${q.trim()}%,email.ilike.%${q.trim()}%`)
+  if (q.trim())       query = query.or(`full_name.ilike.%${q.trim()}%,email.ilike.%${q.trim()}%`)
   if (role !== 'all') query = query.eq('role', role)
 
   const { data: users, count } = await query

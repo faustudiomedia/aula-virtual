@@ -42,7 +42,6 @@ export async function updateUser(userId: string, formData: FormData): Promise<Ac
   const auth = await assertAdmin()
   if (!auth.ok) return { success: false, error: auth.error }
 
-  // Verify the target user belongs to the admin's institute
   const { data: target } = await auth.supabase
     .from('profiles')
     .select('institute_id')
@@ -79,7 +78,6 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
   const auth = await assertAdmin()
   if (!auth.ok) return { success: false, error: auth.error }
 
-  // Verify the target user belongs to the admin's institute
   const { data: target } = await auth.supabase
     .from('profiles')
     .select('institute_id')

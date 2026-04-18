@@ -58,7 +58,6 @@ export async function createInstitute(formData: FormData): Promise<ActionResult>
     return { success: false, error: msgs }
   }
 
-  // Verificar slug único
   const { data: existing } = await auth.supabase
     .from('institutes')
     .select('id')
@@ -99,7 +98,6 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
     return { success: false, error: msgs }
   }
 
-  // Verificar slug único (excluyendo el propio)
   const { data: existing } = await auth.supabase
     .from('institutes')
     .select('id')
