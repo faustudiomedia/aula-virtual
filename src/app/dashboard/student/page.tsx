@@ -93,36 +93,35 @@ export default async function StudentDashboard() {
           </p>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {items.map((enrollment) => (
-            <Link
-              key={enrollment.id}
-              href={`/dashboard/student/courses/${enrollment.courses.id}`}
-              className="bg-white rounded-2xl border border-black/5 p-5 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow"
-            >
-              {/* Cover placeholder */}
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex-shrink-0 flex items-center justify-center text-white text-xl font-bold">
-                {enrollment.courses.title.charAt(0)}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-semibold text-[#050F1F] truncate">
-                    {enrollment.courses.title}
-                  </h3>
-                  {enrollment.completed && (
-                    <span className="ml-2 px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium flex-shrink-0">
-                      Completado
-                    </span>
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((enrollment, idx) => {
+            const GRADIENTS = [
+              ["#1A56DB","#38BDF8"],["#7C3AED","#A78BFA"],["#059669","#34D399"],
+              ["#D97706","#FCD34D"],["#DC2626","#F87171"],["#0891B2","#67E8F9"],
+            ]
+            const [from, to] = GRADIENTS[idx % GRADIENTS.length]
+            return (
+              <Link
+                key={enrollment.id}
+                href={`/dashboard/student/courses/${enrollment.courses.id}`}
+                className="block bg-white rounded-2xl border border-black/5 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+              >
+                <div className="h-20 flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}>
+                  <span className="text-3xl font-bold text-white/90">{enrollment.courses.title.charAt(0)}</span>
                 </div>
-                <p className="text-sm text-[#050F1F]/50 mb-2 line-clamp-1">
-                  {enrollment.courses.description ?? "Sin descripción"}
-                </p>
-                <ProgressBar value={enrollment.progress} />
-              </div>
-            </Link>
-          ))}
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-1 gap-2">
+                    <h3 className="font-semibold text-[#050F1F] truncate text-sm">{enrollment.courses.title}</h3>
+                    {enrollment.completed && (
+                      <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium flex-shrink-0">✓ Completado</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-[#050F1F]/40 mb-3 line-clamp-1">{enrollment.courses.description ?? "Sin descripción"}</p>
+                  <ProgressBar value={enrollment.progress} />
+                </div>
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>
