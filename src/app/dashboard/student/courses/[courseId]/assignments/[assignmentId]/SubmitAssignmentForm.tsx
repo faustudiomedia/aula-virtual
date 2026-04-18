@@ -2,8 +2,11 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import FileUpload from '@/components/ui/FileUpload'
 import { submitAssignment } from '@/app/actions/assignments'
+
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor'), { ssr: false })
 
 interface Props {
   assignmentId: string
@@ -14,6 +17,7 @@ interface Props {
 export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResubmit = false }: Props) {
   const [fileUrl, setFileUrl] = useState('')
   const [fileError, setFileError] = useState('')
+  const [editorContent, setEditorContent] = useState(defaultContent)
   const [error, setError] = useState('')
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -22,6 +26,7 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
     e.preventDefault()
     setError('')
     const formData = new FormData(e.currentTarget)
+    formData.set('content', editorContent)
     if (fileUrl) formData.set('file_url', fileUrl)
 
     startTransition(async () => {
@@ -43,13 +48,12 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
       )}
 
       <div>
-        <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Tu respuesta</label>
-        <textarea
-          name="content"
-          rows={7}
-          defaultValue={defaultContent}
-          placeholder="Escribí tu respuesta aquí..."
-          className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm text-[#050F1F] resize-none focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+        <label className="block text-sm font-medium text-[#050F1F] mb-2">Tu respuesta</label>
+        <RichTextEditor
+          content={defaultContent}
+          onChange={setEditorContent}
+          placeholder="Escribí tu trabajo aquí. Podés usar negrita, listas, títulos y más..."
+          minHeight={280}
         />
       </div>
 

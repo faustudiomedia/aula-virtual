@@ -96,9 +96,10 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
             </span>
           </div>
           {s.content && (
-            <p className="text-sm text-[#050F1F]/80 whitespace-pre-wrap bg-[#F8FAFC] rounded-xl p-3 mb-3">
-              {s.content}
-            </p>
+            <div
+              className="text-sm text-[#050F1F]/80 bg-[#F8FAFC] rounded-xl p-4 mb-3 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_mark]:bg-yellow-200"
+              dangerouslySetInnerHTML={{ __html: s.content }}
+            />
           )}
           {s.file_url && (
             <a
