@@ -36,9 +36,9 @@ export default async function StudentDashboard() {
     : 0;
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-2xl font-bold text-[#050F1F]">
           Hola, {profile?.full_name?.split(" ")[0] ?? "Alumno"} 👋
         </h1>
@@ -48,7 +48,7 @@ export default async function StudentDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         {[
           {
             label: "Cursos inscriptos",
@@ -71,13 +71,13 @@ export default async function StudentDashboard() {
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl p-5 border border-black/5"
+            className="rounded-2xl p-4 sm:p-5 border border-black/5 flex sm:block items-center gap-4"
             style={{ background: stat.bg }}
           >
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm text-[#050F1F]/60 mt-1">{stat.label}</p>
+            <p className="text-sm text-[#050F1F]/60 sm:mt-1">{stat.label}</p>
           </div>
         ))}
       </div>

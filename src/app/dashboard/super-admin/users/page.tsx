@@ -108,9 +108,9 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
               </tr>
             </thead>
             <tbody>
-              {(users ?? []).map((u: any) => {
+              {(users ?? []).map((u: { id: string; full_name: string | null; email: string; role: string; created_at: string; institutes: { name: string } | null }) => {
                 const roleInfo = ROLE_LABELS[u.role] ?? { label: u.role, color: 'bg-gray-50 text-gray-600' }
-                const instituteName = (u.institutes as any)?.name ?? '—'
+                const instituteName = u.institutes?.name ?? '—'
                 const date = new Date(u.created_at).toLocaleDateString('es-AR', {
                   day: '2-digit', month: '2-digit', year: 'numeric',
                 })

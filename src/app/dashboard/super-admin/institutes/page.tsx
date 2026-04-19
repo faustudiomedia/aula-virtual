@@ -41,10 +41,10 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
   const usersByInstitute: Record<string, number> = {}
   const coursesByInstitute: Record<string, number> = {}
 
-  ;(profileStats ?? []).forEach((p: any) => {
+  ;(profileStats ?? []).forEach((p: { institute_id: string | null; role: string }) => {
     if (p.institute_id) usersByInstitute[p.institute_id] = (usersByInstitute[p.institute_id] ?? 0) + 1
   })
-  ;(courseStats ?? []).forEach((c: any) => {
+  ;(courseStats ?? []).forEach((c: { institute_id: string | null }) => {
     if (c.institute_id) coursesByInstitute[c.institute_id] = (coursesByInstitute[c.institute_id] ?? 0) + 1
   })
 
@@ -127,7 +127,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
               </tr>
             </thead>
             <tbody>
-              {(institutes ?? []).map((inst: any) => (
+              {(institutes ?? []).map((inst: { id: string; name: string; slug: string; domain: string | null; primary_color: string | null; secondary_color: string | null; active: boolean }) => (
                 <tr key={inst.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.01] transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">

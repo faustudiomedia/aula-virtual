@@ -56,8 +56,8 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-[#050F1F]">
             Panel de Administración
@@ -68,15 +68,15 @@ export default async function AdminDashboard() {
         </div>
         <Link
           href="/dashboard/admin/institutes/new"
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold
-                     hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20"
+          className="px-4 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold
+                     hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20 text-center"
         >
           + Nuevo instituto
         </Link>
       </div>
 
       {/* Global stats */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
           {
             label: "Institutos",
@@ -146,7 +146,7 @@ export default async function AdminDashboard() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {instituteList.map((inst) => (
             <div
               key={inst.id}
