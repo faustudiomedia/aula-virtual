@@ -96,6 +96,13 @@ const superAdminSections: NavSection[] = [
       { label: "Mi progreso",        href: "/dashboard/student/progress",       icon: TrendingUp },
     ],
   },
+  {
+    title: "Comunicación",
+    items: [
+      { label: "Reuniones",          href: "/dashboard/meetings",               icon: Video },
+      { label: "Mensajes",           href: "/dashboard/messages",               icon: Mail },
+    ],
+  },
 ];
 
 const adminSections: NavSection[] = [

@@ -42,7 +42,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
   const totalPages = Math.ceil((count ?? 0) / PAGE_SIZE)
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-8">
@@ -94,12 +94,14 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
       {/* ── Tabla ── */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
         {(users ?? []).length === 0 ? (
+
           <div className="py-16 text-center">
             <p className="text-4xl mb-3">👥</p>
             <p className="text-[#050F1F]/50">No se encontraron usuarios</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[650px] text-sm">
             <thead>
               <tr className="border-b border-black/5 bg-black/[0.02]">
                 <th className="text-left px-6 py-3.5 font-semibold text-[#050F1F]/60">Usuario</th>
@@ -152,6 +154,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
               })}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
