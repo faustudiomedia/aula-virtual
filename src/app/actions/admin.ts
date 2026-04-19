@@ -7,6 +7,12 @@ import { z } from 'zod'
 
 type ActionResult = { success: true } | { success: false; error: string }
 
+export type ActionState = {
+  success?: boolean
+  error?: string
+  fieldErrors?: Record<string, string[]>
+}
+
 // ── Helper: verificar que el usuario es admin y obtener su institute_id ────────
 
 async function assertAdmin(): Promise<
@@ -221,6 +227,67 @@ export async function removeUserFromInstituteAction(formData: FormData): Promise
 
   await auth.supabase.from('profiles').update({ institute_id: null }).eq('id', userId)
   revalidatePath('/dashboard/admin/institutes/[instituteId]', 'page')
+}
+
+// ── Invitar usuario por email ─────────────────────────────────────────────────
+
+const inviteUserSchema = z.object({
+  email:        z.string().email('Email inválido'),
+  full_name:    z.string().min(1, 'El nombre es requerido'),
+  role:         z.enum(ALLOWED_ROLES, { message: 'Rol inválido' }),
+  institute_id: z.string().uuid('Instituto inválido'),
+})
+
+export async function inviteUser(_prev: ActionState, formData: FormData): Promise<ActionState> {
+  const auth = await assertAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  const raw = {
+    email:        (formData.get('email') as string)?.trim().toLowerCase(),
+    full_name:    (formData.get('full_name') as string)?.trim(),
+    role:         formData.get('role') as string,
+    institute_id: formData.get('institute_id') as string,
+  }
+
+  const parsed = inviteUserSchema.safeParse(raw)
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string[]> = {}
+    for (const issue of parsed.error.issues) {
+      const key = issue.path[0] as string
+      fieldErrors[key] = [...(fieldErrors[key] ?? []), issue.message]
+    }
+    return { success: false, error: 'Por favor corregí los errores del formulario.', fieldErrors }
+  }
+
+  // Admin can only invite to their own institute
+  if (parsed.data.institute_id !== auth.institute_id) {
+    return { success: false, error: 'Solo podés invitar usuarios a tu propio instituto.' }
+  }
+
+  let adminClient: ReturnType<typeof createAdminClient>
+  try {
+    adminClient = createAdminClient()
+  } catch {
+    return { success: false, error: 'Error de configuración del servidor. Contactá al administrador.' }
+  }
+
+  const { data: invited, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(
+    parsed.data.email,
+    { data: { full_name: parsed.data.full_name } },
+  )
+
+  if (inviteError) return { success: false, error: inviteError.message }
+
+  // Upsert profile so role and institute are set when the user accepts the invite
+  await adminClient.from('profiles').upsert({
+    id:           invited.user.id,
+    email:        parsed.data.email,
+    full_name:    parsed.data.full_name,
+    role:         parsed.data.role,
+    institute_id: parsed.data.institute_id,
+  })
+
+  return { success: true }
 }
 
 // ── Eliminar instituto ────────────────────────────────────────────────────────
