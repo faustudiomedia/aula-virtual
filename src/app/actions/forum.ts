@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { createNotification } from '@/app/actions/notifications'
 
 export async function createThread(courseId: string, formData: FormData) {
   const supabase = await createClient()
@@ -86,6 +87,20 @@ export async function createReply(threadId: string, courseId: string, formData: 
     author_id: user.id,
     content: content.trim(),
   })
+
+  // Notify thread author (if they are not the one replying)
+  const { data: thread } = await supabase
+    .from('forum_threads').select('author_id, title').eq('id', threadId).single()
+  if (thread && thread.author_id !== user.id) {
+    const { data: replier } = await supabase
+      .from('profiles').select('full_name').eq('id', user.id).single()
+    await createNotification(
+      thread.author_id,
+      'Nueva respuesta en tu hilo',
+      `${replier?.full_name ?? 'Alguien'} respondió a "${thread.title}"`,
+      `/dashboard/student/courses/${courseId}/forum/${threadId}`,
+    )
+  }
 
   revalidatePath(`/dashboard/teacher/courses/${courseId}/forum/${threadId}`)
   revalidatePath(`/dashboard/student/courses/${courseId}/forum/${threadId}`)

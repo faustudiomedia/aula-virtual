@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { markMessagesAsRead } from '@/app/actions/messages'
 import { MessageInput } from './MessageInput'
 import { ScrollToBottom } from './ScrollToBottom'
+import { RealtimeMessages } from './RealtimeMessages'
 
 interface Props { params: Promise<{ userId: string }> }
 
@@ -78,6 +79,7 @@ export default async function ConversationPage({ params }: Props) {
       </div>
 
       <MessageInput recipientId={otherUserId} />
+      <RealtimeMessages currentUserId={user.id} otherUserId={otherUserId} />
     </div>
   )
 }

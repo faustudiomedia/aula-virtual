@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useTeacherCourses, useEnrollmentCounts } from "@/lib/hooks/use-data";
+import { useTeacherCourses, useEnrollmentCounts, useActiveStudentsThisWeek } from "@/lib/hooks/use-data";
 import {
   EditCourseButton,
   DeleteCourseButton,
@@ -19,6 +19,7 @@ export default function TeacherDashboardView({
   const { data: courses = [], isLoading } = useTeacherCourses(teacherId);
   const courseIds = courses.map((c) => c.id);
   const { data: countMap = {} } = useEnrollmentCounts(courseIds);
+  const { data: activeThisWeek = 0 } = useActiveStudentsThisWeek(courseIds);
 
   const totalStudents = Object.values(countMap).reduce((a, b) => a + b, 0);
 
@@ -60,7 +61,7 @@ export default function TeacherDashboardView({
       {header}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
           {
             label: "Cursos activos",
@@ -82,6 +83,13 @@ export default function TeacherDashboardView({
             color: "#059669",
             bg: "#ECFDF5",
             border: "#A7F3D0",
+          },
+          {
+            label: "Activos esta semana",
+            value: activeThisWeek,
+            color: "#D97706",
+            bg: "#FFFBEB",
+            border: "#FDE68A",
           },
         ].map((stat) => (
           <div

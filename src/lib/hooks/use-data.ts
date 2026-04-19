@@ -177,6 +177,32 @@ export function useCourseMaterials(courseId: string) {
   });
 }
 
+// ─── Active students this week (teacher) ─────────────────────────
+export function useActiveStudentsThisWeek(courseIds: string[]) {
+  return useQuery({
+    queryKey: ['active_students_week', courseIds] as const,
+    queryFn: async () => {
+      if (!courseIds.length) return 0
+      const supabase = createClient()
+      const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+      const { data: materials } = await supabase
+        .from('materials').select('id').in('course_id', courseIds)
+      const materialIds = (materials ?? []).map((m: { id: string }) => m.id)
+      if (!materialIds.length) return 0
+
+      const { data } = await supabase
+        .from('material_completions')
+        .select('student_id')
+        .in('material_id', materialIds)
+        .gte('completed_at', oneWeekAgo)
+
+      return new Set((data ?? []).map((r: { student_id: string }) => r.student_id)).size
+    },
+    enabled: courseIds.length > 0,
+  })
+}
+
 // ─── All courses (admin, with pagination & search) ────────────────
 export interface CoursesOptions {
   search?: string;

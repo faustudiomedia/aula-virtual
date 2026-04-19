@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { createNotification } from '@/app/actions/notifications'
 
 type Result = { success: true } | { success: false; error: string }
 
@@ -89,6 +90,25 @@ export async function submitAssignment(assignmentId: string, formData: FormData)
   )
 
   if (error) return { success: false, error: error.message }
+
+  // Notify the course teacher
+  const { data: assignment } = await supabase
+    .from('assignments').select('title, course_id').eq('id', assignmentId).single()
+  if (assignment?.course_id) {
+    const { data: course } = await supabase
+      .from('courses').select('teacher_id, title').eq('id', assignment.course_id).single()
+    const { data: student } = await supabase
+      .from('profiles').select('full_name').eq('id', user.id).single()
+    if (course?.teacher_id) {
+      await createNotification(
+        course.teacher_id,
+        'Nueva entrega recibida',
+        `${student?.full_name ?? 'Un alumno'} entregó "${assignment.title}" en ${course.title}`,
+        `/dashboard/teacher/courses/${assignment.course_id}/assignments/${assignmentId}`,
+      )
+    }
+  }
+
   return { success: true }
 }
 
@@ -118,6 +138,20 @@ export async function gradeSubmission(formData: FormData): Promise<void> {
       feedback,
       graded_at: new Date().toISOString(),
     }).eq('id', submissionId)
+
+    // Notify the student
+    const { data: submission } = await supabase
+      .from('submissions').select('student_id').eq('id', submissionId).single()
+    const { data: assignment } = await supabase
+      .from('assignments').select('title').eq('id', assignmentId).single()
+    if (submission?.student_id && assignment?.title) {
+      await createNotification(
+        submission.student_id,
+        'Tu entrega fue calificada',
+        `Obtuviste ${score} puntos en "${assignment.title}"`,
+        `/dashboard/student/courses/${courseId}/assignments/${assignmentId}`,
+      )
+    }
   }
 
   redirect(`/dashboard/teacher/courses/${courseId}/assignments/${assignmentId}?success=1`)
