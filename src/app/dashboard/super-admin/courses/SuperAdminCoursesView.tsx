@@ -41,7 +41,7 @@ export default function SuperAdminCoursesView() {
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-[#050F1F]">Todos los cursos</h1>
@@ -97,7 +97,8 @@ export default function SuperAdminCoursesView() {
       ) : (
         <>
           <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[600px] text-sm">
               <thead className="bg-[#F0F9FF] border-b border-black/5">
                 <tr>
                   <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
@@ -179,6 +180,7 @@ export default function SuperAdminCoursesView() {
                 ))}
               </tbody>
             </table>
+          </div>
           </div>
 
           {totalPages > 1 && (

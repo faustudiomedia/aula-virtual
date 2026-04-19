@@ -40,14 +40,16 @@ export default function AllMaterialsView({ teacherId }: Props) {
     loadingCourses || (courseIds.length > 0 && loadingMaterials);
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-2xl font-bold text-[#050F1F]">
-          Todos los materiales
-        </h1>
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
+      <div className="mb-2">
+        <div className="flex items-start justify-between gap-3 mb-1">
+          <h1 className="text-2xl font-bold text-[#050F1F]">
+            Todos los materiales
+          </h1>
+        </div>
         {courses.length > 0 && (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-[#050F1F]/50">Agregar en:</span>
+          <div className="flex items-center gap-2 flex-wrap mt-2">
+            <span className="text-sm text-[#050F1F]/50 flex-shrink-0">Agregar en:</span>
             <div className="flex gap-2 flex-wrap">
               {courses.slice(0, 4).map((c) => (
                 <Link

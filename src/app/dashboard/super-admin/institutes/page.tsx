@@ -49,7 +49,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
   })
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-8">
@@ -115,7 +115,8 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
             </Link>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[600px] text-sm">
             <thead>
               <tr className="border-b border-black/5 bg-black/[0.02]">
                 <th className="text-left px-6 py-3.5 font-semibold text-[#050F1F]/60">Instituto</th>
@@ -173,6 +174,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
