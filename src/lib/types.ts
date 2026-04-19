@@ -54,13 +54,6 @@ export interface Material {
   created_at: string;
 }
 
-export interface InstituteTheme {
-  name: string;
-  primaryColor: string;
-  secondaryColor: string;
-  logoUrl: string | null;
-}
-
 export interface Announcement {
   id: string;
   course_id: string;

@@ -158,6 +158,15 @@ export async function updateMaterial(
     const title = (formData.get("title") as string)?.trim();
     if (!title) return { success: false, error: "El título es requerido" };
 
+    // Verify ownership: material → course → teacher
+    const { data: material } = await supabase
+      .from("materials").select("course_id").eq("id", materialId).single();
+    if (!material) return { success: false, error: "Material no encontrado" };
+    const { data: course } = await supabase
+      .from("courses").select("teacher_id").eq("id", material.course_id).single();
+    if (!course || course.teacher_id !== user.id)
+      return { success: false, error: "Sin permisos para editar este material" };
+
     const { error } = await supabase
       .from("materials")
       .update({

@@ -67,6 +67,12 @@ export async function createQuiz(courseId: string, content: QuizQuestion[], prev
 
     if (!parsed.success) return { success: false, error: parsed.error.issues[0].message }
 
+    // Verify the teacher owns the course
+    const { data: course } = await supabase
+      .from('courses').select('teacher_id').eq('id', courseId).single()
+    if (!course || course.teacher_id !== user.id)
+      return { success: false, error: 'Sin permisos para este curso' }
+
     const { error } = await supabase
       .from('quizzes')
       .insert({

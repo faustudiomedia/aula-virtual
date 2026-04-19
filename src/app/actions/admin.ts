@@ -138,9 +138,10 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
     try {
       adminClient = createAdminClient()
     } catch {
+      console.error('[admin] SUPABASE_SERVICE_ROLE_KEY not configured')
       return {
         success: false,
-        error: 'Falta configurar SUPABASE_SERVICE_ROLE_KEY en .env.local. Obtené la clave de servicio en Settings > API de tu proyecto Supabase.',
+        error: 'Error de configuración del servidor. Contactá al administrador.',
       }
     }
 

@@ -16,6 +16,14 @@ export async function updateProfile(formData: FormData): Promise<ActionResult> {
 
     const avatarFile = formData.get("avatar") as File | null
     if (avatarFile && avatarFile.size > 0) {
+      const MAX_SIZE = 2 * 1024 * 1024 // 2 MB
+      if (avatarFile.size > MAX_SIZE)
+        return { success: false, error: "La imagen no puede superar los 2 MB" }
+
+      const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+      if (!ALLOWED_TYPES.includes(avatarFile.type))
+        return { success: false, error: "Solo se permiten imágenes (JPEG, PNG, WebP, GIF)" }
+
       const ext = avatarFile.name.split('.').pop()?.toLowerCase() ?? 'jpg'
       const path = `${user.id}.${ext}`
       const bytes = await avatarFile.arrayBuffer()

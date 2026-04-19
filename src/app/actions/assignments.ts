@@ -15,6 +15,12 @@ export async function createAssignment(courseId: string, formData: FormData): Pr
   if (profile?.role !== 'profesor' && profile?.role !== 'super_admin')
     return { success: false, error: 'Sin permisos' }
 
+  // Verify the teacher owns the course
+  const { data: course } = await supabase
+    .from('courses').select('teacher_id').eq('id', courseId).single()
+  if (!course || course.teacher_id !== user.id)
+    return { success: false, error: 'Sin permisos para este curso' }
+
   const title = (formData.get('title') as string | null)?.trim()
   const description = (formData.get('description') as string | null)?.trim() ?? ''
   const dueDateStr = (formData.get('due_date') as string | null)?.trim() || null
@@ -38,6 +44,20 @@ export async function deleteAssignment(assignmentId: string): Promise<Result> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'No autenticado' }
+
+  const { data: profile } = await supabase
+    .from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'profesor' && profile?.role !== 'super_admin')
+    return { success: false, error: 'Sin permisos' }
+
+  // Verify the teacher owns the course that contains this assignment
+  const { data: assignment } = await supabase
+    .from('assignments').select('course_id').eq('id', assignmentId).single()
+  if (!assignment) return { success: false, error: 'Tarea no encontrada' }
+  const { data: course } = await supabase
+    .from('courses').select('teacher_id').eq('id', assignment.course_id).single()
+  if (!course || course.teacher_id !== user.id)
+    return { success: false, error: 'Sin permisos para eliminar esta tarea' }
 
   const { error } = await supabase
     .from('assignments').delete().eq('id', assignmentId)
@@ -86,6 +106,11 @@ export async function gradeSubmission(formData: FormData): Promise<void> {
   const courseId = formData.get('course_id') as string
   const score = parseInt(formData.get('score') as string)
   const feedback = (formData.get('feedback') as string | null)?.trim() ?? ''
+
+  // Verify the teacher owns the course containing this submission
+  const { data: course } = await supabase
+    .from('courses').select('teacher_id').eq('id', courseId).single()
+  if (!course || course.teacher_id !== user.id) redirect('/dashboard')
 
   if (!isNaN(score) && score >= 0) {
     await supabase.from('submissions').update({

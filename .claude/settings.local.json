@@ -3,7 +3,12 @@
     "allow": [
       "mcp__claude_ai_Supabase__list_projects",
       "mcp__claude_ai_Supabase__apply_migration",
-      "mcp__claude_ai_Supabase__execute_sql"
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(gh repo *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)",
+      "Bash(grep -n \"avatars\" \"c:\\\\Users\\\\Gustavo A Pedrocca\\\\OneDrive\\\\claude/supabase/migrations\"/*.sql)",
+      "Bash(awk '{print $5, $9}')"
     ]
   }
 }
