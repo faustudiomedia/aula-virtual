@@ -1,7 +1,9 @@
 'use server'
 
 import { createClient as createAdminClient } from '@supabase/supabase-js'
-import type { AuditAction, AuditEntityType } from '@/lib/types'
+
+type AuditEntityType = 'user' | 'course' | 'material' | 'assignment' | 'submission' | 'quiz' | 'enrollment' | 'institute' | 'announcement' | 'forum_thread' | 'forum_reply'
+type AuditAction = 'create' | 'update' | 'delete' | 'publish' | 'unpublish' | 'enroll' | 'unenroll' | 'grade' | 'submit' | 'login' | 'logout'
 
 /**
  * Registra una acción en el audit_log.
