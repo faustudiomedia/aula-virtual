@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ProgressBar from "@/components/ui/ProgressBar";
 
@@ -86,6 +87,7 @@ export default async function AllStudentsPage() {
                 <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
                   Completados
                 </th>
+                <th className="px-5 py-3" />
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
@@ -131,6 +133,14 @@ export default async function AllStudentsPage() {
                     </td>
                     <td className="px-5 py-3.5 text-[#050F1F]">
                       {stats?.completed ?? 0}
+                    </td>
+                    <td className="px-5 py-3.5 text-right">
+                      <Link
+                        href={`/dashboard/messages/${student.id}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                      >
+                        Mensaje
+                      </Link>
                     </td>
                   </tr>
                 );
