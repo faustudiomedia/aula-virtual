@@ -105,3 +105,65 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
     return { success: false, error: msg }
   }
 }
+
+// ── Cambiar rol de un usuario del propio instituto ────────────────────────────
+
+// ── Cambiar rol de un usuario del propio instituto ────────────────────────────
+
+export async function changeUserRoleAction(formData: FormData): Promise<void> {
+  const { revalidatePath } = await import('next/cache')
+  const auth = await assertAdmin()
+  if (!auth.ok) return
+
+  const userId  = formData.get('userId') as string
+  const newRole = formData.get('role') as 'alumno' | 'profesor'
+  if (!userId || !['alumno','profesor'].includes(newRole)) return
+
+  const { data: target } = await auth.supabase
+    .from('profiles').select('institute_id, role').eq('id', userId).maybeSingle()
+  if (!target || target.institute_id !== auth.institute_id) return
+  if (target.role === 'admin' || target.role === 'super_admin') return
+
+  await auth.supabase.from('profiles').update({ role: newRole }).eq('id', userId)
+  revalidatePath('/dashboard/admin/institutes/[instituteId]', 'page')
+}
+
+// ── Eliminar usuario del instituto ────────────────────────────────────────────
+
+export async function removeUserFromInstituteAction(formData: FormData): Promise<void> {
+  const { revalidatePath } = await import('next/cache')
+  const auth = await assertAdmin()
+  if (!auth.ok) return
+
+  const userId = formData.get('userId') as string
+  if (!userId) return
+
+  const { data: target } = await auth.supabase
+    .from('profiles').select('institute_id, role').eq('id', userId).maybeSingle()
+  if (!target || target.institute_id !== auth.institute_id) return
+  if (target.role === 'admin' || target.role === 'super_admin') return
+
+  await auth.supabase.from('profiles').update({ institute_id: null }).eq('id', userId)
+  revalidatePath('/dashboard/admin/institutes/[instituteId]', 'page')
+}
+
+// ── Eliminar instituto ────────────────────────────────────────────────────────
+
+export async function deleteInstituteAction(formData: FormData): Promise<void> {
+  const { redirect } = await import('next/navigation')
+  const { revalidatePath } = await import('next/cache')
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  const instituteId = formData.get('instituteId') as string
+  if (!instituteId) return
+
+  const { data: profile } = await supabase
+    .from('profiles').select('role').eq('id', user.id).maybeSingle()
+  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') return
+
+  await supabase.from('institutes').delete().eq('id', instituteId)
+  revalidatePath('/dashboard/admin')
+  redirect('/dashboard/admin')
+}

@@ -23,15 +23,15 @@ export default async function MeetingRoomPage({ params }: Props) {
   if (!meeting) redirect('/dashboard/meetings')
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/dashboard/meetings" className="text-[#050F1F]/40 hover:text-[#050F1F] transition-colors text-sm">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+      <div className="flex items-center gap-3 mb-4">
+        <Link href="/dashboard/meetings" className="text-[#050F1F]/40 hover:text-[#050F1F] transition-colors text-sm flex-shrink-0">
           ← Reuniones
         </Link>
         <span className="text-[#050F1F]/20">/</span>
-        <h1 className="text-lg font-bold text-[#050F1F]">{meeting.display_name}</h1>
+        <h1 className="text-base font-bold text-[#050F1F] truncate">{meeting.display_name}</h1>
         {!meeting.active && (
-          <span className="text-xs px-2 py-0.5 rounded-full bg-black/5 text-[#050F1F]/40">Finalizada</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-black/5 text-[#050F1F]/40 flex-shrink-0">Finalizada</span>
         )}
       </div>
 
