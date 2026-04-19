@@ -44,3 +44,5 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
     </div>
   );
 }
+
+export default SearchInput

@@ -15,7 +15,7 @@ export default async function AllStudentsPage() {
 
   if (profile?.role !== 'profesor') redirect('/dashboard')
 
-  // Students from same institute
+  // Alumnos del mismo instituto
   const { data: students } = await supabase
     .from('profiles')
     .select('id, full_name, email, created_at')
@@ -23,15 +23,15 @@ export default async function AllStudentsPage() {
     .eq('role', 'alumno')
     .order('full_name')
 
-  // Get enrollment stats for each student
+  // Stats de matrículas por alumno
   const studentIds = (students ?? []).map((s) => s.id)
   const { data: enrollments } = await supabase
     .from('enrollments')
     .select('student_id, progress, completed')
-    .in('student_id', studentIds)
+    .in('student_id', studentIds.length > 0 ? studentIds : [''])
 
   const statsMap: Record<string, { total: number; avgProgress: number; completed: number }> = {}
-  ;(enrollments ?? []).forEach((e) => {
+  ;(enrollments ?? []).forEach((e: { student_id: string; progress: number; completed: boolean }) => {
     const s = statsMap[e.student_id] ?? { total: 0, avgProgress: 0, completed: 0 }
     s.total++
     s.avgProgress += e.progress
@@ -43,7 +43,8 @@ export default async function AllStudentsPage() {
     <div className="p-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-[#050F1F] mb-2">Alumnos del instituto</h1>
       <p className="text-[#050F1F]/50 mb-8">
-        {students?.length ?? 0} alumno{(students?.length ?? 0) !== 1 ? 's' : ''} registrado{(students?.length ?? 0) !== 1 ? 's' : ''}
+        {students?.length ?? 0} alumno{(students?.length ?? 0) !== 1 ? 's' : ''} registrado
+        {(students?.length ?? 0) !== 1 ? 's' : ''}
       </p>
 
       {(students ?? []).length === 0 ? (

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import Link from 'next/link'
 import ProgressBar from '@/components/ui/ProgressBar'
 import type { Enrollment, Course } from '@/lib/types'
 
@@ -30,7 +31,7 @@ export default async function StudentProgressPage() {
       ) : (
         <div className="space-y-4">
           {items.map((e) => (
-            <div key={e.id} className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm">
+            <Link key={e.id} href={`/dashboard/student/courses/${e.course_id}`} className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer block">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-[#050F1F]">{e.courses.title}</h3>
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -47,7 +48,7 @@ export default async function StudentProgressPage() {
               <p className="text-xs text-[#050F1F]/40 mt-2">
                 Inscripto el {new Date(e.enrolled_at).toLocaleDateString('es-AR', { dateStyle: 'medium' })}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       )}

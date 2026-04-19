@@ -8,6 +8,8 @@ export function FormError({ message }: { message?: string | null }) {
         )
         }
 
+export default FormError
+
         export function FormSuccess({ message }: { message?: string | null }) {
               if (!message) return null
                 return (

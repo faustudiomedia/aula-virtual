@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import './globals.css'
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: 'MAVIC – Plataforma Educativa',
@@ -30,6 +31,7 @@ export default async function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-[#F0F9FF] text-[#050F1F]">
         {children}
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   )

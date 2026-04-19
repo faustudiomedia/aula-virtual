@@ -5,9 +5,21 @@ const PUBLIC_PATHS = ['/login', '/api/auth']
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const response = NextResponse.next()
 
-  // ── Supabase session refresh ──────────────────────────────────────────────
+  // ── Early return for asset paths (no DB queries needed) ──────────────────
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/favicon') ||
+    /\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$/.test(pathname)
+  ) {
+    return NextResponse.next()
+  }
+
+  const response = NextResponse.next({
+    request: { headers: request.headers },
+  })
+
+  // ── Supabase session refresh (required on every request) ─────────────────
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -39,43 +51,35 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // ── Multi-institute branding via request header ───────────────────────────
-  // The header is read by the root layout to set CSS custom properties.
-  if (user) {
+  // ── Profile & institute branding (only for dashboard routes) ─────────────
+  // Fetch profile+institute in a single join to reduce round-trips
+  if (user && pathname.startsWith('/dashboard')) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('institute_id, role')
+      .select('role, institutes(name, primary_color, secondary_color, logo_url)')
       .eq('id', user.id)
       .single()
 
-    if (profile?.institute_id) {
-      const { data: institute } = await supabase
-        .from('institutes')
-        .select('name, primary_color, secondary_color, logo_url')
-        .eq('id', profile.institute_id)
-        .single()
-
-      if (institute) {
-        response.headers.set('x-institute-name', institute.name)
-        response.headers.set('x-institute-primary', institute.primary_color)
-        response.headers.set('x-institute-secondary', institute.secondary_color)
-        if (institute.logo_url) {
-          response.headers.set('x-institute-logo', institute.logo_url)
-        }
-      }
-    }
-
-    // Role-based path guard
-    if (profile?.role && pathname.startsWith('/dashboard')) {
+    if (profile) {
       const role = profile.role as string
-      if (role === 'alumno' && pathname.startsWith('/dashboard/teacher')) {
-        return NextResponse.redirect(new URL('/dashboard/student', request.url))
-      }
-      if (role === 'alumno' && pathname.startsWith('/dashboard/admin')) {
+
+      // Role-based path guard
+      if (role === 'alumno' && (pathname.startsWith('/dashboard/teacher') || pathname.startsWith('/dashboard/admin'))) {
         return NextResponse.redirect(new URL('/dashboard/student', request.url))
       }
       if (role === 'profesor' && pathname.startsWith('/dashboard/admin')) {
         return NextResponse.redirect(new URL('/dashboard/teacher', request.url))
+      }
+
+      // Inject per-institute branding into response headers
+      const inst = (profile.institutes as unknown) as { name: string; primary_color: string; secondary_color: string; logo_url?: string } | null
+      if (inst) {
+        response.headers.set('x-institute-name', inst.name)
+        response.headers.set('x-institute-primary', inst.primary_color)
+        response.headers.set('x-institute-secondary', inst.secondary_color)
+        if (inst.logo_url) {
+          response.headers.set('x-institute-logo', inst.logo_url)
+        }
       }
     }
   }

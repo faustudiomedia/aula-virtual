@@ -18,6 +18,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   if (!profile) redirect('/login')
 
+  // Conteo de notificaciones no leídas (query rápida con head: true)
+  const { count: unreadCount } = await supabase
+    .from('notifications')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('is_read', false)
+
   const headersList = await headers()
   const instituteName = headersList.get('x-institute-name') ?? 'MAVIC'
   const primaryColor = headersList.get('x-institute-primary') ?? '#1A56DB'
@@ -29,6 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         instituteName={instituteName}
         userName={profile.full_name || user.email || 'Usuario'}
         primaryColor={primaryColor}
+        unreadNotifications={unreadCount ?? 0}
       />
       <main className="flex-1 overflow-auto">
         {children}
