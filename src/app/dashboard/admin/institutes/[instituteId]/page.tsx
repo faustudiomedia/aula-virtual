@@ -5,6 +5,22 @@ async function updateInstitute(instituteId: string, formData: FormData) {
   "use server";
   const supabase = await createClient();
 
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, institute_id")
+    .eq("id", user.id)
+    .single();
+
+  const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
+  if (!isAdmin) redirect("/dashboard");
+
+  // Admin can only edit their own institute; super_admin can edit any
+  if (profile?.role === "admin" && profile?.institute_id !== instituteId)
+    redirect("/dashboard/admin");
+
   await supabase
     .from("institutes")
     .update({
