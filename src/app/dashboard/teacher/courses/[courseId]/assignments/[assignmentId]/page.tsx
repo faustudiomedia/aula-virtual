@@ -143,9 +143,10 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                 {student.submission.content && (
                   <div className="mb-3">
                     <p className="text-xs font-medium text-[#050F1F]/40 uppercase tracking-wide mb-1">Respuesta</p>
-                    <p className="text-sm text-[#050F1F]/80 whitespace-pre-wrap bg-[#F8FAFC] rounded-xl p-3">
-                      {student.submission.content}
-                    </p>
+                    <div
+                      className="text-sm text-[#050F1F]/80 bg-[#F8FAFC] rounded-xl p-4 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_h3]:text-base [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_blockquote]:text-[#050F1F]/60 [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_pre]:bg-black/5 [&_pre]:rounded-lg [&_pre]:p-3 [&_mark]:bg-yellow-200"
+                      dangerouslySetInnerHTML={{ __html: student.submission.content }}
+                    />
                   </div>
                 )}
                 {student.submission.file_url && (

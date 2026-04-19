@@ -69,8 +69,8 @@ export default async function AdminDashboard() {
         </div>
         <Link
           href="/dashboard/admin/institutes/new"
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold
-                     hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20"
+          className="px-4 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold
+                     hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20 text-center"
         >
           + Nuevo instituto
         </Link>
@@ -151,7 +151,7 @@ export default async function AdminDashboard() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {instituteList.map((inst) => (
             <div
               key={inst.id}

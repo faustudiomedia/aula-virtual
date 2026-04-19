@@ -122,6 +122,12 @@ export async function addMaterial(
     const title = (formData.get("title") as string)?.trim();
     if (!title) return { success: false, error: "El título es requerido" };
 
+    // Verify user is the course teacher
+    const { data: course } = await supabase
+      .from("courses").select("teacher_id").eq("id", courseId).single();
+    if (!course || course.teacher_id !== user.id)
+      return { success: false, error: "Sin permisos para agregar materiales" };
+
     const { error } = await supabase.from("materials").insert({
       course_id: courseId,
       title,
@@ -182,6 +188,15 @@ export async function deleteMaterial(
       error: authError,
     } = await supabase.auth.getUser();
     if (authError || !user) return { success: false, error: "No autenticado" };
+
+    // Verify ownership through course
+    const { data: material } = await supabase
+      .from("materials").select("course_id").eq("id", materialId).single();
+    if (!material) return { success: false, error: "Material no encontrado" };
+    const { data: course } = await supabase
+      .from("courses").select("teacher_id").eq("id", material.course_id).single();
+    if (!course || course.teacher_id !== user.id)
+      return { success: false, error: "Sin permisos para eliminar este material" };
 
     const { error } = await supabase
       .from("materials")

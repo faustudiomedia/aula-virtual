@@ -32,9 +32,10 @@ export default async function SuperAdminStatsPage() {
     .select('institute_id, role, institutes(name)')
 
   const institutionMap: Record<string, { name: string; students: number; teachers: number; admins: number }> = {}
-  ;(profileStats ?? []).forEach((p: any) => {
+  ;(profileStats ?? []).forEach((p) => {
     if (!p.institute_id) return
-    const name = p.institutes?.name ?? p.institute_id
+    const inst = p.institutes as unknown as { name: string } | null
+    const name = inst?.name ?? p.institute_id
     const entry = institutionMap[p.institute_id] ?? { name, students: 0, teachers: 0, admins: 0 }
     if (p.role === 'alumno')   entry.students++
     if (p.role === 'profesor') entry.teachers++

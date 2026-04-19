@@ -200,7 +200,6 @@ export default function Sidebar({
             </p>
             <p className="text-xs text-[#050F1F]/40 mt-0.5">Plataforma Educativa</p>
           </div>
-          {/* Close button — only on mobile */}
           {onClose && (
             <button
               onClick={onClose}
