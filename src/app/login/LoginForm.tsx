@@ -48,7 +48,6 @@ export function LoginForm({ initialError, institutes }: { initialError?: string;
         <select
           id="institute_id"
           name="institute_id"
-          required
           className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white
                      focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
                      transition-all text-sm [&>option]:bg-[#050F1F] [&>option]:text-white"

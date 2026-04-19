@@ -9,7 +9,7 @@ import { z } from "zod";
 const loginSchema = z.object({
   email: z.string().email("Correo inválido"),
   password: z.string().min(6, "Debe tener al menos 6 caracteres"),
-  institute_id: z.string().uuid("Seleccioná un instituto válido"),
+  institute_id: z.string().uuid("Instituto inválido").optional().or(z.literal("")),
 });
 
 // Simple in-memory rate limiting
@@ -91,16 +91,20 @@ export async function login(
 
   const role = profile?.role ?? "alumno";
 
-  // For non-super_admin: the selected institute must match their profile
-  if (role !== "super_admin" && profile?.institute_id !== parsed.data.institute_id) {
-    await supabase.auth.signOut();
-    return { error: "El instituto seleccionado no corresponde a tu cuenta." };
+  const selectedInstituteId = parsed.data.institute_id || null;
+
+  // Only validate institute match if the profile has one assigned AND the user selected one
+  if (role !== "super_admin" && profile?.institute_id && selectedInstituteId) {
+    if (profile.institute_id !== selectedInstituteId) {
+      await supabase.auth.signOut();
+      return { error: "El instituto seleccionado no corresponde a tu cuenta." };
+    }
   }
 
   // Store active institute in cookie
   const cookieStore = await cookies();
   const activeInstituteId =
-    role === "super_admin" ? parsed.data.institute_id : profile?.institute_id;
+    role === "super_admin" ? (selectedInstituteId ?? profile?.institute_id) : (profile?.institute_id ?? selectedInstituteId);
   if (activeInstituteId) {
     cookieStore.set("active_institute_id", activeInstituteId, {
       httpOnly: true,
