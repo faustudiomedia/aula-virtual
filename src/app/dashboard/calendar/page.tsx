@@ -38,10 +38,8 @@ export default async function CalendarPage() {
         (submissionRows ?? []).map((s: { assignment_id: string; score: number | null; graded_at: string | null }) => [s.assignment_id, s])
       )
 
-      assignments = (assignmentRows ?? []).map((a: {
-        id: string; title: string; due_date: string; course_id: string;
-        courses: { title: string } | null
-      }) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      assignments = (assignmentRows ?? []).map((a: any) => {
         const sub = submissionMap.get(a.id)
         return {
           id: a.id,
@@ -80,14 +78,12 @@ export default async function CalendarPage() {
         .not('due_date', 'is', null)
         .order('due_date')
 
-      assignments = (assignmentRows ?? []).map((a: {
-        id: string; title: string; due_date: string; course_id: string;
-        courses: { title: string } | null
-      }) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      assignments = (assignmentRows ?? []).map((a: any) => ({
         id: a.id,
         title: a.title,
         courseId: a.course_id,
-        courseTitle: (a.courses as { title: string } | null)?.title ?? '',
+        courseTitle: Array.isArray(a.courses) ? (a.courses[0]?.title ?? '') : (a.courses?.title ?? ''),
         dueDate: a.due_date,
       }))
 
