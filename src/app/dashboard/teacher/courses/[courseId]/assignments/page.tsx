@@ -1,58 +1,120 @@
-import { redirect, notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { CourseNavTabs } from '@/components/ui/CourseNavTabs'
+import { deleteAssignment } from '@/app/actions/assignments'
 import Link from 'next/link'
-import type { Assignment, Submission } from '@/lib/types'
-import AssignmentManager from '@/components/ui/AssignmentManager'
+import type { Assignment } from '@/lib/types'
 
-interface Props { params: Promise<{ courseId: string }> }
+interface Props {
+  params: Promise<{ courseId: string }>
+  searchParams: Promise<{ error?: string }>
+}
 
-export default async function TeacherAssignmentsPage({ params }: Props) {
+export default async function TeacherAssignmentsPage({ params, searchParams }: Props) {
   const { courseId } = await params
+  const { error } = await searchParams
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+  const { data: profile } = await supabase
+    .from('profiles').select('role').eq('id', user.id).single()
+  if (profile?.role !== 'profesor' && profile?.role !== 'super_admin') redirect('/dashboard')
+
   const { data: course } = await supabase
-    .from('courses').select('title').eq('id', courseId).eq('teacher_id', user.id).single()
-  if (!course) notFound()
+    .from('courses').select('title').eq('id', courseId).single()
+  if (!course) redirect('/dashboard/teacher')
 
   const { data: assignments } = await supabase
-    .from('assignments').select('*').eq('course_id', courseId).order('created_at', { ascending: false })
-  const assignmentList = (assignments ?? []) as Assignment[]
+    .from('assignments')
+    .select('*')
+    .eq('course_id', courseId)
+    .order('created_at', { ascending: false })
 
-  // Get submissions for all assignments
-  const assignmentIds = assignmentList.map(a => a.id)
-  const { data: submissions } = assignmentIds.length > 0
-    ? await supabase
-        .from('submissions')
-        .select('*, student:profiles!submissions_student_id_fkey(full_name, email)')
-        .in('assignment_id', assignmentIds)
-        .order('submitted_at', { ascending: false })
-    : { data: [] }
-
-  const submissionsByAssignment: Record<string, Submission[]> = {}
-  ;(submissions ?? []).forEach((s: unknown) => {
-    const sub = s as Submission & { assignment_id: string }
-    if (!submissionsByAssignment[sub.assignment_id]) submissionsByAssignment[sub.assignment_id] = []
-    submissionsByAssignment[sub.assignment_id].push(sub)
-  })
+  async function handleDelete(formData: FormData) {
+    'use server'
+    const id = formData.get('id') as string
+    await deleteAssignment(id)
+    redirect(`/dashboard/teacher/courses/${courseId}/assignments`)
+  }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <div className="flex items-center gap-2 text-sm text-[#050F1F]/50 mb-6">
-        <Link href="/dashboard/teacher" className="hover:text-[#1A56DB] transition-colors">Mis cursos</Link>
-        <span>/</span>
-        <Link href={`/dashboard/teacher/courses/${courseId}/materials`} className="hover:text-[#1A56DB] transition-colors">{course.title}</Link>
-        <span>/</span>
-        <span className="text-[#050F1F] font-medium">Trabajos prácticos</span>
+      <div className="mb-2">
+        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+          ← Mis cursos
+        </Link>
       </div>
-      <AssignmentManager
-        assignments={assignmentList}
-        submissionsByAssignment={submissionsByAssignment}
-        courseId={courseId}
-        courseTitle={course.title}
-        isTeacher={true}
-      />
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-[#050F1F]">{course.title}</h1>
+        <Link
+          href={`/dashboard/teacher/courses/${courseId}/assignments/new`}
+          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all shadow-lg shadow-[#1A56DB]/20"
+        >
+          + Nueva tarea
+        </Link>
+      </div>
+
+      <CourseNavTabs courseId={courseId} />
+
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          ⚠️ {error}
+        </div>
+      )}
+
+      <div className="space-y-4">
+        {(assignments as Assignment[] ?? []).map((a) => {
+          const overdue = a.due_date && new Date(a.due_date) < new Date()
+          return (
+            <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-[#050F1F]">{a.title}</h3>
+                    {a.due_date && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
+                        {overdue ? 'Vencida' : 'Activa'}
+                      </span>
+                    )}
+                  </div>
+                  {a.description && (
+                    <p className="text-sm text-[#050F1F]/50 line-clamp-2 mb-2">{a.description}</p>
+                  )}
+                  <div className="flex items-center gap-4 text-xs text-[#050F1F]/40">
+                    <span>Puntaje máx: {a.max_score} pts</span>
+                    {a.due_date && (
+                      <span>
+                        Vence: {new Date(a.due_date).toLocaleDateString('es-AR', { dateStyle: 'short' })}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <Link
+                    href={`/dashboard/teacher/courses/${courseId}/assignments/${a.id}`}
+                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-medium text-[#050F1F]/70 hover:bg-[#F0F9FF] transition-all"
+                  >
+                    Ver entregas
+                  </Link>
+                  <form action={handleDelete}>
+                    <input type="hidden" name="id" value={a.id} />
+                    <button type="submit" className="text-xs text-red-400 hover:text-red-600 transition-colors">
+                      Eliminar
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+        {(assignments ?? []).length === 0 && (
+          <div className="text-center py-16 text-[#050F1F]/40 text-sm">
+            No hay tareas creadas. Creá la primera con el botón de arriba.
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,437 +1,256 @@
-import { redirect, notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
-import { z } from 'zod'
-
-const updateInstituteSchema = z.object({
-  name: z.string().min(3, 'El nombre debe tener al menos 3 caracteres'),
-  domain: z.string().optional(),
-  primary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Color inválido').optional(),
-  secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Color inválido').optional(),
-  active: z.boolean(),
-})
+import { redirect, notFound } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { changeUserRoleAction, removeUserFromInstituteAction, deleteInstituteAction } from "@/app/actions/admin";
 
 async function updateInstitute(instituteId: string, formData: FormData) {
-  'use server'
-  const supabase = await createClient()
-  const { data: { user }, error: authErr } = await supabase.auth.getUser()
-  if (authErr || !user) redirect('/login')
+  "use server";
+  const supabase = await createClient();
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') redirect('/dashboard')
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  const payload = {
-    name: formData.get('name') as string,
-    domain: (formData.get('domain') as string) || undefined,
-    primary_color: formData.get('primary_color') as string,
-    secondary_color: formData.get('secondary_color') as string,
-    active: formData.get('active') === 'on',
-  }
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, institute_id")
+    .eq("id", user.id)
+    .single();
 
-  const parsed = updateInstituteSchema.safeParse(payload)
-  if (!parsed.success) redirect('/dashboard/admin')
+  const isAdmin = profile?.role === "admin" || profile?.role === "super_admin";
+  if (!isAdmin) redirect("/dashboard");
 
-  await supabase.from('institutes').update({
-    name: parsed.data.name,
-    domain: parsed.data.domain || null,
-    primary_color: parsed.data.primary_color,
-    secondary_color: parsed.data.secondary_color,
-    active: parsed.data.active,
-  }).eq('id', instituteId)
+  if (profile?.role === "admin" && profile?.institute_id !== instituteId)
+    redirect("/dashboard/admin");
 
-  redirect('/dashboard/admin')
+  await supabase
+    .from("institutes")
+    .update({
+      name:            formData.get("name") as string,
+      domain:          (formData.get("domain") as string) || null,
+      primary_color:   formData.get("primary_color") as string,
+      secondary_color: formData.get("secondary_color") as string,
+      active:          formData.get("active") === "on",
+    })
+    .eq("id", instituteId);
+
+  redirect(`/dashboard/admin/institutes/${instituteId}`);
 }
 
 interface Props {
-  params: Promise<{ instituteId: string }>
+  params: Promise<{ instituteId: string }>;
+}
+
+const ROLE_LABEL: Record<string, string> = {
+  alumno:   "Alumno",
+  profesor: "Profesor",
+  admin:    "Admin",
+}
+const ROLE_COLOR: Record<string, string> = {
+  alumno:   "bg-sky-50 text-sky-700",
+  profesor: "bg-violet-50 text-violet-700",
+  admin:    "bg-orange-50 text-orange-700",
 }
 
 export default async function InstituteDetailPage({ params }: Props) {
-  const { instituteId } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  const { instituteId } = await params;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') redirect('/dashboard/admin')
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, institute_id")
+    .eq("id", user.id)
+    .single();
+  if (profile?.role !== "admin" && profile?.role !== "super_admin")
+    redirect("/dashboard/admin");
 
   const { data: institute } = await supabase
-    .from('institutes')
-    .select('*')
-    .eq('id', instituteId)
-    .single()
+    .from("institutes").select("*").eq("id", instituteId).single();
+  if (!institute) notFound();
 
-  if (!institute) notFound()
+  const { data: members } = await supabase
+    .from("profiles")
+    .select("id, full_name, email, role, avatar_url")
+    .eq("institute_id", instituteId)
+    .order("role")
+    .order("full_name");
 
-  // ── Profesores del instituto ──────────────────────────────────
-  const { data: teachers } = await supabase
-    .from('profiles')
-    .select('id, full_name, email, avatar_url')
-    .eq('institute_id', instituteId)
-    .eq('role', 'profesor')
-    .order('full_name')
+  const memberList = (members ?? []) as {
+    id: string; full_name: string | null; email: string; role: string; avatar_url: string | null
+  }[]
 
-  const teacherList = (teachers ?? []) as { id: string; full_name: string; email: string; avatar_url: string | null }[]
+  const students  = memberList.filter(m => m.role === "alumno").length;
+  const teachers  = memberList.filter(m => m.role === "profesor").length;
 
-  // ── Cursos del instituto con profesor ─────────────────────────
   const { data: courses } = await supabase
-    .from('courses')
-    .select('id, title, published, schedule, teacher_id, profiles(full_name, email)')
-    .eq('institute_id', instituteId)
-    .order('created_at', { ascending: false })
+    .from("courses").select("id, title, published").eq("institute_id", instituteId);
+  const courseList = (courses ?? []) as { id: string; title: string; published: boolean }[]
 
-  type CourseRow = {
-    id: string; title: string; published: boolean; schedule: string | null; teacher_id: string
-    profiles: { full_name: string; email: string } | null
-  }
-  const courseList = (courses ?? []) as unknown as CourseRow[]
-
-  // ── Alumnos del instituto con sus inscripciones ───────────────
-  const { data: students } = await supabase
-    .from('profiles')
-    .select('id, full_name, email, avatar_url')
-    .eq('institute_id', instituteId)
-    .eq('role', 'alumno')
-    .order('full_name')
-
-  const studentList = (students ?? []) as { id: string; full_name: string; email: string; avatar_url: string | null }[]
-
-  // Enrollment data for students
-  const { data: enrollments } = await supabase
-    .from('enrollments')
-    .select('student_id, course_id, progress, completed, courses(title)')
-    .in('student_id', studentList.length > 0 ? studentList.map(s => s.id) : [''])
-
-  type EnrollRow = {
-    student_id: string; course_id: string; progress: number; completed: boolean
-    courses: { title: string } | null
-  }
-  const enrollmentList = (enrollments ?? []) as unknown as EnrollRow[]
-
-  // Group enrollments by student
-  const enrollsByStudent: Record<string, EnrollRow[]> = {}
-  enrollmentList.forEach((e) => {
-    if (!enrollsByStudent[e.student_id]) enrollsByStudent[e.student_id] = []
-    enrollsByStudent[e.student_id].push(e)
-  })
-
-  // Count enrollments per course
-  const enrollCountByCourse: Record<string, number> = {}
-  enrollmentList.forEach((e) => {
-    enrollCountByCourse[e.course_id] = (enrollCountByCourse[e.course_id] ?? 0) + 1
-  })
-
-  // Courses per teacher
-  const coursesByTeacher: Record<string, string[]> = {}
-  courseList.forEach((c) => {
-    if (!coursesByTeacher[c.teacher_id]) coursesByTeacher[c.teacher_id] = []
-    coursesByTeacher[c.teacher_id].push(c.title)
-  })
-
-  const boundUpdate = updateInstitute.bind(null, instituteId)
+  const boundUpdate = updateInstitute.bind(null, instituteId);
+  const isSuperAdmin = profile?.role === "super_admin";
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-[#050F1F]/50 mb-6">
-        <Link href="/dashboard/admin" className="hover:text-[#1A56DB] transition-colors">Panel Admin</Link>
-        <span>/</span>
-        <span className="text-[#050F1F] font-medium">{institute.name}</span>
-      </div>
-
-      {/* Header con branding */}
-      <div className="rounded-2xl overflow-hidden border border-black/5 shadow-sm mb-8">
-        <div className="h-3" style={{ background: `linear-gradient(to right, ${institute.primary_color}, ${institute.secondary_color})` }} />
-        <div className="bg-white p-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
-              style={{ background: `linear-gradient(135deg, ${institute.primary_color}, ${institute.secondary_color})` }}
-            >
-              {institute.name.charAt(0)}
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-[#050F1F]">{institute.name}</h1>
-              <div className="flex items-center gap-3 mt-1 text-sm text-[#050F1F]/50">
-                <span className="font-mono">/{institute.slug}</span>
-                {institute.domain && <span>🌐 {institute.domain}</span>}
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${institute.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                  {institute.active ? 'Activo' : 'Inactivo'}
-                </span>
-              </div>
-            </div>
-          </div>
+    <div className="p-4 sm:p-8 max-w-4xl mx-auto">
+      <a href="/dashboard/admin" className="text-[#1A56DB] hover:underline text-sm">
+        ← Institutos
+      </a>
+      <div className="flex items-start justify-between mt-3 mb-6 gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#050F1F]">{institute.name}</h1>
+          <p className="text-[#050F1F]/50 text-sm mt-0.5">/{institute.slug}</p>
         </div>
+        {isSuperAdmin && (
+          <form action={deleteInstituteAction}>
+            <input type="hidden" name="instituteId" value={instituteId} />
+            <button
+              type="submit"
+              className="px-3 py-2 rounded-xl border border-red-200 text-red-500 text-xs font-medium hover:bg-red-50 transition-all"
+            >
+              Eliminar instituto
+            </button>
+          </form>
+        )}
       </div>
 
-      {/* Stats cards */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
         {[
-          { label: 'Profesores', value: teacherList.length, icon: '👩‍🏫', color: '#7C3AED', bg: '#F5F3FF' },
-          { label: 'Alumnos', value: studentList.length, icon: '🎒', color: '#1A56DB', bg: '#EFF6FF' },
-          { label: 'Cursos', value: courseList.length, icon: '📚', color: '#D97706', bg: '#FFFBEB' },
-          { label: 'Inscripciones', value: enrollmentList.length, icon: '📝', color: '#059669', bg: '#ECFDF5' },
-        ].map((s) => (
-          <div key={s.label} className="rounded-2xl p-5 border border-black/5" style={{ background: s.bg }}>
-            <span className="text-xl">{s.icon}</span>
-            <p className="text-3xl font-bold mt-1" style={{ color: s.color }}>{s.value}</p>
-            <p className="text-sm text-[#050F1F]/60 mt-1">{s.label}</p>
+          { label: "Alumnos",   value: students,         bg: "#EFF6FF", color: "#1A56DB" },
+          { label: "Profesores", value: teachers,        bg: "#F5F3FF", color: "#7C3AED" },
+          { label: "Cursos",    value: courseList.length, bg: "#FFFBEB", color: "#D97706" },
+        ].map(s => (
+          <div key={s.label} className="rounded-xl p-4 border border-black/5" style={{ background: s.bg }}>
+            <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
+            <p className="text-xs text-[#050F1F]/50 mt-1">{s.label}</p>
           </div>
         ))}
       </div>
 
-      {/* ── PROFESORES ────────────────────────────────────────── */}
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold text-[#050F1F] mb-4 flex items-center gap-2">
-          👩‍🏫 Profesores
-          <span className="text-sm font-normal text-[#050F1F]/40">({teacherList.length})</span>
-        </h2>
-        {teacherList.length === 0 ? (
-          <p className="text-sm text-[#050F1F]/40 bg-[#F5F3FF]/50 rounded-xl p-4 border border-purple-100">No hay profesores asignados a este instituto.</p>
-        ) : (
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-[#F5F3FF] border-b border-black/5">
-                <tr>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Profesor</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Email</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Cursos a cargo</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/5">
-                {teacherList.map((t) => (
-                  <tr key={t.id} className="hover:bg-[#F5F3FF]/30 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                          {t.full_name.charAt(0).toUpperCase()}
-                        </div>
-                        <span className="font-medium text-[#050F1F]">{t.full_name || 'Sin nombre'}</span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/50">{t.email}</td>
-                    <td className="px-5 py-3.5">
-                      {(coursesByTeacher[t.id] ?? []).length === 0 ? (
-                        <span className="text-[#050F1F]/30 text-xs">Sin cursos</span>
-                      ) : (
-                        <div className="flex flex-wrap gap-1">
-                          {coursesByTeacher[t.id].map((title, i) => (
-                            <span key={i} className="px-2 py-0.5 rounded-full bg-[#F5F3FF] text-[#7C3AED] text-xs font-medium">{title}</span>
-                          ))}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <Link
-                        href={`/dashboard/messages?to=${t.id}`}
-                        className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                      >
-                        📨 Mensaje
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      {/* ── CURSOS ─────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold text-[#050F1F] mb-4 flex items-center gap-2">
-          📚 Cursos
-          <span className="text-sm font-normal text-[#050F1F]/40">({courseList.length})</span>
-        </h2>
-        {courseList.length === 0 ? (
-          <p className="text-sm text-[#050F1F]/40 bg-[#FFFBEB]/50 rounded-xl p-4 border border-amber-100">No hay cursos en este instituto.</p>
-        ) : (
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-[#FFFBEB] border-b border-black/5">
-                <tr>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Curso</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Profesor</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Horario</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Alumnos</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Estado</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/5">
-                {courseList.map((c) => (
-                  <tr key={c.id} className="hover:bg-[#FFFBEB]/30 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D97706] to-[#F59E0B] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                          {c.title.charAt(0)}
-                        </div>
-                        <span className="font-medium text-[#050F1F]">{c.title}</span>
-                      </div>
-                    </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/60">{c.profiles?.full_name || c.profiles?.email || '—'}</td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/50 text-xs">
-                      {c.schedule ?? <span className="text-[#050F1F]/30 italic">Sin horario</span>}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span className="font-semibold text-[#1A56DB]">{enrollCountByCourse[c.id] ?? 0}</span>
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        c.published ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
-                      }`}>
-                        {c.published ? 'Publicado' : 'Borrador'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      {/* ── ALUMNOS ────────────────────────────────────────────── */}
-      <section className="mb-8">
-        <h2 className="text-lg font-semibold text-[#050F1F] mb-4 flex items-center gap-2">
-          🎒 Alumnos
-          <span className="text-sm font-normal text-[#050F1F]/40">({studentList.length})</span>
-        </h2>
-        {studentList.length === 0 ? (
-          <p className="text-sm text-[#050F1F]/40 bg-[#EFF6FF]/50 rounded-xl p-4 border border-blue-100">No hay alumnos en este instituto.</p>
-        ) : (
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-[#EFF6FF] border-b border-black/5">
-                <tr>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Alumno</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Email</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Cursos inscriptos</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/5">
-                {studentList.map((s) => {
-                  const myEnrollments = enrollsByStudent[s.id] ?? []
-                  return (
-                    <tr key={s.id} className="hover:bg-[#EFF6FF]/30 transition-colors">
-                      <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                            {(s.full_name || s.email).charAt(0).toUpperCase()}
-                          </div>
-                          <span className="font-medium text-[#050F1F]">{s.full_name || 'Sin nombre'}</span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3.5 text-[#050F1F]/50">{s.email}</td>
-                      <td className="px-5 py-3.5">
-                        {myEnrollments.length === 0 ? (
-                          <span className="text-[#050F1F]/30 text-xs">Sin inscripciones</span>
-                        ) : (
-                          <div className="flex flex-wrap gap-1">
-                            {myEnrollments.map((e) => (
-                              <span key={e.course_id} className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                e.completed ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                              }`}>
-                                {e.courses?.title ?? 'Curso'} ({e.progress}%)
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <Link
-                          href={`/dashboard/messages?to=${s.id}`}
-                          className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                        >
-                          📨 Mensaje
-                        </Link>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-
-      {/* ── CONFIGURACIÓN DEL INSTITUTO ───────────────────────── */}
-      <section>
-        <h2 className="text-lg font-semibold text-[#050F1F] mb-4">⚙️ Configuración</h2>
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-          <form action={boundUpdate} className="space-y-5">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Nombre *</label>
-                <input
-                  name="name"
-                  required
-                  defaultValue={institute.name}
-                  className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Slug</label>
-                <input
-                  value={institute.slug}
-                  disabled
-                  className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm bg-black/5 text-[#050F1F]/50 font-mono"
-                />
-              </div>
-            </div>
-
+      {/* Edit form */}
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+        <h2 className="text-sm font-semibold text-[#050F1F] mb-4">Configuración</h2>
+        <form action={boundUpdate} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Dominio personalizado</label>
-              <input
-                name="domain"
-                defaultValue={institute.domain ?? ''}
-                placeholder="Ej: miinstituto.edu.ar"
-                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition"
-              />
+              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Nombre *</label>
+              <input name="name" required defaultValue={institute.name}
+                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Color primario</label>
-                <input
-                  type="color"
-                  name="primary_color"
-                  defaultValue={institute.primary_color}
-                  className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Color secundario</label>
-                <input
-                  type="color"
-                  name="secondary_color"
-                  defaultValue={institute.secondary_color}
-                  className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Slug</label>
+              <input value={institute.slug} disabled
+                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm bg-black/5 text-[#050F1F]/40 font-mono" />
             </div>
-
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                id="active"
-                name="active"
-                defaultChecked={institute.active}
-                className="w-4 h-4 rounded accent-[#1A56DB]"
-              />
-              <label htmlFor="active" className="text-sm font-medium text-[#050F1F]">Instituto activo</label>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Dominio personalizado</label>
+            <input name="domain" defaultValue={institute.domain ?? ""}
+              placeholder="Ej: miinstituto.edu.ar"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Color primario</label>
+              <input type="color" name="primary_color" defaultValue={institute.primary_color}
+                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
             </div>
+            <div>
+              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Color secundario</label>
+              <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
+                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <input type="checkbox" id="active" name="active" defaultChecked={institute.active}
+              className="w-4 h-4 rounded accent-[#1A56DB]" />
+            <label htmlFor="active" className="text-sm font-medium text-[#050F1F]">Instituto activo</label>
+          </div>
+          <button type="submit"
+            className="w-full py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20">
+            Guardar cambios
+          </button>
+        </form>
+      </div>
 
-            <button
-              type="submit"
-              className="w-full py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20"
-            >
-              Guardar cambios
-            </button>
-          </form>
+      {/* Members */}
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-[#050F1F]">Usuarios del instituto</h2>
+          <a href={`/dashboard/admin/users/new`}
+            className="text-xs px-3 py-1.5 rounded-lg bg-[#1A56DB] text-white font-medium hover:bg-[#1A56DB]/90 transition-all">
+            + Agregar usuario
+          </a>
         </div>
-      </section>
+
+        {memberList.length === 0 ? (
+          <p className="text-sm text-[#050F1F]/40 py-4 text-center">Sin usuarios registrados.</p>
+        ) : (
+          <div className="space-y-2">
+            {memberList.map(m => (
+              <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-black/5 hover:bg-black/[0.01]">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                  style={{ background: "#1A56DB" }}>
+                  {(m.full_name || m.email || "?").charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-[#050F1F] truncate">{m.full_name || "(sin nombre)"}</p>
+                  <p className="text-xs text-[#050F1F]/40 truncate">{m.email}</p>
+                </div>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLOR[m.role] ?? "bg-black/5 text-[#050F1F]/50"}`}>
+                  {ROLE_LABEL[m.role] ?? m.role}
+                </span>
+                {m.role !== "admin" && m.role !== "super_admin" && (
+                  <div className="flex gap-1 flex-shrink-0">
+                    {m.role === "alumno" ? (
+                      <form action={changeUserRoleAction}>
+                        <input type="hidden" name="userId" value={m.id} />
+                        <input type="hidden" name="role" value="profesor" />
+                        <button type="submit"
+                          className="text-xs px-2.5 py-1 rounded-lg border border-violet-200 text-violet-600 hover:bg-violet-50 transition-all">
+                          → Profesor
+                        </button>
+                      </form>
+                    ) : (
+                      <form action={changeUserRoleAction}>
+                        <input type="hidden" name="userId" value={m.id} />
+                        <input type="hidden" name="role" value="alumno" />
+                        <button type="submit"
+                          className="text-xs px-2.5 py-1 rounded-lg border border-sky-200 text-sky-600 hover:bg-sky-50 transition-all">
+                          → Alumno
+                        </button>
+                      </form>
+                    )}
+                    <form action={removeUserFromInstituteAction}>
+                      <input type="hidden" name="userId" value={m.id} />
+                      <button type="submit"
+                        className="text-xs px-2 py-1 rounded-lg border border-black/10 text-[#050F1F]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
+                        ✕
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Courses */}
+      {courseList.length > 0 && (
+        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+          <h2 className="text-sm font-semibold text-[#050F1F] mb-3">Cursos</h2>
+          <div className="space-y-2">
+            {courseList.map(c => (
+              <div key={c.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-black/5 text-sm">
+                <span className="font-medium text-[#050F1F] truncate">{c.title}</span>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${c.published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
+                  {c.published ? "Publicado" : "Borrador"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

@@ -1,12 +1,13 @@
-import { LoginForm } from './LoginForm'
+import { LoginForm } from "./LoginForm";
 
 interface Props {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; message?: string }>;
 }
 
 export default async function LoginPage({ searchParams }: Props) {
-  const params = await searchParams
-  const errorMsg = params.error
+  const params = await searchParams;
+  const errorMsg = params.error;
+  const successMsg = params.message;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050F1F] px-4">
@@ -22,27 +23,38 @@ export default async function LoginPage({ searchParams }: Props) {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] mb-4 shadow-lg shadow-[#1A56DB]/30">
             <span className="text-white font-bold text-2xl">M</span>
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">MAVIC</h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">
+            MAVIC
+          </h1>
           <p className="text-[#BAE6FD] mt-1 text-sm">Plataforma Educativa</p>
         </div>
 
         {/* Card */}
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <h2 className="text-xl font-semibold text-white mb-2">Iniciar sesión</h2>
+          <h2 className="text-xl font-semibold text-white mb-2">
+            Iniciar sesión
+          </h2>
           <p className="text-[#BAE6FD] text-sm mb-6">
             Ingresá con tu cuenta institucional
           </p>
 
+          {successMsg && (
+            <div className="mb-4 px-4 py-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-300 text-sm">
+              {successMsg}
+            </div>
+          )}
           <LoginForm initialError={errorMsg} />
 
           {/* Role indicator */}
           <div className="mt-6 pt-6 border-t border-white/10">
-            <p className="text-xs text-center text-white/40 mb-3">Roles disponibles</p>
+            <p className="text-xs text-center text-white/40 mb-3">
+              Roles disponibles
+            </p>
             <div className="flex gap-2 justify-center">
               {[
-                { label: 'Alumno', color: '#38BDF8' },
-                { label: 'Profesor', color: '#1A56DB' },
-                { label: 'Admin', color: '#050F1F' },
+                { label: "Alumno", color: "#38BDF8" },
+                { label: "Profesor", color: "#1A56DB" },
+                { label: "Admin", color: "#050F1F" },
               ].map((r) => (
                 <span
                   key={r.label}
@@ -60,5 +72,5 @@ export default async function LoginPage({ searchParams }: Props) {
         </p>
       </div>
     </div>
-  )
+  );
 }
