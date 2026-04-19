@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { deleteUserAction } from '@/app/actions/super-admin'
+import DeleteUserButton from '@/components/ui/DeleteUserButton'
 import Link from 'next/link'
 
 interface Props {
@@ -27,14 +29,13 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (profile?.role !== 'super_admin') redirect('/dashboard')
 
-  // Query de usuarios con su instituto
   let query = supabase
     .from('profiles')
     .select('*, institutes(name)', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)
 
-  if (q.trim())    query = query.or(`full_name.ilike.%${q.trim()}%,email.ilike.%${q.trim()}%`)
+  if (q.trim())       query = query.or(`full_name.ilike.%${q.trim()}%,email.ilike.%${q.trim()}%`)
   if (role !== 'all') query = query.eq('role', role)
 
   const { data: users, count } = await query
@@ -105,12 +106,13 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Rol</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Instituto</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Registrado</th>
+                <th className="px-4 py-3.5" />
               </tr>
             </thead>
             <tbody>
-              {(users ?? []).map((u: { id: string; full_name: string | null; email: string; role: string; created_at: string; institutes: { name: string } | null }) => {
+              {(users ?? []).map((u: any) => {
                 const roleInfo = ROLE_LABELS[u.role] ?? { label: u.role, color: 'bg-gray-50 text-gray-600' }
-                const instituteName = u.institutes?.name ?? '—'
+                const instituteName = (u.institutes as any)?.name ?? '—'
                 const date = new Date(u.created_at).toLocaleDateString('es-AR', {
                   day: '2-digit', month: '2-digit', year: 'numeric',
                 })
@@ -134,6 +136,17 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                     </td>
                     <td className="px-4 py-4 text-[#050F1F]/60 text-sm">{instituteName}</td>
                     <td className="px-4 py-4 text-[#050F1F]/40 text-xs">{date}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex items-center gap-2 justify-end">
+                        <Link
+                          href={`/dashboard/super-admin/users/${u.id}/edit`}
+                          className="px-3 py-1 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                        >
+                          Editar
+                        </Link>
+                        <DeleteUserButton userId={u.id} action={deleteUserAction} />
+                      </div>
+                    </td>
                   </tr>
                 )
               })}

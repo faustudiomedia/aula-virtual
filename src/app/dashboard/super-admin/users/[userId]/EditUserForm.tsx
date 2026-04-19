@@ -51,7 +51,7 @@ export default function EditUserForm({
     const formData = new FormData(e.currentTarget);
 
     startTransition(async () => {
-      const result = await updateUser(formData);
+      const result = await updateUser(profile.id, formData);
       if (result.success) {
         router.push("/dashboard/super-admin/users?updated=1");
       } else {

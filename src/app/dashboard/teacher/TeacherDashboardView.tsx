@@ -41,7 +41,7 @@ export default function TeacherDashboardView({
 
   if (isLoading) {
     return (
-      <div className="p-8 max-w-5xl mx-auto">
+      <div className="p-4 md:p-8 max-w-5xl mx-auto">
         {header}
         <div className="grid gap-4">
           {[...Array(3)].map((_, i) => (
@@ -56,40 +56,45 @@ export default function TeacherDashboardView({
   }
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
       {header}
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {[
           {
             label: "Cursos activos",
             value: courses.filter((c) => c.published).length,
             color: "#1A56DB",
             bg: "#EFF6FF",
+            border: "#BFDBFE",
           },
           {
             label: "Cursos totales",
             value: courses.length,
             color: "#7C3AED",
             bg: "#F5F3FF",
+            border: "#DDD6FE",
           },
           {
             label: "Alumnos inscriptos",
             value: totalStudents,
             color: "#059669",
             bg: "#ECFDF5",
+            border: "#A7F3D0",
           },
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl p-5 border border-black/5"
-            style={{ background: stat.bg }}
+            className="rounded-2xl p-5 border"
+            style={{ background: stat.bg, borderColor: stat.border }}
           >
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm text-[#050F1F]/60 mt-1">{stat.label}</p>
+            <p className="text-sm font-medium mt-1" style={{ color: stat.color + "99" }}>
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>

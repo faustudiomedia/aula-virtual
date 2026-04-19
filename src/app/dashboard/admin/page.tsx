@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import type { Institute, UserRole } from "@/lib/types";
 import { getDashboardPath } from "@/lib/auth/getDashboardPath";
+import { Building2, GraduationCap, UserCog, BookOpen, Globe, Users } from "lucide-react";
 
 export default async function AdminDashboard() {
   const supabase = await createClient();
@@ -56,8 +57,8 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div className="p-4 sm:p-8 max-w-6xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-[#050F1F]">
             Panel de Administración
@@ -76,14 +77,15 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Global stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {[
           {
             label: "Institutos",
             value: instituteList.length,
-            icon: "🏛️",
+            Icon: Building2,
             color: "#1A56DB",
             bg: "#EFF6FF",
+            border: "#BFDBFE",
           },
           {
             label: "Alumnos totales",
@@ -91,9 +93,10 @@ export default async function AdminDashboard() {
               (s, p) => s + p.students,
               0,
             ),
-            icon: "🎒",
+            Icon: GraduationCap,
             color: "#059669",
             bg: "#ECFDF5",
+            border: "#A7F3D0",
           },
           {
             label: "Profesores",
@@ -101,30 +104,32 @@ export default async function AdminDashboard() {
               (s, p) => s + p.teachers,
               0,
             ),
-            icon: "👩‍🏫",
+            Icon: UserCog,
             color: "#7C3AED",
             bg: "#F5F3FF",
+            border: "#DDD6FE",
           },
           {
             label: "Cursos",
             value: Object.values(coursesByInstitute).reduce((s, n) => s + n, 0),
-            icon: "📚",
+            Icon: BookOpen,
             color: "#D97706",
             bg: "#FFFBEB",
+            border: "#FDE68A",
           },
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl p-5 border border-black/5"
-            style={{ background: stat.bg }}
+            className="rounded-2xl p-5 border"
+            style={{ background: stat.bg, borderColor: stat.border }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xl">{stat.icon}</span>
-            </div>
+            <stat.Icon size={20} className="mb-2" style={{ color: stat.color }} />
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm text-[#050F1F]/60 mt-1">{stat.label}</p>
+            <p className="text-sm font-medium mt-1" style={{ color: stat.color + "99" }}>
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>
@@ -134,7 +139,7 @@ export default async function AdminDashboard() {
 
       {instituteList.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
-          <p className="text-4xl mb-3">🏛️</p>
+          <Building2 size={40} className="mx-auto mb-3 text-[#BAE6FD]" />
           <p className="text-[#050F1F]/50 mb-4">
             No hay institutos creados todavía.
           </p>
@@ -189,19 +194,21 @@ export default async function AdminDashboard() {
                 </div>
 
                 {inst.domain && (
-                  <p className="text-xs text-[#050F1F]/40 mb-3">
-                    🌐 {inst.domain}
+                  <p className="text-xs text-[#050F1F]/40 mb-3 flex items-center gap-1">
+                    <Globe size={11} /> {inst.domain}
                   </p>
                 )}
 
                 <div className="flex gap-4 text-sm text-[#050F1F]/60 mb-4">
-                  <span>
-                    👥 {profilesByInstitute[inst.id]?.students ?? 0} alumnos
+                  <span className="flex items-center gap-1">
+                    <Users size={12} /> {profilesByInstitute[inst.id]?.students ?? 0} alumnos
                   </span>
-                  <span>
-                    👩‍🏫 {profilesByInstitute[inst.id]?.teachers ?? 0} profesores
+                  <span className="flex items-center gap-1">
+                    <UserCog size={12} /> {profilesByInstitute[inst.id]?.teachers ?? 0} prof.
                   </span>
-                  <span>📚 {coursesByInstitute[inst.id] ?? 0} cursos</span>
+                  <span className="flex items-center gap-1">
+                    <BookOpen size={12} /> {coursesByInstitute[inst.id] ?? 0} cursos
+                  </span>
                 </div>
 
                 {/* Color swatches */}

@@ -1,5 +1,6 @@
 'use server'
 
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { z } from 'zod'
@@ -57,7 +58,6 @@ export async function createInstitute(formData: FormData): Promise<ActionResult>
     return { success: false, error: msgs }
   }
 
-  // Verificar slug único
   const { data: existing } = await auth.supabase
     .from('institutes')
     .select('id')
@@ -98,7 +98,6 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
     return { success: false, error: msgs }
   }
 
-  // Verificar slug único (excluyendo el propio)
   const { data: existing } = await auth.supabase
     .from('institutes')
     .select('id')
@@ -132,9 +131,71 @@ export async function toggleInstituteStatus(id: string, active: boolean): Promis
   return { success: true }
 }
 
-// ── Crear usuario ─────────────────────────────────────────────────────────────
+// ── Actualizar usuario ────────────────────────────────────────────────────────
 
 const VALID_ROLES = ['alumno', 'profesor', 'admin', 'super_admin'] as const
+
+const updateUserSchema = z.object({
+  full_name:    z.string().min(1, 'El nombre es requerido'),
+  role:         z.enum(VALID_ROLES, { message: 'Rol inválido' }),
+  institute_id: z.string().uuid().nullable().optional(),
+})
+
+export async function updateUser(userId: string, formData: FormData): Promise<ActionResult> {
+  const auth = await assertSuperAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  const raw = {
+    full_name:    (formData.get('full_name') as string)?.trim(),
+    role:         formData.get('role') as string,
+    institute_id: (formData.get('institute_id') as string) || null,
+  }
+
+  const parsed = updateUserSchema.safeParse(raw)
+  if (!parsed.success) {
+    const msgs = parsed.error.issues.map((e) => e.message).join('. ')
+    return { success: false, error: msgs }
+  }
+
+  const { error } = await auth.supabase
+    .from('profiles')
+    .update({
+      full_name:    parsed.data.full_name,
+      role:         parsed.data.role,
+      institute_id: parsed.data.institute_id ?? null,
+    })
+    .eq('id', userId)
+
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+// ── Eliminar usuario ──────────────────────────────────────────────────────────
+
+export async function deleteUser(userId: string): Promise<ActionResult> {
+  const auth = await assertSuperAdmin()
+  if (!auth.ok) return { success: false, error: auth.error }
+
+  let adminClient: ReturnType<typeof createAdminClient>
+  try {
+    adminClient = createAdminClient()
+  } catch {
+    return { success: false, error: 'Falta configurar SUPABASE_SERVICE_ROLE_KEY en .env.local.' }
+  }
+
+  const { error } = await adminClient.auth.admin.deleteUser(userId)
+  if (error) return { success: false, error: error.message }
+  return { success: true }
+}
+
+export async function deleteUserAction(formData: FormData): Promise<void> {
+  const userId = formData.get('userId') as string
+  if (!userId) return
+  await deleteUser(userId)
+  redirect('/dashboard/super-admin/users')
+}
+
+// ── Crear usuario ─────────────────────────────────────────────────────────────
 
 const createUserSchema = z.object({
   email:        z.string().email('Email inválido'),
@@ -205,50 +266,6 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
       return { success: false, error: profileError.message }
     }
 
-    return { success: true }
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : 'Error inesperado'
-    return { success: false, error: msg }
-  }
-}
-
-// ── Actualizar usuario existente ───────────────────────────────────────────────
-
-const updateUserSchema = z.object({
-  id:           z.string().uuid('ID inválido'),
-  full_name:    z.string().min(1, 'El nombre es requerido'),
-  role:         z.enum(VALID_ROLES, { message: 'Rol inválido' }),
-  institute_id: z.string().uuid().nullable().optional(),
-})
-
-export async function updateUser(formData: FormData): Promise<ActionResult> {
-  try {
-    const auth = await assertSuperAdmin()
-    if (!auth.ok) return { success: false, error: auth.error }
-
-    const raw = {
-      id:           (formData.get('id') as string)?.trim(),
-      full_name:    (formData.get('full_name') as string)?.trim(),
-      role:         formData.get('role') as string,
-      institute_id: (formData.get('institute_id') as string) || null,
-    }
-
-    const parsed = updateUserSchema.safeParse(raw)
-    if (!parsed.success) {
-      const msgs = parsed.error.issues.map((e) => e.message).join('. ')
-      return { success: false, error: msgs }
-    }
-
-    const { error } = await auth.supabase
-      .from('profiles')
-      .update({
-        full_name:    parsed.data.full_name,
-        role:         parsed.data.role,
-        institute_id: parsed.data.institute_id ?? null,
-      })
-      .eq('id', parsed.data.id)
-
-    if (error) return { success: false, error: error.message }
     return { success: true }
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Error inesperado'

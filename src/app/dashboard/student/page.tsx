@@ -36,9 +36,9 @@ export default async function StudentDashboard() {
     : 0;
 
   return (
-    <div className="p-4 sm:p-8 max-w-5xl mx-auto">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#050F1F]">
           Hola, {profile?.full_name?.split(" ")[0] ?? "Alumno"} 👋
         </h1>
@@ -48,36 +48,41 @@ export default async function StudentDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {[
           {
             label: "Cursos inscriptos",
             value: items.length,
             color: "#1A56DB",
             bg: "#EFF6FF",
+            border: "#BFDBFE",
           },
           {
             label: "Cursos completados",
             value: completed,
             color: "#059669",
             bg: "#ECFDF5",
+            border: "#A7F3D0",
           },
           {
             label: "Progreso promedio",
             value: `${avgProgress}%`,
             color: "#D97706",
             bg: "#FFFBEB",
+            border: "#FDE68A",
           },
         ].map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl p-4 sm:p-5 border border-black/5 flex sm:block items-center gap-4"
-            style={{ background: stat.bg }}
+            className="rounded-2xl p-5 border"
+            style={{ background: stat.bg, borderColor: stat.border }}
           >
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm text-[#050F1F]/60 sm:mt-1">{stat.label}</p>
+            <p className="text-sm font-medium mt-1" style={{ color: stat.color + "99" }}>
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>
