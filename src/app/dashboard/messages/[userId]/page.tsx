@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { markMessagesAsRead } from '@/app/actions/messages'
 import { MessageInput } from './MessageInput'
+import { ScrollToBottom } from './ScrollToBottom'
 
 interface Props { params: Promise<{ userId: string }> }
 
@@ -71,6 +72,9 @@ export default async function ConversationPage({ params }: Props) {
             </div>
           )
         })}
+        {/* Anchor to scroll to bottom */}
+        <div id="messages-end" />
+        <ScrollToBottom />
       </div>
 
       <MessageInput recipientId={otherUserId} />

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { NewMessageModal } from './NewMessageModal'
 
 export default async function MessagesInboxPage() {
   const supabase = await createClient()
@@ -91,7 +92,10 @@ export default async function MessagesInboxPage() {
 
   return (
     <div className="p-4 sm:p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Mensajes</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-2xl font-bold text-[#050F1F]">Mensajes</h1>
+        <NewMessageModal />
+      </div>
       <p className="text-[#050F1F]/50 mb-6">Conversaciones directas.</p>
 
       {conversations.length === 0 && newContacts.length === 0 && (
