@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      academic_periods: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          institute_id: string
+          is_active: boolean
+          name: string
+          start_date: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          institute_id: string
+          is_active?: boolean
+          name: string
+          start_date: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          institute_id?: string
+          is_active?: boolean
+          name?: string
+          start_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academic_periods_institute_id_fkey"
+            columns: ["institute_id"]
+            isOneToOne: false
+            referencedRelation: "institutes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       announcements: {
         Row: {
           author_id: string
@@ -107,6 +145,87 @@ export type Database = {
           },
         ]
       }
+      attendance_records: {
+        Row: {
+          id: string
+          notes: string | null
+          session_id: string
+          status: string
+          student_id: string
+        }
+        Insert: {
+          id?: string
+          notes?: string | null
+          session_id: string
+          status: string
+          student_id: string
+        }
+        Update: {
+          id?: string
+          notes?: string | null
+          session_id?: string
+          status?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "attendance_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_sessions: {
+        Row: {
+          course_id: string
+          created_at: string
+          created_by: string
+          id: string
+          session_date: string
+          topic: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          session_date: string
+          topic?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          session_date?: string
+          topic?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_sessions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_log: {
         Row: {
           action: string
@@ -152,6 +271,7 @@ export type Database = {
           description: string | null
           id: string
           institute_id: string
+          period_id: string | null
           published: boolean
           teacher_id: string
           title: string
@@ -162,6 +282,7 @@ export type Database = {
           description?: string | null
           id?: string
           institute_id: string
+          period_id?: string | null
           published?: boolean
           teacher_id: string
           title: string
@@ -172,6 +293,7 @@ export type Database = {
           description?: string | null
           id?: string
           institute_id?: string
+          period_id?: string | null
           published?: boolean
           teacher_id?: string
           title?: string
@@ -182,6 +304,13 @@ export type Database = {
             columns: ["institute_id"]
             isOneToOne: false
             referencedRelation: "institutes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_period_id_fkey"
+            columns: ["period_id"]
+            isOneToOne: false
+            referencedRelation: "academic_periods"
             referencedColumns: ["id"]
           },
           {
@@ -616,6 +745,7 @@ export type Database = {
           full_name: string
           id: string
           institute_id: string | null
+          legajo: string | null
           role: Database["public"]["Enums"]["user_role"]
         }
         Insert: {
@@ -625,6 +755,7 @@ export type Database = {
           full_name?: string
           id: string
           institute_id?: string | null
+          legajo?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
         Update: {
@@ -634,6 +765,7 @@ export type Database = {
           full_name?: string
           id?: string
           institute_id?: string | null
+          legajo?: string | null
           role?: Database["public"]["Enums"]["user_role"]
         }
         Relationships: [
@@ -802,6 +934,7 @@ export type Database = {
 }
 
 type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
@@ -898,6 +1031,23 @@ export type Enums<
   ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {

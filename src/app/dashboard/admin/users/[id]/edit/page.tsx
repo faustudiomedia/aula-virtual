@@ -28,7 +28,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
 
   const { data: target } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, full_name, email, role, legajo')
     .eq('id', id)
     .eq('institute_id', profile.institute_id)
     .single()
@@ -112,6 +112,20 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
               <option value="alumno">🎓 Alumno</option>
               <option value="profesor">👨‍🏫 Profesor</option>
             </select>
+          </div>
+
+          {/* Legajo */}
+          <div>
+            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+              Legajo
+            </label>
+            <input
+              name="legajo"
+              defaultValue={target.legajo ?? ''}
+              placeholder="Ej: 12345"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+            />
+            <p className="text-xs text-[#050F1F]/40 mt-1">Número de legajo único del usuario en el instituto.</p>
           </div>
 
           {/* Botones */}

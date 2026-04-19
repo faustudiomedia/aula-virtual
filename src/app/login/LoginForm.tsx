@@ -21,7 +21,12 @@ function SubmitButton() {
   );
 }
 
-export function LoginForm({ initialError }: { initialError?: string }) {
+interface Institute {
+  id: string;
+  name: string;
+}
+
+export function LoginForm({ initialError, institutes }: { initialError?: string; institutes: Institute[] }) {
   const [state, formAction] = useActionState(login, null);
 
   const displayError = state?.error || initialError;
@@ -33,6 +38,34 @@ export function LoginForm({ initialError }: { initialError?: string }) {
           {displayError}
         </div>
       )}
+      <div>
+        <label
+          htmlFor="institute_id"
+          className="block text-sm font-medium text-[#BAE6FD] mb-1.5"
+        >
+          Instituto
+        </label>
+        <select
+          id="institute_id"
+          name="institute_id"
+          required
+          className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white
+                     focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
+                     transition-all text-sm [&>option]:bg-[#050F1F] [&>option]:text-white"
+        >
+          <option value="">Seleccioná tu instituto...</option>
+          {institutes.map((inst) => (
+            <option key={inst.id} value={inst.id}>
+              {inst.name}
+            </option>
+          ))}
+        </select>
+        {state?.fieldErrors?.institute_id && (
+          <p className="mt-1 text-xs text-red-400">
+            {state.fieldErrors.institute_id.join(", ")}
+          </p>
+        )}
+      </div>
       <div>
         <label
           htmlFor="email"

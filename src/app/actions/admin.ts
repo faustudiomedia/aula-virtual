@@ -42,6 +42,7 @@ const ALLOWED_ROLES = ['alumno', 'profesor'] as const
 const updateUserSchema = z.object({
   full_name: z.string().min(1, 'El nombre es requerido'),
   role:      z.enum(ALLOWED_ROLES, { message: 'Rol inválido' }),
+  legajo:    z.string().optional(),
 })
 
 export async function updateUser(userId: string, formData: FormData): Promise<ActionResult> {
@@ -61,6 +62,7 @@ export async function updateUser(userId: string, formData: FormData): Promise<Ac
   const raw = {
     full_name: (formData.get('full_name') as string)?.trim(),
     role:      formData.get('role') as string,
+    legajo:    (formData.get('legajo') as string)?.trim() || undefined,
   }
 
   const parsed = updateUserSchema.safeParse(raw)
@@ -71,7 +73,11 @@ export async function updateUser(userId: string, formData: FormData): Promise<Ac
 
   const { error } = await auth.supabase
     .from('profiles')
-    .update({ full_name: parsed.data.full_name, role: parsed.data.role })
+    .update({
+      full_name: parsed.data.full_name,
+      role: parsed.data.role,
+      legajo: parsed.data.legajo ?? null,
+    })
     .eq('id', userId)
 
   if (error) return { success: false, error: error.message }

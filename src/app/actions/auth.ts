@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 
 import { z } from "zod";
@@ -8,6 +9,7 @@ import { z } from "zod";
 const loginSchema = z.object({
   email: z.string().email("Correo inválido"),
   password: z.string().min(6, "Debe tener al menos 6 caracteres"),
+  institute_id: z.string().uuid("Seleccioná un instituto válido"),
 });
 
 // Simple in-memory rate limiting
@@ -21,6 +23,7 @@ export type ActionState = {
   fieldErrors?: {
     email?: string[];
     password?: string[];
+    institute_id?: string[];
   };
 } | null;
 
@@ -30,6 +33,7 @@ export async function login(
 ): Promise<ActionState> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const instituteId = (formData.get("institute_id") as string)?.trim();
 
   if (email) {
     const attempt = loginAttempts.get(email);
@@ -43,7 +47,7 @@ export async function login(
     }
   }
 
-  const parsed = loginSchema.safeParse({ email, password });
+  const parsed = loginSchema.safeParse({ email, password, institute_id: instituteId });
   if (!parsed.success) {
     return {
       error: "Por favor, corrige los errores del formulario.",
@@ -81,11 +85,31 @@ export async function login(
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, institute_id")
     .eq("id", user.id)
     .single();
 
   const role = profile?.role ?? "alumno";
+
+  // For non-super_admin: the selected institute must match their profile
+  if (role !== "super_admin" && profile?.institute_id !== parsed.data.institute_id) {
+    await supabase.auth.signOut();
+    return { error: "El instituto seleccionado no corresponde a tu cuenta." };
+  }
+
+  // Store active institute in cookie
+  const cookieStore = await cookies();
+  const activeInstituteId =
+    role === "super_admin" ? parsed.data.institute_id : profile?.institute_id;
+  if (activeInstituteId) {
+    cookieStore.set("active_institute_id", activeInstituteId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  }
 
   if (role === "super_admin") redirect("/dashboard/super-admin");
   if (role === "admin") redirect("/dashboard/admin");

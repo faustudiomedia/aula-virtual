@@ -23,6 +23,9 @@ import {
   LogOut,
   BookMarked,
   X,
+  CalendarDays,
+  Bell,
+  ClipboardList,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -108,11 +111,14 @@ const superAdminSections: NavSection[] = [
 const adminSections: NavSection[] = [
   {
     items: [
-      { label: "Panel",        href: "/dashboard/admin",            icon: LayoutDashboard },
-      { label: "Institutos",   href: "/dashboard/admin/institutes", icon: School },
-      { label: "Cursos",       href: "/dashboard/admin/courses",    icon: BookOpen },
-      { label: "Usuarios",     href: "/dashboard/admin/users",      icon: Users },
-      { label: "Estadísticas", href: "/dashboard/admin/stats",      icon: BarChart2 },
+      { label: "Panel",               href: "/dashboard/admin",                       icon: LayoutDashboard },
+      { label: "Institutos",          href: "/dashboard/admin/institutes",            icon: School },
+      { label: "Cursos",              href: "/dashboard/admin/courses",               icon: BookOpen },
+      { label: "Usuarios",            href: "/dashboard/admin/users",                 icon: Users },
+      { label: "Periodos Académicos", href: "/dashboard/admin/academic-periods",      icon: CalendarDays },
+      { label: "Estadísticas",        href: "/dashboard/admin/stats",                 icon: BarChart2 },
+      { label: "Auditoría",           href: "/dashboard/admin/audit",                 icon: ClipboardList },
+      { label: "Invitaciones",        href: "/dashboard/admin/invitations",           icon: Bell },
     ],
   },
 ];

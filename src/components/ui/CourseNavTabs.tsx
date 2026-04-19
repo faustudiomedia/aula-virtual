@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const TABS = (courseId: string) => [
-  { label: 'Materiales',  href: `/dashboard/teacher/courses/${courseId}/materials` },
-  { label: 'Anuncios',    href: `/dashboard/teacher/courses/${courseId}/announcements` },
-  { label: 'Tareas',      href: `/dashboard/teacher/courses/${courseId}/assignments` },
-  { label: 'Foro',        href: `/dashboard/teacher/courses/${courseId}/forum` },
-  { label: 'Alumnos',     href: `/dashboard/teacher/courses/${courseId}/students` },
+  { label: 'Materiales',    href: `/dashboard/teacher/courses/${courseId}/materials` },
+  { label: 'Anuncios',      href: `/dashboard/teacher/courses/${courseId}/announcements` },
+  { label: 'Tareas',        href: `/dashboard/teacher/courses/${courseId}/assignments` },
+  { label: 'Quizzes',       href: `/dashboard/teacher/courses/${courseId}/quizzes` },
+  { label: 'Foro',          href: `/dashboard/teacher/courses/${courseId}/forum` },
+  { label: 'Alumnos',       href: `/dashboard/teacher/courses/${courseId}/students` },
+  { label: 'Asistencia',    href: `/dashboard/teacher/courses/${courseId}/attendance` },
+  { label: 'Calificaciones',href: `/dashboard/teacher/courses/${courseId}/gradebook` },
 ]
 
 export function CourseNavTabs({ courseId }: { courseId: string }) {

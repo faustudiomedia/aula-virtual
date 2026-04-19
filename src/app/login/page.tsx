@@ -1,4 +1,5 @@
 import { LoginForm } from "./LoginForm";
+import { createClient } from "@/lib/supabase/server";
 
 interface Props {
   searchParams: Promise<{ error?: string; message?: string }>;
@@ -8,6 +9,13 @@ export default async function LoginPage({ searchParams }: Props) {
   const params = await searchParams;
   const errorMsg = params.error;
   const successMsg = params.message;
+
+  const supabase = await createClient();
+  const { data: institutes } = await supabase
+    .from("institutes")
+    .select("id, name")
+    .eq("active", true)
+    .order("name");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050F1F] px-4">
@@ -43,7 +51,7 @@ export default async function LoginPage({ searchParams }: Props) {
               {successMsg}
             </div>
           )}
-          <LoginForm initialError={errorMsg} />
+          <LoginForm initialError={errorMsg} institutes={institutes ?? []} />
 
           {/* Role indicator */}
           <div className="mt-6 pt-6 border-t border-white/10">

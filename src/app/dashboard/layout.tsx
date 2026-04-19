@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { MeetingNotifier } from "@/components/ui/MeetingNotifier";
@@ -25,10 +25,27 @@ export default async function DashboardLayout({
 
   if (!profile) redirect("/login");
 
-  const headersList = await headers();
-  const instituteName = headersList.get("x-institute-name") ?? "MAVIC";
-  const primaryColor = headersList.get("x-institute-primary") ?? "#1A56DB";
-  const logoUrl = headersList.get("x-institute-logo") ?? null;
+  const cookieStore = await cookies();
+  const activeInstituteId =
+    cookieStore.get("active_institute_id")?.value ?? profile.institute_id ?? null;
+
+  let instituteName = "MAVIC";
+  let primaryColor = "#1A56DB";
+  let logoUrl: string | null = null;
+
+  if (activeInstituteId) {
+    const { data: institute } = await supabase
+      .from("institutes")
+      .select("name, primary_color, logo_url")
+      .eq("id", activeInstituteId)
+      .single();
+
+    if (institute) {
+      instituteName = institute.name;
+      primaryColor = institute.primary_color ?? "#1A56DB";
+      logoUrl = institute.logo_url ?? null;
+    }
+  }
 
   return (
     <>

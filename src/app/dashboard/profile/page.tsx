@@ -13,7 +13,7 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, role, avatar_url, institute_id")
+    .select("full_name, role, avatar_url, institute_id, legajo")
     .eq("id", user.id)
     .single();
 
@@ -51,6 +51,9 @@ export default async function ProfilePage() {
           <div>
             <p className="font-semibold text-[#050F1F]">{profile.full_name || "Sin nombre"}</p>
             <p className="text-sm text-[#050F1F]/50">{user.email}</p>
+            {profile.legajo && (
+              <p className="text-xs text-[#050F1F]/40 mt-0.5">Legajo: <span className="font-medium text-[#050F1F]/60">{profile.legajo}</span></p>
+            )}
           </div>
         </div>
 

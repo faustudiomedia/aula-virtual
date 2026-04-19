@@ -11,6 +11,7 @@ interface ProfileWithInstitute {
   email: string;
   full_name: string | null;
   role: string;
+  legajo: string | null;
   created_at: string;
   institutes: { name: string } | null;
 }
@@ -108,6 +109,7 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                         <div className="min-w-0">
                           <p className="font-medium text-[#050F1F] truncate">{u.full_name || "Sin nombre"}</p>
                           <p className="text-xs text-[#050F1F]/40 truncate">{u.email}</p>
+                          {u.legajo && <p className="text-xs text-[#050F1F]/30">Leg. {u.legajo}</p>}
                         </div>
                       </div>
                     </td>
