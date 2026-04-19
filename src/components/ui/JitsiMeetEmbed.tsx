@@ -37,7 +37,8 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle, meetingId, 
 
     const init = () => {
       if (!containerRef.current || !window.JitsiMeetExternalAPI) return
-      api = new window.JitsiMeetExternalAPI('meet.jit.si', {
+      const jitsiDomain = process.env.NEXT_PUBLIC_JITSI_DOMAIN || 'meet.jitsi.at'
+      api = new window.JitsiMeetExternalAPI(jitsiDomain, {
         roomName,
         parentNode: containerRef.current,
         userInfo:   { displayName },
@@ -72,7 +73,8 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle, meetingId, 
       init()
     } else {
       const script = document.createElement('script')
-      script.src = 'https://meet.jit.si/external_api.js'
+      const jitsiScriptDomain = process.env.NEXT_PUBLIC_JITSI_DOMAIN || 'meet.jitsi.at'
+      script.src = `https://${jitsiScriptDomain}/external_api.js`
       script.async = true
       script.onload = init
       document.head.appendChild(script)
