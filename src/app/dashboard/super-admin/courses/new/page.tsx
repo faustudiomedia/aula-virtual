@@ -38,7 +38,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
 
   async function handleCreate(formData: FormData) {
     "use server";
-    const result = await createCourse(formData);
+    const result = await createCourse({}, formData);
     if (!result.success) {
       redirect(
         `/dashboard/super-admin/courses/new?error=${encodeURIComponent(result.error)}`,

@@ -85,7 +85,7 @@ export async function createQuiz(courseId: string, content: QuizQuestion[], prev
     if (error) return { success: false, error: error.message }
 
     // 📋 Audit log
-    await logAction(user.id, 'quiz', null, 'CREATE', { title: parsed.data.title, courseId })
+    await logAction(user.id, 'quiz', null, 'create', { title: parsed.data.title, courseId })
 
     revalidatePath(`/dashboard/teacher/courses/${courseId}/quizzes`)
     return { success: true }

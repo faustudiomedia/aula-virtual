@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Course } from "@/lib/types";
 import { useTeacherCourses, useEnrollmentCounts, useActiveStudentsThisWeek } from "@/lib/hooks/use-data";
 import {
   EditCourseButton,
@@ -17,11 +18,11 @@ export default function TeacherDashboardView({
   teacherName: _teacherName,
 }: Props) {
   const { data: courses = [], isLoading } = useTeacherCourses(teacherId);
-  const courseIds = courses.map((c) => c.id);
+  const courseIds = courses.map((c: Course) => c.id);
   const { data: countMap = {} } = useEnrollmentCounts(courseIds);
   const { data: activeThisWeek = 0 } = useActiveStudentsThisWeek(courseIds);
 
-  const totalStudents = Object.values(countMap).reduce((a, b) => a + b, 0);
+  const totalStudents = Object.values(countMap as Record<string, number>).reduce((a: number, b: number) => a + b, 0);
 
   const header = (
     <div className="flex items-center justify-between mb-8">
@@ -65,7 +66,7 @@ export default function TeacherDashboardView({
         {[
           {
             label: "Cursos activos",
-            value: courses.filter((c) => c.published).length,
+            value: courses.filter((c: Course) => c.published).length,
             color: "#1A56DB",
             bg: "#EFF6FF",
             border: "#BFDBFE",
@@ -124,7 +125,7 @@ export default function TeacherDashboardView({
         </div>
       ) : (
         <div className="grid gap-4">
-          {courses.map((course) => (
+          {courses.map((course: Course) => (
             <div
               key={course.id}
               className="bg-white rounded-2xl border border-black/5 p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"

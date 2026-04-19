@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { CalendarEvent } from '@/lib/types'
-import CalendarView from '@/components/ui/CalendarView'
+import { CalendarView, type CalendarAssignment, type CalendarMeeting } from '@/components/ui/CalendarView'
 
 export default async function CalendarPage() {
   const supabase = await createClient()
@@ -12,59 +11,110 @@ export default async function CalendarPage() {
     .from('profiles').select('role, institute_id').eq('id', user.id).single()
   if (!profile) redirect('/login')
 
-  let events: CalendarEvent[] = []
-  let teacherCourses: { id: string; title: string }[] = []
+  const role = profile.role === 'profesor' ? 'teacher' : 'student'
+  let assignments: CalendarAssignment[] = []
+  let meetings: CalendarMeeting[] = []
 
   if (profile.role === 'alumno') {
-    // Alumno: ver eventos de cursos inscriptos
+    // Alumno: tareas con fecha de entrega de sus cursos inscriptos
     const { data: enrollments } = await supabase
       .from('enrollments').select('course_id').eq('student_id', user.id)
-    const courseIds = (enrollments ?? []).map(e => e.course_id)
+    const courseIds = (enrollments ?? []).map((e: { course_id: string }) => e.course_id)
 
     if (courseIds.length > 0) {
-      const { data } = await supabase
-        .from('events')
-        .select('*, courses(title)')
+      const { data: assignmentRows } = await supabase
+        .from('assignments')
+        .select('id, title, due_date, course_id, courses(title)')
         .in('course_id', courseIds)
-        .gte('start_at', new Date(Date.now() - 7 * 86400000).toISOString()) // últimos 7 días y futuro
-        .order('start_at')
-      events = (data ?? []) as unknown as CalendarEvent[]
+        .not('due_date', 'is', null)
+        .order('due_date')
+
+      const { data: submissionRows } = await supabase
+        .from('submissions')
+        .select('assignment_id, score, graded_at')
+        .eq('student_id', user.id)
+
+      const submissionMap = new Map(
+        (submissionRows ?? []).map((s: { assignment_id: string; score: number | null; graded_at: string | null }) => [s.assignment_id, s])
+      )
+
+      assignments = (assignmentRows ?? []).map((a: {
+        id: string; title: string; due_date: string; course_id: string;
+        courses: { title: string } | null
+      }) => {
+        const sub = submissionMap.get(a.id)
+        return {
+          id: a.id,
+          title: a.title,
+          courseId: a.course_id,
+          courseTitle: (a.courses as { title: string } | null)?.title ?? '',
+          dueDate: a.due_date,
+          submitted: !!sub,
+          graded: !!sub?.graded_at,
+          score: sub?.score ?? null,
+        }
+      })
+
+      const { data: meetingRows } = await supabase
+        .from('meetings')
+        .select('id, display_name, scheduled_at')
+        .in('course_id', courseIds)
+        .order('scheduled_at')
+
+      meetings = (meetingRows ?? []).map((m: { id: string; display_name: string; scheduled_at: string }) => ({
+        id: m.id,
+        displayName: m.display_name,
+        scheduledAt: m.scheduled_at,
+      }))
     }
   } else if (profile.role === 'profesor') {
-    // Profesor: ver sus eventos + crear
     const { data: courses } = await supabase
-      .from('courses').select('id, title').eq('teacher_id', user.id)
-    teacherCourses = (courses ?? []) as { id: string; title: string }[]
-    const courseIds = teacherCourses.map(c => c.id)
+      .from('courses').select('id').eq('teacher_id', user.id)
+    const courseIds = (courses ?? []).map((c: { id: string }) => c.id)
 
     if (courseIds.length > 0) {
-      const { data } = await supabase
-        .from('events')
-        .select('*, courses(title)')
+      const { data: assignmentRows } = await supabase
+        .from('assignments')
+        .select('id, title, due_date, course_id, courses(title)')
         .in('course_id', courseIds)
-        .order('start_at')
-      events = (data ?? []) as unknown as CalendarEvent[]
+        .not('due_date', 'is', null)
+        .order('due_date')
+
+      assignments = (assignmentRows ?? []).map((a: {
+        id: string; title: string; due_date: string; course_id: string;
+        courses: { title: string } | null
+      }) => ({
+        id: a.id,
+        title: a.title,
+        courseId: a.course_id,
+        courseTitle: (a.courses as { title: string } | null)?.title ?? '',
+        dueDate: a.due_date,
+      }))
+
+      const { data: meetingRows } = await supabase
+        .from('meetings')
+        .select('id, display_name, scheduled_at')
+        .in('course_id', courseIds)
+        .order('scheduled_at')
+
+      meetings = (meetingRows ?? []).map((m: { id: string; display_name: string; scheduled_at: string }) => ({
+        id: m.id,
+        displayName: m.display_name,
+        scheduledAt: m.scheduled_at,
+      }))
     }
-  } else {
-    // Admin: ver todos los eventos del instituto
-    const { data } = await supabase
-      .from('events')
-      .select('*, courses(title)')
-      .order('start_at')
-      .limit(100)
-    events = (data ?? []) as unknown as CalendarEvent[]
   }
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#050F1F]">📅 Calendario</h1>
-        <p className="text-[#050F1F]/50 mt-1">Eventos, clases y fechas de entrega.</p>
+        <p className="text-[#050F1F]/50 mt-1">Tareas, reuniones y fechas de entrega.</p>
       </div>
       <CalendarView
-        events={events}
-        isTeacher={profile.role === 'profesor'}
-        teacherCourses={teacherCourses}
+        assignments={assignments}
+        role={role}
+        meetings={meetings}
       />
     </div>
   )

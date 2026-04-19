@@ -84,3 +84,61 @@ export interface Submission {
   submitted_at: string;
   graded_at: string | null;
 }
+
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correct: number;
+}
+
+export interface Quiz {
+  id: string;
+  course_id: string;
+  title: string;
+  content: QuizQuestion[];
+  is_published: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface QuizAttempt {
+  id: string;
+  quiz_id: string;
+  student_id: string;
+  answers: number[];
+  score: number;
+  completed_at: string;
+}
+
+export interface AuditLog {
+  id: string;
+  user_id: string | null;
+  entity_type: string;
+  entity_id: string | null;
+  action: string;
+  detailed_changes: Record<string, unknown> | null;
+  created_at: string;
+  profiles: { full_name: string | null; email: string | null } | null;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  title: string;
+  message: string;
+  link_url: string | null;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string | null;
+  start_at: string;
+  end_at: string | null;
+  created_at: string;
+  courses?: { title: string } | null;
+}

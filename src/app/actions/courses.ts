@@ -2,14 +2,21 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-// ─── Result type for server actions ────────────────────────────
+// ─── Result types for server actions ───────────────────────────
 export type ActionResult =
   | { success: true }
   | { success: false; error: string };
 
+// Compatible with React's useActionState
+export type ActionState = {
+  success?: boolean;
+  error?: string;
+  fieldErrors?: Record<string, string[]>;
+};
+
 // ─── COURSES ────────────────────────────────────────────────────
 
-export async function createCourse(formData: FormData): Promise<ActionResult> {
+export async function createCourse(_prev: ActionState, formData: FormData): Promise<ActionState> {
   try {
     const supabase = await createClient();
     const {
