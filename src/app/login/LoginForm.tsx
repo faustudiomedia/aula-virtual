@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { login } from "@/app/actions/auth";
+import { Eye, EyeOff } from "lucide-react";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -28,6 +29,7 @@ interface Institute {
 
 export function LoginForm({ initialError, institutes }: { initialError?: string; institutes: Institute[] }) {
   const [state, formAction] = useActionState(login, null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const displayError = state?.error || initialError;
 
@@ -96,16 +98,26 @@ export function LoginForm({ initialError, institutes }: { initialError?: string;
         >
           Contraseña
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
-                     focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
-                     transition-all text-sm"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            placeholder="••••••••"
+            className="w-full px-4 py-2.5 pr-11 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
+                       focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent
+                       transition-all text-sm"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(v => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 transition-colors"
+            aria-label={showPassword ? "Ocultar contraseña" : "Ver contraseña"}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
         {state?.fieldErrors?.password && (
           <p className="mt-1 text-xs text-red-400">
             {state.fieldErrors.password.join(", ")}
