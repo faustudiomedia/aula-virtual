@@ -128,37 +128,41 @@ export default function TeacherDashboardView({
           {courses.map((course: Course) => (
             <div
               key={course.id}
-              className="bg-white rounded-2xl border border-black/5 p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white font-bold flex-shrink-0">
-                {course.title.charAt(0)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-[#050F1F] truncate">
-                    {course.title}
-                  </h3>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
-                      course.published
-                        ? "bg-green-100 text-green-700"
-                        : "bg-amber-100 text-amber-700"
-                    }`}
-                  >
-                    {course.published ? "Publicado" : "Borrador"}
-                  </span>
+              {/* Info row */}
+              <div className="flex items-center gap-4 p-5">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  {course.title.charAt(0)}
                 </div>
-                <p className="text-sm text-[#050F1F]/50 truncate">
-                  {course.description ?? "Sin descripción"}
-                </p>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-semibold text-[#050F1F]">
+                      {course.title}
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
+                        course.published
+                          ? "bg-green-100 text-green-700"
+                          : "bg-amber-100 text-amber-700"
+                      }`}
+                    >
+                      {course.published ? "Publicado" : "Borrador"}
+                    </span>
+                  </div>
+                  <p className="text-sm text-[#050F1F]/50 mt-0.5 truncate">
+                    {course.description ?? "Sin descripción"}
+                  </p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="text-2xl font-bold text-[#1A56DB]">
+                    {countMap[course.id] ?? 0}
+                  </p>
+                  <p className="text-xs text-[#050F1F]/40">alumnos</p>
+                </div>
               </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-lg font-bold text-[#1A56DB]">
-                  {countMap[course.id] ?? 0}
-                </p>
-                <p className="text-xs text-[#050F1F]/40">alumnos</p>
-              </div>
-              <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
+              {/* Actions row */}
+              <div className="flex items-center gap-2 px-5 py-3 border-t border-black/5 flex-wrap">
                 <Link
                   href={`/dashboard/teacher/courses/${course.id}/materials`}
                   className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
@@ -171,6 +175,7 @@ export default function TeacherDashboardView({
                 >
                   Alumnos
                 </Link>
+                <div className="flex-1" />
                 <EditCourseButton course={course} />
                 <DeleteCourseButton
                   courseId={course.id}

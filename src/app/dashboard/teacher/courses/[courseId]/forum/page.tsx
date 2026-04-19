@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { CourseNavTabs } from '@/components/ui/CourseNavTabs'
-import { createThread, deleteThread, togglePinThread } from '@/app/actions/forum'
+import { createThread } from '@/app/actions/forum'
+import { ForumThreadActions } from './ForumThreadActions'
 
 interface Props { params: Promise<{ courseId: string }> }
 
@@ -73,25 +74,11 @@ export default async function TeacherForumPage({ params }: Props) {
                   </p>
                 </div>
                 {isTeacher && (
-                  <div className="flex gap-2 flex-shrink-0">
-                    <form action={togglePinThread.bind(null, t.id, t.pinned, courseId)}>
-                      <button
-                        type="submit"
-                        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all"
-                      >
-                        {t.pinned ? 'Desfijar' : 'Fijar'}
-                      </button>
-                    </form>
-                    <form action={deleteThread.bind(null, t.id, courseId)}>
-                      <button
-                        type="submit"
-                        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all"
-                        onClick={(e) => { if (!confirm('¿Eliminar este tema?')) e.preventDefault() }}
-                      >
-                        Eliminar
-                      </button>
-                    </form>
-                  </div>
+                  <ForumThreadActions
+                    threadId={t.id}
+                    courseId={courseId}
+                    pinned={t.pinned}
+                  />
                 )}
               </div>
             )

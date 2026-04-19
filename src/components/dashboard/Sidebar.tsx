@@ -127,7 +127,7 @@ const teacherSections: NavSection[] = [
   {
     items: [
       { label: "Panel",        href: "/dashboard/teacher",              icon: LayoutDashboard },
-      { label: "Mis cursos",   href: "/dashboard/teacher/courses/new",  icon: BookOpen },
+      { label: "Mis cursos",   href: "/dashboard/teacher/courses",      icon: BookOpen },
       { label: "Materiales",   href: "/dashboard/teacher/materials",    icon: FolderOpen },
       { label: "Alumnos",      href: "/dashboard/teacher/students",     icon: GraduationCap },
       { label: "Calendario",   href: "/dashboard/teacher/calendar",     icon: Calendar },

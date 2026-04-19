@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { CourseNavTabs } from '@/components/ui/CourseNavTabs'
-import { createReply, deleteReply, deleteThread } from '@/app/actions/forum'
+import { createReply, deleteReply } from '@/app/actions/forum'
+import { ForumDeleteButton } from './ForumDeleteButton'
 
 interface Props { params: Promise<{ courseId: string; threadId: string }> }
 
@@ -41,12 +42,6 @@ export default async function TeacherThreadPage({ params }: Props) {
     await createReply(threadId, courseId, formData)
   }
 
-  async function handleDeleteThread() {
-    'use server'
-    await deleteThread(threadId, courseId)
-    redirect(`/dashboard/teacher/courses/${courseId}/forum`)
-  }
-
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-[#050F1F] mb-1">{course.title}</h1>
@@ -72,15 +67,7 @@ export default async function TeacherThreadPage({ params }: Props) {
             </p>
           </div>
           {isTeacher && (
-            <form action={handleDeleteThread}>
-              <button
-                type="submit"
-                className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all"
-                onClick={(e) => { if (!confirm('¿Eliminar este tema y todas sus respuestas?')) e.preventDefault() }}
-              >
-                Eliminar tema
-              </button>
-            </form>
+            <ForumDeleteButton threadId={threadId} courseId={courseId} />
           )}
         </div>
         <p className="text-sm text-[#050F1F]/80 whitespace-pre-wrap">{thread.content}</p>
