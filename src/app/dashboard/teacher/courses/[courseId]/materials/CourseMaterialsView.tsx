@@ -106,9 +106,25 @@ export default function CourseMaterialsView({ courseId }: Props) {
             </select>
           </div>
 
+          {/* Module fields */}
+          <div className="grid grid-cols-3 gap-3">
+            <input
+              name="module_number"
+              type="number"
+              min="1"
+              placeholder="Módulo # (ej: 1)"
+              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            />
+            <input
+              name="module_title"
+              placeholder="Título del módulo (opcional)"
+              className="col-span-2 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            />
+          </div>
+
           <input
             name="description"
-            placeholder="Descripción (opcional)"
+            placeholder="Descripción del material (opcional)"
             className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
           />
 
@@ -186,7 +202,14 @@ export default function CourseMaterialsView({ courseId }: Props) {
                 {idx + 1}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-[#050F1F] text-sm">{m.title}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-medium text-[#050F1F] text-sm">{m.title}</p>
+                  {m.module_number && (
+                    <span className="px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-600 text-[10px] font-semibold">
+                      M{m.module_number}
+                    </span>
+                  )}
+                </div>
                 {m.description && (
                   <p className="text-xs text-[#050F1F]/50 mt-0.5">{m.description}</p>
                 )}

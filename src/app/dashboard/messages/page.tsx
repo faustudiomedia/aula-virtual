@@ -3,7 +3,23 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { NewMessageModal } from './NewMessageModal'
 
-export default async function MessagesInboxPage() {
+interface Props {
+  searchParams: Promise<{ tab?: string }>
+}
+
+const TABS = [
+  { key: 'inbox',   label: 'Bandeja de entrada' },
+  { key: 'unread',  label: 'No leídos' },
+  { key: 'sent',    label: 'Enviados' },
+  { key: 'starred', label: 'Destacados' },
+] as const
+
+type TabKey = typeof TABS[number]['key']
+
+export default async function MessagesInboxPage({ searchParams }: Props) {
+  const { tab } = await searchParams
+  const activeTab: TabKey = (TABS.some(t => t.key === tab) ? tab : 'inbox') as TabKey
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -12,19 +28,21 @@ export default async function MessagesInboxPage() {
     .from('profiles').select('role').eq('id', user.id).single()
   if (!profile) redirect('/login')
 
-  // All messages involving this user
+  // Fetch all messages involving this user
   const { data: messages } = await supabase
     .from('messages')
-    .select('id, sender_id, recipient_id, content, read_at, created_at')
+    .select('id, sender_id, recipient_id, content, read_at, created_at, is_starred')
     .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
 
-  // Build conversations grouped by the other participant
+  // Build per-conversation data
   const conversationMap = new Map<string, {
     userId: string
     lastMessage: string
     lastAt: string
     unread: number
+    isStarred: boolean
+    lastSenderId: string
   }>()
 
   for (const m of messages ?? []) {
@@ -35,42 +53,42 @@ export default async function MessagesInboxPage() {
         lastMessage: m.content,
         lastAt: m.created_at,
         unread: (!m.read_at && m.recipient_id === user.id) ? 1 : 0,
+        isStarred: m.is_starred ?? false,
+        lastSenderId: m.sender_id,
       })
     } else {
-      const existing = conversationMap.get(otherId)!
-      if (!m.read_at && m.recipient_id === user.id) existing.unread++
+      const ex = conversationMap.get(otherId)!
+      if (!m.read_at && m.recipient_id === user.id) ex.unread++
+      if (m.is_starred) ex.isStarred = true
     }
   }
 
-  const conversations = [...conversationMap.values()]
+  let conversations = [...conversationMap.values()]
 
-  // Fetch names for all other participants
-  const otherIds = conversations.map(c => c.userId)
+  // Apply tab filter
+  if (activeTab === 'unread')  conversations = conversations.filter(c => c.unread > 0)
+  if (activeTab === 'sent')    conversations = conversations.filter(c => c.lastSenderId === user.id)
+  if (activeTab === 'starred') conversations = conversations.filter(c => c.isStarred)
+
+  // Fetch names
+  const otherIds = [...conversationMap.values()].map(c => c.userId)
   const { data: otherProfiles } = otherIds.length
     ? await supabase.from('profiles').select('id, full_name, role').in('id', otherIds)
     : { data: [] }
-
   const profileMap = new Map((otherProfiles ?? []).map(p => [p.id, p]))
 
-  // For teachers: load students from their courses; for students: load their teachers
+  // Suggested new contacts
   let contactSuggestions: { id: string; full_name: string; role: string }[] = []
-
   if (profile.role === 'profesor') {
-    const { data: courses } = await supabase
-      .from('courses').select('id').eq('teacher_id', user.id)
+    const { data: courses } = await supabase.from('courses').select('id').eq('teacher_id', user.id)
     const courseIds = (courses ?? []).map((c: { id: string }) => c.id)
     if (courseIds.length) {
       const { data: enrollments } = await supabase
-        .from('enrollments')
-        .select('student_id, profiles(id, full_name, role)')
-        .in('course_id', courseIds)
+        .from('enrollments').select('student_id, profiles(id, full_name, role)').in('course_id', courseIds)
       const seen = new Set<string>()
       for (const e of enrollments ?? []) {
         const p = e.profiles as unknown as { id: string; full_name: string; role: string } | null
-        if (p && !seen.has(p.id)) {
-          seen.add(p.id)
-          contactSuggestions.push(p)
-        }
+        if (p && !seen.has(p.id)) { seen.add(p.id); contactSuggestions.push(p) }
       }
     }
   } else if (profile.role === 'alumno') {
@@ -81,53 +99,126 @@ export default async function MessagesInboxPage() {
     const seen = new Set<string>()
     for (const e of enrollments ?? []) {
       const c = e.courses as unknown as { teacher_id: string; profiles: { id: string; full_name: string; role: string } | null } | null
-      if (c?.profiles && !seen.has(c.profiles.id)) {
-        seen.add(c.profiles.id)
-        contactSuggestions.push(c.profiles)
-      }
+      if (c?.profiles && !seen.has(c.profiles.id)) { seen.add(c.profiles.id); contactSuggestions.push(c.profiles) }
     }
   }
-
   const newContacts = contactSuggestions.filter(c => !conversationMap.has(c.id))
+
+  const totalUnread = [...conversationMap.values()].reduce((n, c) => n + c.unread, 0)
 
   return (
     <div className="p-4 sm:p-8 max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Mensajes</h1>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-[#050F1F]">Mensajes</h1>
+          {totalUnread > 0 && (
+            <p className="text-xs text-[#050F1F]/50 mt-0.5">
+              {totalUnread} mensaje{totalUnread !== 1 ? 's' : ''} sin leer
+            </p>
+          )}
+        </div>
         <NewMessageModal />
       </div>
-      <p className="text-[#050F1F]/50 mb-6">Conversaciones directas.</p>
 
-      {conversations.length === 0 && newContacts.length === 0 && (
+      {/* Filter tabs */}
+      <div className="flex gap-1.5 mb-6 p-1 bg-black/[0.03] rounded-xl flex-wrap">
+        {TABS.map(t => {
+          const isActive = activeTab === t.key
+          const badge = t.key === 'unread' && totalUnread > 0 ? totalUnread : null
+          return (
+            <Link
+              key={t.key}
+              href={t.key === 'inbox' ? '/dashboard/messages' : `/dashboard/messages?tab=${t.key}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                isActive
+                  ? 'bg-white text-[#050F1F] shadow-sm'
+                  : 'text-[#050F1F]/50 hover:text-[#050F1F]'
+              }`}
+            >
+              {t.label}
+              {badge && (
+                <span className="w-4 h-4 rounded-full bg-[#1A56DB] text-white text-[10px] flex items-center justify-center font-bold">
+                  {badge > 9 ? '9+' : badge}
+                </span>
+              )}
+            </Link>
+          )
+        })}
+      </div>
+
+      {/* Empty state */}
+      {conversations.length === 0 && (activeTab !== 'inbox' || newContacts.length === 0) && (
         <div className="text-center py-16 text-[#050F1F]/40">
-          <p className="text-4xl mb-3">✉️</p>
-          <p className="text-sm">No tenés conversaciones todavía.</p>
+          <p className="text-3xl mb-3">
+            {activeTab === 'unread' ? '📭' : activeTab === 'starred' ? '⭐' : '✉️'}
+          </p>
+          <p className="text-sm">
+            {activeTab === 'unread' ? 'No tenés mensajes sin leer.'
+              : activeTab === 'sent' ? 'No enviaste mensajes todavía.'
+              : activeTab === 'starred' ? 'No tenés mensajes destacados.'
+              : 'No tenés conversaciones todavía.'}
+          </p>
         </div>
       )}
 
-      {/* Active conversations */}
+      {/* Conversations list */}
       {conversations.length > 0 && (
         <div className="space-y-2 mb-8">
           {conversations.map(conv => {
             const other = profileMap.get(conv.userId)
             if (!other) return null
+            const initial = other.full_name?.charAt(0) ?? '?'
+            const roleLabel = other.role === 'profesor' ? 'Profesor' : other.role === 'admin' ? 'Admin' : 'Alumno'
+            const date = new Date(conv.lastAt)
+            const isToday = date.toDateString() === new Date().toDateString()
+            const timeStr = isToday
+              ? date.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+              : date.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })
+
             return (
               <Link
                 key={conv.userId}
                 href={`/dashboard/messages/${conv.userId}`}
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-black/5 shadow-sm hover:border-[#1A56DB]/20 hover:shadow-md transition-all"
+                className={`flex items-center gap-4 p-4 bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all ${
+                  conv.unread > 0 ? 'border-[#1A56DB]/20' : 'border-black/5 hover:border-[#1A56DB]/20'
+                }`}
               >
-                <div className="w-10 h-10 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#1A56DB] font-semibold text-sm flex-shrink-0">
-                  {other.full_name?.charAt(0) ?? '?'}
+                {/* Avatar */}
+                <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
+                  other.role === 'profesor'
+                    ? 'bg-violet-100 text-violet-600'
+                    : 'bg-[#EFF6FF] text-[#1A56DB]'
+                }`}>
+                  {initial}
                 </div>
+
+                {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#050F1F]">{other.full_name}</p>
-                  <p className="text-xs text-[#050F1F]/50 truncate">{conv.lastMessage}</p>
+                  <div className="flex items-center justify-between gap-2 mb-0.5">
+                    <p className={`text-sm truncate ${conv.unread > 0 ? 'font-bold text-[#050F1F]' : 'font-semibold text-[#050F1F]'}`}>
+                      {other.full_name}
+                    </p>
+                    <span className="text-[10px] text-[#050F1F]/30 flex-shrink-0">{timeStr}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[#050F1F]/30 flex-shrink-0 bg-black/[0.04] px-1.5 py-0.5 rounded-full">
+                      {roleLabel}
+                    </span>
+                    <p className={`text-xs truncate ${conv.unread > 0 ? 'text-[#050F1F]/80 font-medium' : 'text-[#050F1F]/50'}`}>
+                      {conv.lastMessage}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Unread badge */}
                 {conv.unread > 0 && (
                   <span className="w-5 h-5 rounded-full bg-[#1A56DB] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
-                    {conv.unread}
+                    {conv.unread > 9 ? '9+' : conv.unread}
                   </span>
+                )}
+                {conv.isStarred && conv.unread === 0 && (
+                  <span className="text-amber-400 flex-shrink-0">⭐</span>
                 )}
               </Link>
             )
@@ -135,10 +226,12 @@ export default async function MessagesInboxPage() {
         </div>
       )}
 
-      {/* New contacts */}
-      {newContacts.length > 0 && (
+      {/* Suggested contacts — only on inbox tab */}
+      {activeTab === 'inbox' && newContacts.length > 0 && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#050F1F]/30 mb-3">Contactos disponibles</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#050F1F]/30 mb-3">
+            Contactos disponibles
+          </p>
           <div className="space-y-2">
             {newContacts.map(c => (
               <Link
@@ -146,14 +239,18 @@ export default async function MessagesInboxPage() {
                 href={`/dashboard/messages/${c.id}`}
                 className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-black/5 shadow-sm hover:border-[#1A56DB]/20 hover:shadow-md transition-all"
               >
-                <div className="w-10 h-10 rounded-full bg-[#F0FDF4] flex items-center justify-center text-green-600 font-semibold text-sm flex-shrink-0">
+                <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
+                  c.role === 'profesor' ? 'bg-violet-100 text-violet-600' : 'bg-[#F0FDF4] text-green-600'
+                }`}>
                   {c.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-[#050F1F]">{c.full_name}</p>
-                  <p className="text-xs text-[#050F1F]/40">{c.role === 'profesor' ? 'Profesor' : 'Alumno'}</p>
+                  <p className="text-xs text-[#050F1F]/40">
+                    {c.role === 'profesor' ? 'Profesor' : 'Alumno'}
+                  </p>
                 </div>
-                <span className="text-xs text-[#1A56DB]">Iniciar chat →</span>
+                <span className="text-xs text-[#1A56DB] font-medium">Iniciar chat →</span>
               </Link>
             ))}
           </div>

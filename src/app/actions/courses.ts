@@ -135,6 +135,7 @@ export async function addMaterial(
     if (!course || course.teacher_id !== user.id)
       return { success: false, error: "Sin permisos para agregar materiales" };
 
+    const moduleNum = formData.get("module_number");
     const { error } = await supabase.from("materials").insert({
       course_id: courseId,
       title,
@@ -142,6 +143,8 @@ export async function addMaterial(
       file_url: (formData.get("file_url") as string)?.trim() || null,
       file_type: (formData.get("file_type") as string) || null,
       order_index: Number(formData.get("order_index") ?? 0),
+      module_number: moduleNum ? Number(moduleNum) : null,
+      module_title: (formData.get("module_title") as string)?.trim() || null,
     });
     if (error) return { success: false, error: error.message };
     return { success: true };

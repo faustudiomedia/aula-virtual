@@ -42,6 +42,20 @@ export async function sendMessage(recipientId: string, formData: FormData) {
   revalidatePath('/dashboard/messages')
 }
 
+export async function toggleStarMessage(messageId: string, starred: boolean) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+
+  await supabase
+    .from('messages')
+    .update({ is_starred: !starred })
+    .eq('id', messageId)
+    .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
+
+  revalidatePath('/dashboard/messages')
+}
+
 export async function markMessagesAsRead(otherUserId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

@@ -51,6 +51,8 @@ export interface Material {
   file_url: string | null;
   file_type: string | null;
   order_index: number;
+  module_number: number | null;
+  module_title: string | null;
   created_at: string;
 }
 

@@ -24,7 +24,7 @@ export default async function ConversationPage({ params }: Props) {
   // Load conversation
   const { data: messages } = await supabase
     .from('messages')
-    .select('id, sender_id, content, created_at, read_at')
+    .select('id, sender_id, content, created_at, read_at, is_starred')
     .or(
       `and(sender_id.eq.${user.id},recipient_id.eq.${otherUserId}),and(sender_id.eq.${otherUserId},recipient_id.eq.${user.id})`
     )
