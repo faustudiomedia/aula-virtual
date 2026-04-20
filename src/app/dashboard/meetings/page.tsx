@@ -16,7 +16,7 @@ export default async function MeetingsPage() {
 
   const { data: meetings } = await supabase
     .from('meetings')
-    .select('id, display_name, active, scheduled_at, created_at, host_id, profiles(full_name)')
+    .select('id, display_name, active, scheduled_at, created_at, host_id, external_url, profiles(full_name)')
     .order('scheduled_at', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false })
 
@@ -40,6 +40,12 @@ export default async function MeetingsPage() {
               required
               className="w-full px-3 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
               placeholder="Ej: Clase de Matemáticas, Repaso Final..."
+            />
+            <input
+              name="external_url"
+              type="url"
+              className="w-full px-3 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+              placeholder="Enlace externo: Zoom, Meet, Teams… (opcional)"
             />
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
               <div className="flex-1">
@@ -115,7 +121,7 @@ function Section({ title, empty, children }: { title: string; empty?: string; ch
 }
 
 interface MeetingRowProps {
-  m: { id: string; display_name: string; active: boolean; scheduled_at: string | null; created_at: string; host_id: string }
+  m: { id: string; display_name: string; active: boolean; scheduled_at: string | null; created_at: string; host_id: string; external_url?: string | null }
   host: { full_name: string } | null
   userId: string
   isTeacher: boolean
@@ -170,7 +176,17 @@ function MeetingRow({ m, host, userId, isTeacher, status }: MeetingRowProps) {
             <button type="submit" className="text-xs px-2.5 py-1 rounded-lg border border-black/10 text-[#050F1F]/30 hover:bg-red-50 hover:text-red-500 transition-all">✕</button>
           </form>
         )}
-        {status !== 'past' && (
+        {m.external_url && status !== 'past' && (
+          <a
+            href={m.external_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-1.5 rounded-lg bg-green-600 text-white text-xs font-semibold hover:bg-green-700 transition-all"
+          >
+            Unirse →
+          </a>
+        )}
+        {!m.external_url && status !== 'past' && (
           <Link
             href={`/dashboard/meetings/${m.id}`}
             className="px-4 py-1.5 rounded-lg bg-[#1A56DB] text-white text-xs font-semibold hover:bg-[#1A56DB]/90 transition-all"

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import TeacherCoursesView from "./TeacherCoursesView";
+import type { AcademicPeriod } from "@/lib/types";
 
 export default async function TeacherCoursesPage() {
   const supabase = await createClient();
@@ -11,12 +12,18 @@ export default async function TeacherCoursesPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, institute_id")
     .eq("id", user.id)
     .single();
 
   if (profile?.role !== "profesor" && profile?.role !== "super_admin")
     redirect("/dashboard");
 
-  return <TeacherCoursesView teacherId={user.id} />;
+  const { data: periods } = await supabase
+    .from("academic_periods")
+    .select("*")
+    .eq("institute_id", profile?.institute_id)
+    .order("start_date", { ascending: false });
+
+  return <TeacherCoursesView teacherId={user.id} periods={(periods ?? []) as AcademicPeriod[]} />;
 }

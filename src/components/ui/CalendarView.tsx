@@ -21,10 +21,21 @@ export interface CalendarMeeting {
   scheduledAt: string
 }
 
+export interface CalendarEvent {
+  id: string
+  title: string
+  description: string | null
+  eventDate: string
+  eventTime: string | null
+  color: string
+}
+
 interface Props {
   assignments: CalendarAssignment[]
   role: 'student' | 'teacher'
   meetings?: CalendarMeeting[]
+  events?: CalendarEvent[]
+  onDeleteEvent?: (id: string) => void
 }
 
 const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
@@ -39,7 +50,7 @@ function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate()
 }
 
-export function CalendarView({ assignments, role, meetings = [] }: Props) {
+export function CalendarView({ assignments, role, meetings = [], events = [], onDeleteEvent }: Props) {
   const today = new Date()
   const [year, setYear]         = useState(today.getFullYear())
   const [month, setMonth]       = useState(today.getMonth())
@@ -74,6 +85,17 @@ export function CalendarView({ assignments, role, meetings = [] }: Props) {
       const day = d.getDate()
       if (!meetingsByDay.has(day)) meetingsByDay.set(day, [])
       meetingsByDay.get(day)!.push(m)
+    }
+  }
+
+  // Group custom events by day
+  const eventsByDay = new Map<number, CalendarEvent[]>()
+  for (const e of events) {
+    const d = new Date(e.eventDate + 'T12:00:00')
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      const day = d.getDate()
+      if (!eventsByDay.has(day)) eventsByDay.set(day, [])
+      eventsByDay.get(day)!.push(e)
     }
   }
 
@@ -137,7 +159,8 @@ export function CalendarView({ assignments, role, meetings = [] }: Props) {
             if (!day) return <div key={`e-${i}`} />
             const dayAssignments = byDay.get(day) ?? []
             const dayMeetings    = meetingsByDay.get(day) ?? []
-            const hasItems = dayAssignments.length > 0 || dayMeetings.length > 0
+            const dayEvents      = eventsByDay.get(day) ?? []
+            const hasItems = dayAssignments.length > 0 || dayMeetings.length > 0 || dayEvents.length > 0
             const isToday    = day === today.getDate() && month === today.getMonth() && year === today.getFullYear()
             const isSelected = day === selected
 
@@ -160,6 +183,9 @@ export function CalendarView({ assignments, role, meetings = [] }: Props) {
                     {dayMeetings.slice(0, 2).map((_, j) => (
                       <span key={`m-${j}`} className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isSelected ? 'bg-white/70' : 'bg-green-500'}`} />
                     ))}
+                    {dayEvents.slice(0, 2).map((e, j) => (
+                      <span key={`ev-${j}`} className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: isSelected ? 'rgba(255,255,255,0.7)' : e.color }} />
+                    ))}
                   </div>
                 )}
               </button>
@@ -168,25 +194,50 @@ export function CalendarView({ assignments, role, meetings = [] }: Props) {
         </div>
 
         {/* Legend */}
-        {meetings.length > 0 && (
-          <div className="flex gap-4 mt-4 pt-4 border-t border-black/5">
-            <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
-              <span className="w-2 h-2 rounded-full bg-[#1A56DB] inline-block" /> Tareas
-            </div>
+        <div className="flex gap-4 mt-4 pt-4 border-t border-black/5">
+          <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
+            <span className="w-2 h-2 rounded-full bg-[#1A56DB] inline-block" /> Tareas
+          </div>
+          {meetings.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> Reuniones
             </div>
-          </div>
-        )}
+          )}
+          {events.length > 0 && (
+            <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
+              <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" /> Eventos
+            </div>
+          )}
+        </div>
 
         {/* Selected day detail */}
         {selected !== null && (
           <div className="mt-5 pt-5 border-t border-black/5">
             <p className="text-sm font-semibold text-[#050F1F] mb-3">{selected} de {MONTH_NAMES[month]}</p>
-            {(byDay.get(selected) ?? []).length === 0 && (meetingsByDay.get(selected) ?? []).length === 0 ? (
+            {(byDay.get(selected) ?? []).length === 0 && (meetingsByDay.get(selected) ?? []).length === 0 && (eventsByDay.get(selected) ?? []).length === 0 ? (
               <p className="text-sm text-[#050F1F]/40">No hay eventos para este día.</p>
             ) : (
               <div className="space-y-2">
+                {(eventsByDay.get(selected) ?? []).map(e => (
+                  <div
+                    key={e.id}
+                    className="flex items-center gap-3 p-3 rounded-xl"
+                    style={{ background: e.color + '18' }}
+                  >
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: e.color }} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-[#050F1F] truncate">📅 {e.title}</p>
+                      {e.description && <p className="text-xs text-[#050F1F]/50 truncate">{e.description}</p>}
+                      {e.eventTime && <p className="text-xs text-[#050F1F]/40">{e.eventTime.slice(0, 5)}</p>}
+                    </div>
+                    {onDeleteEvent && role === 'teacher' && (
+                      <button
+                        onClick={() => onDeleteEvent(e.id)}
+                        className="text-xs text-red-400 hover:text-red-600 transition-colors px-1"
+                      >✕</button>
+                    )}
+                  </div>
+                ))}
                 {(meetingsByDay.get(selected) ?? []).map(m => (
                   <Link
                     key={m.id}

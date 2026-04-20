@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { CalendarView } from '@/components/ui/CalendarView'
-import type { CalendarAssignment, CalendarMeeting } from '@/components/ui/CalendarView'
+import type { CalendarAssignment, CalendarMeeting, CalendarEvent } from '@/components/ui/CalendarView'
 import type { Assignment, Submission } from '@/lib/types'
 
 export default async function StudentCalendarPage() {
@@ -68,12 +68,13 @@ export default async function StudentCalendarPage() {
     }
   })
 
-  const { data: meetings } = await supabase
-    .from('meetings')
-    .select('id, display_name, scheduled_at')
-    .eq('institute_id', profile?.institute_id)
-    .not('scheduled_at', 'is', null)
-    .order('scheduled_at')
+  const [{ data: meetings }, { data: calEvents }] = await Promise.all([
+    supabase.from('meetings').select('id, display_name, scheduled_at')
+      .eq('institute_id', profile?.institute_id).not('scheduled_at', 'is', null).order('scheduled_at'),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (supabase as any).from('calendar_events').select('*')
+      .eq('institute_id', profile?.institute_id).order('event_date'),
+  ])
 
   const calendarMeetings: CalendarMeeting[] = (meetings ?? []).map(m => ({
     id: m.id,
@@ -81,11 +82,23 @@ export default async function StudentCalendarPage() {
     scheduledAt: m.scheduled_at,
   }))
 
+  const calendarEvents: CalendarEvent[] = (calEvents ?? []).map((e: {
+    id: string; title: string; description: string | null
+    event_date: string; event_time: string | null; color: string
+  }) => ({
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    eventDate: e.event_date,
+    eventTime: e.event_time,
+    color: e.color,
+  }))
+
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Calendario</h1>
       <p className="text-[#050F1F]/50 mb-8">Tus entregas, fechas límite y reuniones.</p>
-      <CalendarView assignments={calendarAssignments} role="student" meetings={calendarMeetings} />
+      <CalendarView assignments={calendarAssignments} role="student" meetings={calendarMeetings} events={calendarEvents} />
     </div>
   )
 }

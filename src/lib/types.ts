@@ -34,6 +34,17 @@ export interface Course {
   cover_url: string | null;
   published: boolean;
   created_at: string;
+  period_id: string | null;
+}
+
+export interface AcademicPeriod {
+  id: string;
+  institute_id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
+  created_at: string;
 }
 
 export interface Enrollment {

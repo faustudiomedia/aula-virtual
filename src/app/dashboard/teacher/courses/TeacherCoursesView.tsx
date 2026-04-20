@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import type { Course } from "@/lib/types";
+import type { Course, AcademicPeriod } from "@/lib/types";
 import { useTeacherCourses, useEnrollmentCounts } from "@/lib/hooks/use-data";
 import {
   EditCourseButton,
@@ -10,12 +11,20 @@ import {
 
 interface Props {
   teacherId: string;
+  periods: AcademicPeriod[];
 }
 
-export default function TeacherCoursesView({ teacherId }: Props) {
+export default function TeacherCoursesView({ teacherId, periods }: Props) {
+  const [periodFilter, setPeriodFilter] = useState<string>("all");
   const { data: courses = [], isLoading } = useTeacherCourses(teacherId);
   const courseIds = courses.map((c: Course) => c.id);
   const { data: countMap = {} } = useEnrollmentCounts(courseIds);
+
+  const filtered = periodFilter === "all"
+    ? courses
+    : periodFilter === "none"
+      ? courses.filter((c: Course) => !c.period_id)
+      : courses.filter((c: Course) => c.period_id === periodFilter);
 
   if (isLoading) {
     return (
@@ -44,7 +53,7 @@ export default function TeacherCoursesView({ teacherId }: Props) {
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <div>
           <h1 className="text-2xl font-bold text-[#050F1F]">Mis cursos</h1>
           <p className="text-[#050F1F]/50 mt-1">
@@ -60,7 +69,38 @@ export default function TeacherCoursesView({ teacherId }: Props) {
         </Link>
       </div>
 
-      {courses.length === 0 ? (
+      {/* Period filter */}
+      {periods.length > 0 && (
+        <div className="flex items-center gap-2 mb-6 flex-wrap">
+          <button
+            onClick={() => setPeriodFilter("all")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${periodFilter === "all" ? "bg-[#1A56DB] text-white" : "bg-black/5 text-[#050F1F]/60 hover:bg-black/10"}`}
+          >
+            Todos
+          </button>
+          {periods.map(p => (
+            <button
+              key={p.id}
+              onClick={() => setPeriodFilter(p.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${periodFilter === p.id ? "bg-[#1A56DB] text-white" : "bg-black/5 text-[#050F1F]/60 hover:bg-black/10"}`}
+            >
+              {p.name} {p.is_active && <span className="ml-1 text-[10px] opacity-70">●</span>}
+            </button>
+          ))}
+          <button
+            onClick={() => setPeriodFilter("none")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${periodFilter === "none" ? "bg-[#1A56DB] text-white" : "bg-black/5 text-[#050F1F]/60 hover:bg-black/10"}`}
+          >
+            Sin período
+          </button>
+        </div>
+      )}
+
+      {filtered.length === 0 && courses.length > 0 ? (
+        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+          <p className="text-[#050F1F]/50">No hay cursos en este período.</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
           <p className="text-4xl mb-3">🎓</p>
           <p className="text-[#050F1F]/50 mb-4">
@@ -75,7 +115,7 @@ export default function TeacherCoursesView({ teacherId }: Props) {
         </div>
       ) : (
         <div className="grid gap-4">
-          {courses.map((course: Course) => {
+          {filtered.map((course: Course) => {
             const count = (countMap as Record<string, number>)[course.id] ?? 0;
             return (
               <div

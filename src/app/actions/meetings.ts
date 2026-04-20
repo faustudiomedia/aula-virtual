@@ -29,6 +29,7 @@ export async function createMeeting(formData: FormData) {
 
   const scheduledAt = (formData.get('scheduled_at') as string) || null
   const isScheduled = scheduledAt && new Date(scheduledAt) > new Date()
+  const externalUrl = (formData.get('external_url') as string)?.trim() || null
 
   await supabase.from('meetings').insert({
     display_name: displayName,
@@ -37,6 +38,7 @@ export async function createMeeting(formData: FormData) {
     institute_id: profile.institute_id,
     scheduled_at: scheduledAt || null,
     active: !isScheduled,
+    external_url: externalUrl,
   })
 
   revalidatePath('/dashboard/meetings')

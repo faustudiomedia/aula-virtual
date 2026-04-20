@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { StatsCharts } from "@/components/ui/StatsCharts";
 
 export default async function AdminStatsPage() {
   const supabase = await createClient();
@@ -23,20 +24,15 @@ export default async function AdminStatsPage() {
     { count: totalCourses },
     { count: totalEnrollments },
     { data: progressStats },
+    { data: enrollmentDates },
   ] = await Promise.all([
     supabase.from("institutes").select("*", { count: "exact", head: true }),
-    supabase
-      .from("profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("role", "alumno"),
-    supabase
-      .from("profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("role", "profesor"),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "alumno"),
+    supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "profesor"),
     supabase.from("courses").select("*", { count: "exact", head: true }),
     supabase.from("enrollments").select("*", { count: "exact", head: true }),
-    // Aggregate progress stats in a single query using select with aggregate
     supabase.from("enrollments").select("progress, completed"),
+    supabase.from("enrollments").select("created_at").order("created_at"),
   ]);
 
   // These two are simple derivations from the single enrollments query — no additional DB calls
@@ -110,6 +106,18 @@ export default async function AdminStatsPage() {
     },
   ];
 
+  // Enrollments per month (last 6 months)
+  const MONTH_ES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  const now = new Date();
+  const enrollmentsByMonth = Array.from({ length: 6 }, (_, i) => {
+    const d = new Date(now.getFullYear(), now.getMonth() - 5 + i, 1);
+    const count = (enrollmentDates ?? []).filter((e: { created_at: string }) => {
+      const ed = new Date(e.created_at);
+      return ed.getFullYear() === d.getFullYear() && ed.getMonth() === d.getMonth();
+    }).length;
+    return { month: MONTH_ES[d.getMonth()], count };
+  });
+
   type Bucket = {
     label: string;
     filter: (p: number) => boolean;
@@ -160,37 +168,14 @@ export default async function AdminStatsPage() {
         ))}
       </div>
 
-      {enrollmentList.length > 0 && (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-[#050F1F] mb-4">
-            Distribución de progreso
-          </h2>
-          <div className="space-y-3">
-            {buckets.map((bucket) => {
-              const count = enrollmentList.filter((e: { progress: number }) =>
-                bucket.filter(e.progress),
-              ).length;
-              const pct = Math.round((count / enrollmentList.length) * 100);
-              return (
-                <div key={bucket.label} className="flex items-center gap-3">
-                  <span className="text-xs text-[#050F1F]/50 w-44 flex-shrink-0">
-                    {bucket.label}
-                  </span>
-                  <div className="flex-1 h-2 bg-black/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${pct}%`, background: bucket.color }}
-                    />
-                  </div>
-                  <span className="text-xs font-medium text-[#050F1F]/60 w-10 text-right">
-                    {count}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      <StatsCharts
+        enrollmentsByMonth={enrollmentsByMonth}
+        progressBuckets={buckets.map(b => ({
+          label: b.label,
+          count: enrollmentList.filter((e: { progress: number }) => b.filter(e.progress)).length,
+          color: b.color,
+        }))}
+      />
     </div>
   );
 }
