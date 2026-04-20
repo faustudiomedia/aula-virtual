@@ -31,18 +31,16 @@ create policy "service insert notifications"
 -- ── trigger: new message → notify recipient ─────────────────────
 create or replace function notify_new_message()
 returns trigger language plpgsql security definer as $$
-declare
-  v_sender_name text;
 begin
-  select full_name into v_sender_name from profiles where id = NEW.sender_id;
   insert into notifications (user_id, type, title, message, link_url)
-  values (
+  select
     NEW.recipient_id,
     'message',
-    'Nuevo mensaje de ' || coalesce(v_sender_name, 'alguien'),
+    'Nuevo mensaje de ' || coalesce(p.full_name, 'alguien'),
     left(NEW.content, 120),
-    '/dashboard/messages/' || NEW.sender_id
-  );
+    '/dashboard/messages/' || NEW.sender_id::text
+  from profiles p
+  where p.id = NEW.sender_id;
   return NEW;
 end;
 $$;
