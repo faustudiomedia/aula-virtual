@@ -10,7 +10,7 @@ import { requestCertificate } from "@/app/actions/courses";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { StudentCourseNavTabs } from "@/components/ui/StudentCourseNavTabs";
 import type { Course, Material } from "@/lib/types";
-import { PlayCircle, FileText, Link as LinkIcon, Image as ImageIcon, CheckCircle2, ChevronDown, ChevronRight, Menu } from "lucide-react";
+import { PlayCircle, FileText, Link as LinkIcon, Image as ImageIcon, CheckCircle2, ChevronDown, ChevronRight, Menu, Lock } from "lucide-react";
 
 interface Enrollment {
   id: string;
@@ -178,37 +178,133 @@ export default function StudentCourseDetailView({ course, enrollment, userId, in
         </div>
       </div>
 
-      {/* Certificate Banner */}
-      {localCompleted && (
-         <div className={`p-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-l border-r border-[#1A56DB]/20 bg-gradient-to-r from-blue-50 to-indigo-50`}>
-            <div>
-               <h3 className="font-bold text-[#1A56DB] flex items-center gap-2">
-                  <CheckCircle2 size={20} /> ¡Felicitaciones! Has completado el curso
-               </h3>
-               <p className="text-sm text-[#050F1F]/60 mt-0.5">
-                  Ya podés solicitar la emisión de tu certificado digital para compartirlo en tus redes.
-               </p>
+      {/* Certificate gamified preview */}
+      {localProgress > 0 && (
+        <div className="border-l border-r border-[#1A56DB]/20 bg-gradient-to-br from-[#EFF6FF] via-white to-[#F0FDF4] px-6 py-5">
+          <div className="flex flex-col lg:flex-row items-center gap-6">
+
+            {/* Blurred diploma card */}
+            <div className="relative flex-shrink-0 w-64">
+              {/* Diploma mockup */}
+              <div
+                className={`bg-white rounded-2xl border border-black/5 shadow-lg p-5 transition-all duration-500 ${
+                  localCompleted && (!certRequest || certRequest.status === 'approved')
+                    ? certRequest?.status === 'approved' ? '' : 'blur-[2px]'
+                    : 'blur-sm'
+                }`}
+                style={{ fontFamily: "'Georgia', serif" }}
+                aria-hidden="true"
+              >
+                <div className="h-1 rounded-full bg-gradient-to-r from-[#1A56DB] via-[#38BDF8] to-[#059669] mb-3" />
+                <div className="text-center">
+                  <p className="text-[8px] uppercase tracking-widest text-[#1A56DB] font-semibold mb-1">Certificado de Finalización</p>
+                  <p className="text-[9px] text-[#050F1F]/40 mb-1">Este certificado acredita que</p>
+                  <p className="text-sm font-bold text-[#050F1F] leading-tight">████████████</p>
+                  <p className="text-[9px] text-[#050F1F]/40 mt-1 mb-1">ha completado el curso</p>
+                  <p className="text-[10px] font-bold text-[#1A56DB] leading-tight">{course.title}</p>
+                </div>
+                <div className="flex items-center gap-2 my-2">
+                  <div className="flex-1 h-px bg-[#1A56DB]/10" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#1A56DB]/20" />
+                  <div className="flex-1 h-px bg-[#1A56DB]/10" />
+                </div>
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="w-16 border-b border-[#050F1F]/20 mb-0.5" />
+                    <p className="text-[7px] text-[#050F1F]/30 uppercase tracking-wide">Director/a</p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full border border-[#1A56DB]/20 flex items-center justify-center text-xs">🎓</div>
+                </div>
+              </div>
+
+              {/* Lock overlay — only when not yet approved */}
+              {certRequest?.status !== 'approved' && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className={`rounded-2xl p-3 shadow-xl transition-all duration-500 ${
+                    localCompleted ? 'bg-[#1A56DB] scale-110' : 'bg-[#050F1F]/60'
+                  }`}>
+                    <Lock size={24} className="text-white" />
+                  </div>
+                  {localCompleted && (
+                    <span className="mt-2 text-[10px] font-bold text-[#1A56DB] bg-white px-2 py-0.5 rounded-full shadow-sm">
+                      ¡Listo para desbloquear!
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="flex-shrink-0">
-               {!certRequest ? (
-                  <button onClick={handleRequestCertificate} disabled={certIsPending} className="px-6 py-2.5 bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white text-sm font-bold rounded-xl shadow-lg shadow-[#1A56DB]/20 transition-all disabled:opacity-50">
-                     {certIsPending ? "Solicitando..." : "Solicitar Certificado"}
-                  </button>
-               ) : certRequest.status === 'pending' ? (
-                  <span className="px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-bold rounded-xl border border-yellow-200">
-                     ⏳ Certificado en revisión
-                  </span>
-               ) : certRequest.status === 'approved' ? (
-                  <a href={`/certificates/${certRequest.certificate_code}`} target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-green-500/20 transition-all block text-center">
-                     🎉 Ver mi Certificado
+
+            {/* Right side: progress / CTA */}
+            <div className="flex-1 min-w-0 text-center lg:text-left">
+              {certRequest?.status === 'approved' ? (
+                <>
+                  <p className="text-lg font-black text-[#050F1F] mb-1">🎉 ¡Certificado desbloqueado!</p>
+                  <p className="text-sm text-[#050F1F]/60 mb-4">Tu certificado fue aprobado. Podés verlo y compartirlo.</p>
+                  <a
+                    href={`/certificates/${certRequest.certificate_code}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-green-500/20 transition-all"
+                  >
+                    <CheckCircle2 size={16} /> Ver mi Certificado
                   </a>
-               ) : (
-                  <span className="px-4 py-2 bg-red-100 text-red-800 text-sm font-bold rounded-xl border border-red-200">
-                     ❌ Solicitud rechazada
-                  </span>
-               )}
+                </>
+              ) : certRequest?.status === 'pending' ? (
+                <>
+                  <p className="text-base font-black text-[#050F1F] mb-1">⏳ Certificado en revisión</p>
+                  <p className="text-sm text-[#050F1F]/60 mb-3">Tu solicitud fue enviada. El profesor la revisará pronto.</p>
+                  <div className="flex items-center gap-2 justify-center lg:justify-start">
+                    <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                    <span className="text-xs font-semibold text-amber-700">Pendiente de aprobación</span>
+                  </div>
+                </>
+              ) : certRequest?.status === 'rejected' ? (
+                <>
+                  <p className="text-base font-black text-red-600 mb-1">❌ Solicitud rechazada</p>
+                  <p className="text-sm text-[#050F1F]/60 mb-3">Contactá a tu profesor para más información.</p>
+                </>
+              ) : localCompleted ? (
+                <>
+                  <p className="text-lg font-black text-[#050F1F] mb-1">🏆 ¡Curso completado!</p>
+                  <p className="text-sm text-[#050F1F]/60 mb-4">Completaste el 100% del curso. Solicitá tu certificado digital.</p>
+                  <button
+                    onClick={handleRequestCertificate}
+                    disabled={certIsPending}
+                    className="px-6 py-2.5 bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white text-sm font-bold rounded-xl shadow-lg shadow-[#1A56DB]/20 transition-all disabled:opacity-50"
+                  >
+                    {certIsPending ? "Solicitando..." : "🎓 Solicitar Certificado"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-base font-bold text-[#050F1F] mb-1">
+                    <Lock size={14} className="inline mr-1.5 text-[#050F1F]/40" />
+                    Certificado bloqueado
+                  </p>
+                  <p className="text-sm text-[#050F1F]/50 mb-3">
+                    Completá el <span className="font-bold text-[#1A56DB]">100%</span> del curso para desbloquearlo.
+                  </p>
+                  {/* Progress to certificate */}
+                  <div className="max-w-xs mx-auto lg:mx-0">
+                    <div className="flex justify-between text-xs text-[#050F1F]/40 mb-1.5">
+                      <span>Progreso</span>
+                      <span className="font-bold text-[#1A56DB]">{localProgress}%</span>
+                    </div>
+                    <div className="h-2.5 rounded-full bg-black/5 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] transition-all duration-700"
+                        style={{ width: `${localProgress}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-[#050F1F]/30 mt-1.5">
+                      Faltan {materials.length - completed.size} tema{materials.length - completed.size !== 1 ? 's' : ''} para desbloquear
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
-         </div>
+          </div>
+        </div>
       )}
 
       {/* Progress bar + stats */}

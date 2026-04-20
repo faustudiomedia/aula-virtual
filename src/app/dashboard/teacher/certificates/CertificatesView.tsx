@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { approveCertificate, rejectCertificate } from "@/app/actions/courses";
+import { CertificatePreviewModal } from "@/components/ui/CertificatePreviewModal";
 
 interface Props {
   teacherId: string;
@@ -18,20 +19,35 @@ const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
   rejected: { label: "Rechazado",  cls: "bg-red-50   text-red-700   border-red-200"   },
 };
 
+type CertReq = {
+  id: string;
+  status: string;
+  certificate_code: string | null;
+  created_at: string;
+  profiles: { full_name: string; email: string } | null;
+  courses: {
+    title: string;
+    teacher: { signature_url: string | null } | null;
+    institute: {
+      name: string; logo_url: string | null;
+      director_name: string | null; director_signature_url: string | null;
+    } | null;
+  } | null;
+};
+
 export default function CertificatesView({ teacherId, role }: Props) {
   const [activeStatus, setActiveStatus] = useState<Status>("pending");
   const [isPending, startTransition] = useTransition();
   const [actionId, setActionId] = useState<string | null>(null);
+  const [previewReq, setPreviewReq] = useState<CertReq | null>(null);
   const queryClient = useQueryClient();
 
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ["certificate_requests", teacherId, role],
     queryFn: async () => {
       const supabase = createClient();
-
-      // Get course IDs this teacher owns
       const { data: courses } = await supabase
-        .from("courses").select("id, title").eq("teacher_id", teacherId);
+        .from("courses").select("id").eq("teacher_id", teacherId);
       const courseIds = (courses ?? []).map((c: { id: string }) => c.id);
       if (!courseIds.length) return [];
 
@@ -40,13 +56,17 @@ export default function CertificatesView({ teacherId, role }: Props) {
         .select(`
           id, status, certificate_code, created_at, approved_at,
           profiles!student_id ( full_name, email ),
-          courses!course_id ( title )
+          courses!course_id (
+            title,
+            teacher:profiles!teacher_id ( signature_url ),
+            institute:institutes ( name, logo_url, director_name, director_signature_url )
+          )
         `)
         .in("course_id", courseIds)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as CertReq[];
     },
   });
 
@@ -71,10 +91,10 @@ export default function CertificatesView({ teacherId, role }: Props) {
 
   const filtered = activeStatus === "all"
     ? requests
-    : requests.filter((r: { status: string }) => r.status === activeStatus);
+    : requests.filter(r => r.status === activeStatus);
 
-  const pending  = requests.filter((r: { status: string }) => r.status === "pending").length;
-  const approved = requests.filter((r: { status: string }) => r.status === "approved").length;
+  const pending  = requests.filter(r => r.status === "pending").length;
+  const approved = requests.filter(r => r.status === "approved").length;
 
   const TABS: { key: Status; label: string; count?: number }[] = [
     { key: "pending",  label: "Pendientes", count: pending },
@@ -85,6 +105,20 @@ export default function CertificatesView({ teacherId, role }: Props) {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
+      {previewReq && (
+        <CertificatePreviewModal
+          studentName={previewReq.profiles?.full_name ?? "—"}
+          courseTitle={previewReq.courses?.title ?? "—"}
+          instituteName={previewReq.courses?.institute?.name ?? "Instituto"}
+          logoUrl={previewReq.courses?.institute?.logo_url}
+          directorName={previewReq.courses?.institute?.director_name}
+          directorSignatureUrl={previewReq.courses?.institute?.director_signature_url}
+          teacherSignatureUrl={previewReq.courses?.teacher?.signature_url}
+          code={previewReq.certificate_code}
+          onClose={() => setPreviewReq(null)}
+        />
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#050F1F]">Certificados</h1>
@@ -96,9 +130,9 @@ export default function CertificatesView({ teacherId, role }: Props) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: "Pendientes",  value: pending,                                              color: "#D97706", bg: "#FFFBEB", border: "#FDE68A" },
-          { label: "Aprobados",   value: approved,                                             color: "#059669", bg: "#ECFDF5", border: "#A7F3D0" },
-          { label: "Total",       value: requests.length,                                      color: "#1A56DB", bg: "#EFF6FF", border: "#BFDBFE" },
+          { label: "Pendientes", value: pending,          color: "#D97706", bg: "#FFFBEB", border: "#FDE68A" },
+          { label: "Aprobados",  value: approved,         color: "#059669", bg: "#ECFDF5", border: "#A7F3D0" },
+          { label: "Total",      value: requests.length,  color: "#1A56DB", bg: "#EFF6FF", border: "#BFDBFE" },
         ].map(s => (
           <div key={s.label} className="rounded-2xl p-5 border" style={{ background: s.bg, borderColor: s.border }}>
             <p className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</p>
@@ -160,22 +194,13 @@ export default function CertificatesView({ teacherId, role }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {filtered.map((req: {
-                id: string;
-                status: string;
-                certificate_code: string | null;
-                created_at: string;
-                profiles: { full_name: string; email: string } | null;
-                courses: { title: string } | null;
-              }) => {
+              {filtered.map(req => {
                 const st = STATUS_LABEL[req.status] ?? STATUS_LABEL.pending;
                 const isActing = isPending && actionId === req.id;
                 return (
                   <tr key={req.id} className="hover:bg-[#F8FAFC]/60 transition-colors">
                     <td className="px-5 py-3.5">
-                      <p className="font-medium text-[#050F1F]">
-                        {req.profiles?.full_name ?? "—"}
-                      </p>
+                      <p className="font-medium text-[#050F1F]">{req.profiles?.full_name ?? "—"}</p>
                       <p className="text-xs text-[#050F1F]/40">{req.profiles?.email}</p>
                     </td>
                     <td className="px-5 py-3.5 text-[#050F1F]/70 text-xs">
@@ -193,6 +218,12 @@ export default function CertificatesView({ teacherId, role }: Props) {
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-2 justify-end">
+                        <button
+                          onClick={() => setPreviewReq(req)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#F0F9FF] text-[#1A56DB] border border-[#BAE6FD] hover:bg-[#BAE6FD]/40 transition-all"
+                        >
+                          Vista previa
+                        </button>
                         {req.status === "approved" && req.certificate_code && (
                           <a
                             href={`/certificates/${req.certificate_code}`}
@@ -200,7 +231,7 @@ export default function CertificatesView({ teacherId, role }: Props) {
                             rel="noopener noreferrer"
                             className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all"
                           >
-                            Ver certificado →
+                            Ver →
                           </a>
                         )}
                         {req.status === "pending" && (
