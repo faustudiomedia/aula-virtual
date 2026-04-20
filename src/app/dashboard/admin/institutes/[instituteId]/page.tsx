@@ -21,16 +21,31 @@ async function updateInstitute(instituteId: string, formData: FormData) {
   if (profile?.role === "admin" && profile?.institute_id !== instituteId)
     redirect("/dashboard/admin");
 
-  await supabase
-    .from("institutes")
-    .update({
-      name:            formData.get("name") as string,
-      domain:          (formData.get("domain") as string) || null,
-      primary_color:   formData.get("primary_color") as string,
-      secondary_color: formData.get("secondary_color") as string,
-      active:          formData.get("active") === "on",
-    })
-    .eq("id", instituteId);
+  const updates: Record<string, unknown> = {
+    name:            formData.get("name") as string,
+    domain:          (formData.get("domain") as string) || null,
+    primary_color:   formData.get("primary_color") as string,
+    secondary_color: formData.get("secondary_color") as string,
+    active:          formData.get("active") === "on",
+    director_name:   (formData.get("director_name") as string) || null,
+  };
+
+  // Handle director signature upload
+  const sigFile = formData.get("director_signature") as File | null;
+  if (sigFile && sigFile.size > 0) {
+    const ext = sigFile.name.split(".").pop()?.toLowerCase() ?? "png";
+    const path = `director_signature_${instituteId}.${ext}`;
+    const bytes = await sigFile.arrayBuffer();
+    const { error: upErr } = await supabase.storage
+      .from("avatars")
+      .upload(path, bytes, { contentType: sigFile.type, upsert: true });
+    if (!upErr) {
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+      updates.director_signature_url = `${publicUrl}?t=${Date.now()}`;
+    }
+  }
+
+  await supabase.from("institutes").update(updates).eq("id", instituteId);
 
   redirect(`/dashboard/admin/institutes/${instituteId}`);
 }
@@ -129,7 +144,7 @@ export default async function InstituteDetailPage({ params }: Props) {
       {/* Edit form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
         <h2 className="text-sm font-semibold text-[#050F1F] mb-4">Configuración</h2>
-        <form action={boundUpdate} className="space-y-4">
+        <form action={boundUpdate} className="space-y-4" encType="multipart/form-data">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Nombre *</label>
@@ -158,6 +173,33 @@ export default async function InstituteDetailPage({ params }: Props) {
               <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Color secundario</label>
               <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
                 className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Nombre del Director/a</label>
+            <input name="director_name" defaultValue={institute.director_name ?? ""}
+              placeholder="Ej: Lic. María González"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">
+              Firma del Director/a <span className="text-[#050F1F]/30">(PNG transparente, aparece en diplomas)</span>
+            </label>
+            <div className="flex items-center gap-4">
+              {institute.director_signature_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={institute.director_signature_url}
+                  alt="Firma actual"
+                  className="h-14 max-w-[160px] object-contain border border-black/10 rounded-xl p-2 bg-white mix-blend-multiply"
+                />
+              )}
+              <input
+                type="file"
+                name="director_signature"
+                accept="image/png"
+                className="text-xs text-[#050F1F]/60 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-black/10 file:text-xs file:font-medium file:bg-white file:text-[#050F1F]/70 hover:file:bg-black/5 transition"
+              />
             </div>
           </div>
           <div className="flex items-center gap-3">

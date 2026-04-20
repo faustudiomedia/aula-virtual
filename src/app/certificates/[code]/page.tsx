@@ -17,7 +17,8 @@ export default async function CertificatePage({ params }: Props) {
       student:profiles!student_id ( full_name ),
       course:courses!course_id (
         title,
-        institute:institutes ( name, logo_url, director_name )
+        teacher:profiles!teacher_id ( full_name, signature_url ),
+        institute:institutes ( name, logo_url, director_name, director_signature_url )
       )
     `)
     .eq("certificate_code", code)
@@ -30,7 +31,11 @@ export default async function CertificatePage({ params }: Props) {
     student: { full_name: string } | null;
     course: {
       title: string;
-      institute: { name: string; logo_url: string | null; director_name: string | null } | null;
+      teacher: { full_name: string; signature_url: string | null } | null;
+      institute: {
+        name: string; logo_url: string | null;
+        director_name: string | null; director_signature_url: string | null;
+      } | null;
     } | null;
   };
 
@@ -40,6 +45,9 @@ export default async function CertificatePage({ params }: Props) {
   const instituteName = c.course?.institute?.name ?? "Instituto";
   const logoUrl = c.course?.institute?.logo_url ?? null;
   const directorName = c.course?.institute?.director_name ?? null;
+  const directorSignatureUrl = c.course?.institute?.director_signature_url ?? null;
+  const teacherName = c.course?.teacher?.full_name ?? null;
+  const teacherSignatureUrl = c.course?.teacher?.signature_url ?? null;
   const approvedAt = c.approved_at
     ? new Date(c.approved_at).toLocaleDateString("es-AR", {
         day: "numeric", month: "long", year: "numeric",
@@ -109,10 +117,21 @@ export default async function CertificatePage({ params }: Props) {
             <div className="flex-1 h-px bg-gradient-to-l from-transparent to-[#1A56DB]/20" />
           </div>
 
-          {/* Director signature */}
-          <div className="flex items-end justify-between mt-8">
+          {/* Signatures row */}
+          <div className="flex items-end justify-between mt-8 gap-4">
+            {/* Director signature */}
             <div className="text-center">
-              <div className="w-40 border-b border-[#050F1F]/20 mb-2" />
+              {directorSignatureUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={directorSignatureUrl}
+                  alt="Firma director/a"
+                  className="h-14 max-w-[160px] object-contain mx-auto mb-1 mix-blend-multiply"
+                />
+              ) : (
+                <div className="w-40 h-10 mb-1" />
+              )}
+              <div className="w-40 border-b border-[#050F1F]/20 mb-1.5" />
               <p className="text-xs text-[#050F1F]/50">{directorName ?? "Director/a"}</p>
               <p className="text-[10px] text-[#050F1F]/30 uppercase tracking-widest mt-0.5">
                 {instituteName}
@@ -130,6 +149,27 @@ export default async function CertificatePage({ params }: Props) {
                 Verificado
               </p>
             </div>
+
+            {/* Teacher signature */}
+            {teacherName && (
+              <div className="text-center">
+                {teacherSignatureUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={teacherSignatureUrl}
+                    alt="Firma docente"
+                    className="h-14 max-w-[160px] object-contain mx-auto mb-1 mix-blend-multiply"
+                  />
+                ) : (
+                  <div className="w-40 h-10 mb-1" />
+                )}
+                <div className="w-40 border-b border-[#050F1F]/20 mb-1.5" />
+                <p className="text-xs text-[#050F1F]/50">{teacherName}</p>
+                <p className="text-[10px] text-[#050F1F]/30 uppercase tracking-widest mt-0.5">
+                  Docente
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
