@@ -28,14 +28,25 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
     .from('profiles').select('role').eq('id', user.id).single()
   if (!profile) redirect('/login')
 
-  // Fetch all messages involving this user
+  // Fetch all messages involving this user, with sender/recipient profiles joined
   const { data: messages } = await supabase
     .from('messages')
-    .select('id, sender_id, recipient_id, content, read_at, created_at')
+    .select(`
+      id, sender_id, recipient_id, content, read_at, created_at,
+      sender:profiles!sender_id(id, full_name, role),
+      recipient:profiles!recipient_id(id, full_name, role)
+    `)
     .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
 
-  // Build per-conversation data
+  type MsgProfile = { id: string; full_name: string; role: string }
+  type Msg = {
+    id: string; sender_id: string; recipient_id: string
+    content: string; read_at: string | null; created_at: string
+    sender: MsgProfile | null; recipient: MsgProfile | null
+  }
+
+  // Build per-conversation data + profile map simultaneously
   const conversationMap = new Map<string, {
     userId: string
     lastMessage: string
@@ -43,9 +54,14 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
     unread: number
     lastSenderId: string
   }>()
+  const profileMap = new Map<string, MsgProfile>()
 
-  for (const m of messages ?? []) {
-    const otherId = m.sender_id === user.id ? m.recipient_id : m.sender_id
+  for (const m of (messages ?? []) as Msg[]) {
+    const isFromMe = m.sender_id === user.id
+    const otherId = isFromMe ? m.recipient_id : m.sender_id
+    const otherProfile = isFromMe ? m.recipient : m.sender
+    if (otherProfile) profileMap.set(otherId, otherProfile)
+
     if (!conversationMap.has(otherId)) {
       conversationMap.set(otherId, {
         userId: otherId,
@@ -65,14 +81,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
   // Apply tab filter
   if (activeTab === 'unread')  conversations = conversations.filter(c => c.unread > 0)
   if (activeTab === 'sent')    conversations = conversations.filter(c => c.lastSenderId === user.id)
-  if (activeTab === 'starred') conversations = [] // is_starred column not yet in DB
-
-  // Fetch names
-  const otherIds = [...conversationMap.values()].map(c => c.userId)
-  const { data: otherProfiles } = otherIds.length
-    ? await supabase.from('profiles').select('id, full_name, role').in('id', otherIds)
-    : { data: [] }
-  const profileMap = new Map((otherProfiles ?? []).map(p => [p.id, p]))
+  if (activeTab === 'starred') conversations = []
 
   // Suggested new contacts
   let contactSuggestions: { id: string; full_name: string; role: string }[] = []

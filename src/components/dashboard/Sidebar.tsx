@@ -26,6 +26,7 @@ import {
   CalendarDays,
   Bell,
   ClipboardList,
+  Award,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -119,6 +120,7 @@ const adminSections: NavSection[] = [
       { label: "Estadísticas",        href: "/dashboard/admin/stats",                 icon: BarChart2 },
       { label: "Auditoría",           href: "/dashboard/admin/audit",                 icon: ClipboardList },
       { label: "Invitaciones",        href: "/dashboard/admin/invitations",           icon: Bell },
+      { label: "Certificados",        href: "/dashboard/admin/certificates",          icon: Award },
     ],
   },
 ];
@@ -129,10 +131,11 @@ const teacherSections: NavSection[] = [
       { label: "Panel",        href: "/dashboard/teacher",              icon: LayoutDashboard },
       { label: "Mis cursos",   href: "/dashboard/teacher/courses",      icon: BookOpen },
       { label: "Materiales",   href: "/dashboard/teacher/materials",    icon: FolderOpen },
-      { label: "Alumnos",      href: "/dashboard/teacher/students",     icon: GraduationCap },
-      { label: "Calendario",   href: "/dashboard/teacher/calendar",     icon: Calendar },
-      { label: "Reuniones",    href: "/dashboard/meetings",             icon: Video },
-      { label: "Mensajes",     href: "/dashboard/messages",             icon: Mail },
+      { label: "Alumnos",        href: "/dashboard/teacher/students",       icon: GraduationCap },
+      { label: "Certificados",   href: "/dashboard/teacher/certificates",   icon: Award },
+      { label: "Calendario",     href: "/dashboard/teacher/calendar",       icon: Calendar },
+      { label: "Reuniones",      href: "/dashboard/meetings",               icon: Video },
+      { label: "Mensajes",       href: "/dashboard/messages",               icon: Mail },
     ],
   },
 ];

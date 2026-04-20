@@ -586,3 +586,83 @@ export async function requestCertificate(courseId: string): Promise<ActionResult
   }
 }
 
+
+export async function approveCertificate(requestId: string): Promise<ActionResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return { success: false, error: "No autenticado" };
+
+    const { data: profile } = await supabase
+      .from("profiles").select("role").eq("id", user.id).single();
+
+    // Load request to check permissions
+    const { data: req } = await supabase
+      .from("certificate_requests")
+      .select("id, course_id, status")
+      .eq("id", requestId)
+      .single();
+    if (!req) return { success: false, error: "Solicitud no encontrada" };
+
+    // Verify teacher owns the course or admin/super_admin
+    if (profile?.role !== "admin" && profile?.role !== "super_admin") {
+      const { data: course } = await supabase
+        .from("courses").select("teacher_id").eq("id", req.course_id).single();
+      if (course?.teacher_id !== user.id)
+        return { success: false, error: "Sin permisos" };
+    }
+
+    // Generate a unique readable code: MAVIC-XXXXXX
+    const code = "CERT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    const { error } = await supabase
+      .from("certificate_requests")
+      .update({
+        status: "approved",
+        approved_by: user.id,
+        approved_at: new Date().toISOString(),
+        certificate_code: code,
+      })
+      .eq("id", requestId);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (_e) {
+    return { success: false, error: "Error inesperado" };
+  }
+}
+
+export async function rejectCertificate(requestId: string): Promise<ActionResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return { success: false, error: "No autenticado" };
+
+    const { data: profile } = await supabase
+      .from("profiles").select("role").eq("id", user.id).single();
+
+    const { data: req } = await supabase
+      .from("certificate_requests")
+      .select("id, course_id")
+      .eq("id", requestId)
+      .single();
+    if (!req) return { success: false, error: "Solicitud no encontrada" };
+
+    if (profile?.role !== "admin" && profile?.role !== "super_admin") {
+      const { data: course } = await supabase
+        .from("courses").select("teacher_id").eq("id", req.course_id).single();
+      if (course?.teacher_id !== user.id)
+        return { success: false, error: "Sin permisos" };
+    }
+
+    const { error } = await supabase
+      .from("certificate_requests")
+      .update({ status: "rejected" })
+      .eq("id", requestId);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (_e) {
+    return { success: false, error: "Error inesperado" };
+  }
+}
