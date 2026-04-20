@@ -81,6 +81,7 @@ const superAdminSections: NavSection[] = [
       { label: "Cursos",             href: "/dashboard/admin/courses",          icon: BookMarked },
       { label: "Usuarios",           href: "/dashboard/admin/users",            icon: User },
       { label: "Estadísticas",       href: "/dashboard/admin/stats",            icon: TrendingUp },
+      { label: "Certificados",       href: "/dashboard/admin/certificates",     icon: Award },
     ],
   },
   {
@@ -90,6 +91,7 @@ const superAdminSections: NavSection[] = [
       { label: "Nuevo curso",        href: "/dashboard/teacher/courses/new",    icon: PlusCircle },
       { label: "Materiales",         href: "/dashboard/teacher/materials",      icon: FolderOpen },
       { label: "Alumnos",            href: "/dashboard/teacher/students",       icon: GraduationCap },
+      { label: "Certificados",       href: "/dashboard/teacher/certificates",   icon: Award },
     ],
   },
   {

@@ -10,26 +10,21 @@ export default async function StudentCourseDetailPage({ params }: Props) {
   const { courseId } = await params;
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
   const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+    .from("profiles").select("role").eq("id", user.id).single();
 
   if (profile?.role !== "alumno" && profile?.role !== "super_admin")
     redirect("/dashboard");
 
-  const { data: course } = await supabase
-    .from("courses")
-    .select("*")
-    .eq("id", courseId)
-    .eq("published", true)
-    .single();
+  const isSuperAdmin = profile?.role === "super_admin";
+
+  // super_admin can preview any course (published or not)
+  let courseQuery = supabase.from("courses").select("*").eq("id", courseId);
+  if (!isSuperAdmin) courseQuery = courseQuery.eq("published", true);
+  const { data: course } = await courseQuery.single();
 
   if (!course) notFound();
 
@@ -40,8 +35,13 @@ export default async function StudentCourseDetailPage({ params }: Props) {
     .eq("course_id", courseId)
     .maybeSingle();
 
-  if (!enrollment) redirect("/dashboard/student/courses");
-  const { data: certificateReq } = await supabase
+  if (!enrollment && !isSuperAdmin) redirect("/dashboard/student/courses");
+
+  const effectiveEnrollment = enrollment ?? { id: "preview", progress: 0, completed: false };
+
+  // certificate_requests not in generated types yet — use any cast
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: certificateReq } = await (supabase as any)
     .from("certificate_requests")
     .select("status, certificate_code")
     .eq("student_id", user.id)
@@ -51,9 +51,9 @@ export default async function StudentCourseDetailPage({ params }: Props) {
   return (
     <StudentCourseDetailView
       course={course}
-      enrollment={enrollment}
+      enrollment={effectiveEnrollment}
       userId={user.id}
-      initialCertificateRequest={certificateReq}
+      initialCertificateRequest={certificateReq ?? null}
     />
   );
 }
