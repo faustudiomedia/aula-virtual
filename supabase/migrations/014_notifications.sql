@@ -53,27 +53,18 @@ create trigger on_new_message
 -- ── trigger: certificate request → notify teacher ────────────────
 create or replace function notify_certificate_request()
 returns trigger language plpgsql security definer as $$
-declare
-  v_teacher_id   uuid;
-  v_student_name text;
-  v_course_title text;
 begin
-  select c.teacher_id, p.full_name, c.title
-    into v_teacher_id, v_student_name, v_course_title
-    from courses c
-    join profiles p on p.id = NEW.student_id
-   where c.id = NEW.course_id;
-
-  if v_teacher_id is not null then
-    insert into notifications (user_id, type, title, message, link_url)
-    values (
-      v_teacher_id,
-      'certificate_request',
-      'Nueva solicitud de certificado',
-      coalesce(v_student_name, 'Un alumno') || ' solicitó un certificado para "' || coalesce(v_course_title, 'un curso') || '"',
-      '/dashboard/teacher/certificates'
-    );
-  end if;
+  insert into notifications (user_id, type, title, message, link_url)
+  select
+    c.teacher_id,
+    'certificate_request',
+    'Nueva solicitud de certificado',
+    coalesce(p.full_name, 'Un alumno') || ' solicitó un certificado para "' || coalesce(c.title, 'un curso') || '"',
+    '/dashboard/teacher/certificates'
+  from courses c
+  join profiles p on p.id = NEW.student_id
+  where c.id = NEW.course_id
+    and c.teacher_id is not null;
   return NEW;
 end;
 $$;
