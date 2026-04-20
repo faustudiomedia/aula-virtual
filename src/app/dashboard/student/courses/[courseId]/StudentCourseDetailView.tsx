@@ -29,6 +29,17 @@ const FILE_ICONS: Record<string, string> = {
   image: "🖼️",
 };
 
+const GRADIENTS = [
+  ["#1A56DB", "#38BDF8"],
+  ["#7C3AED", "#A78BFA"],
+  ["#059669", "#34D399"],
+  ["#D97706", "#FCD34D"],
+  ["#DC2626", "#F87171"],
+  ["#0891B2", "#67E8F9"],
+  ["#BE185D", "#F9A8D4"],
+  ["#92400E", "#FDE68A"],
+];
+
 const FILE_LABELS: Record<string, string> = {
   video: "VIDEO",
   pdf: "PDF",
@@ -200,29 +211,55 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
             )}
 
             {/* Materials grid */}
-            <div className={`grid gap-4 ${hasModules ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
+            <div className={`grid gap-5 ${hasModules ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
               {currentMaterials.map((material, idx) => {
                 const isDone = completed.has(material.id);
                 const isThisPending = isPending && pendingMaterialId === material.id;
+                const [from, to] = GRADIENTS[idx % GRADIENTS.length];
 
                 return (
                   <div
                     key={material.id}
-                    className={`bg-white rounded-2xl border shadow-sm transition-all hover:shadow-md ${
-                      isDone ? "border-green-200" : "border-black/5"
-                    }`}
+                    className={`relative bg-white rounded-2xl overflow-hidden card-shine flex flex-col h-full
+                      transition-all duration-300 hover:-translate-y-1
+                      ${isDone
+                        ? "shadow-md shadow-green-500/10 ring-1 ring-green-200 glow-enrolled"
+                        : "border border-black/5 shadow-sm hover:shadow-xl hover:shadow-black/8"
+                      }`}
                   >
-                    <div className="p-5">
-                      {/* Number + badge */}
-                      <div className="flex items-start justify-between mb-3">
-                        <span className={`text-4xl font-black leading-none ${isDone ? "text-green-400" : "text-[#1A56DB]/15"}`}>
-                          {isDone ? "✓" : String(idx + 1).padStart(2, "0")}
-                        </span>
-                        {material.file_type && (
-                          <span className={`text-[10px] font-bold px-2 py-1 rounded-lg ${
+                    {/* Header Strip with depth */}
+                    <div
+                      className="h-24 flex items-center justify-between px-5 relative overflow-hidden flex-shrink-0"
+                      style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
+                    >
+                      <div
+                        className="absolute inset-0 opacity-10"
+                        style={{
+                          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(255,255,255,0.4) 0%, transparent 50%),
+                                            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
+                        }}
+                      />
+                      <span className="text-4xl font-black text-white/30 select-none relative z-10 font-mono tracking-tighter">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      
+                      {isDone && (
+                        <div className="w-8 h-8 rounded-full bg-green-500/90 backdrop-blur-sm flex items-center justify-center shadow-lg relative z-10">
+                          <svg className="check-animate" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-5 flex flex-col flex-1">
+                      {/* Badge */}
+                      <div className="flex justify-end mb-3 mt-[-36px] relative z-20">
+                         {material.file_type && (
+                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-sm border border-white/50 backdrop-blur-md ${
                             isDone
-                              ? "bg-green-50 text-green-600"
-                              : "bg-[#EFF6FF] text-[#1A56DB]"
+                              ? "bg-green-50 text-green-700 border-green-200"
+                              : "bg-white text-[#1A56DB]"
                           }`}>
                             {FILE_ICONS[material.file_type] ?? "📎"} {FILE_LABELS[material.file_type] ?? material.file_type.toUpperCase()}
                           </span>
@@ -230,25 +267,25 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
                       </div>
 
                       {/* Title + description */}
-                      <h3 className="font-bold text-[#050F1F] text-sm leading-snug mb-1">
+                      <h3 className="font-bold text-[#050F1F] text-[15px] leading-snug mb-1.5 flex-1">
                         {material.title}
                       </h3>
                       {material.description && (
-                        <p className="text-xs text-[#050F1F]/50 line-clamp-2 mb-3">
+                        <p className="text-[13px] text-[#050F1F]/50 line-clamp-2 mb-4">
                           {material.description}
                         </p>
                       )}
 
                       {/* Actions */}
-                      <div className="flex items-center justify-between pt-3 border-t border-black/5">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-4 mt-auto border-t border-black/5">
                         {material.file_url ? (
                           <a
                             href={material.file_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-[#1A56DB] hover:underline font-medium"
+                            className="text-[13px] text-[#1A56DB] hover:underline font-medium text-center sm:text-left"
                           >
-                            ver más →
+                            Ir al material →
                           </a>
                         ) : (
                           <span />
@@ -256,11 +293,11 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
                         <button
                           onClick={() => handleToggle(material.id)}
                           disabled={isThisPending}
-                          className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition disabled:opacity-50 ${
-                            isDone
-                              ? "bg-green-50 text-green-700 hover:bg-green-100"
-                              : "bg-[#EFF6FF] text-[#1A56DB] hover:bg-[#DBEAFE]"
-                          }`}
+                          className={`text-xs px-4 py-2 rounded-xl font-bold transition-all disabled:opacity-50
+                            ${isDone
+                              ? "bg-green-50 text-green-700 hover:bg-green-100 hover:scale-105 active:scale-95"
+                              : "bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] text-white shadow-md hover:shadow-lg hover:brightness-110 active:scale-95"
+                            }`}
                         >
                           {isThisPending ? "..." : isDone ? "✓ Visto" : "Marcar visto"}
                         </button>
