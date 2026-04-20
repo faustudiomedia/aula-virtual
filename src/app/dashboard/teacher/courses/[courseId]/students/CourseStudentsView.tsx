@@ -2,6 +2,7 @@
 
 import { useCourse, useCourseEnrollments } from "@/lib/hooks/use-data";
 import ProgressBar from "@/components/ui/ProgressBar";
+import { CourseBulkEnrollment } from "@/components/ui/CourseBulkEnrollment";
 
 interface EnrollmentRow {
   id: string;
@@ -52,13 +53,22 @@ export default function CourseStudentsView({ courseId }: Props) {
       >
         ← Mis cursos
       </a>
-      <h1 className="text-2xl font-bold text-[#050F1F] mt-2 mb-1">
-        {course.title}
-      </h1>
-      <p className="text-[#050F1F]/50 mb-8">
-        {enrollments.length} alumno{enrollments.length !== 1 ? "s" : ""}{" "}
-        inscripto{enrollments.length !== 1 ? "s" : ""}
-      </p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-[#050F1F] mt-2 mb-1">
+            {course.title}
+          </h1>
+          <p className="text-[#050F1F]/50">
+            {enrollments.length} alumno{enrollments.length !== 1 ? "s" : ""}{" "}
+            inscripto{enrollments.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+        <CourseBulkEnrollment 
+           courseId={courseId} 
+           courseTitle={course.title} 
+           currentEnrollments={typedEnrollments} 
+        />
+      </div>
 
       {enrollments.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">

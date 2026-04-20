@@ -431,3 +431,115 @@ export async function createInstitute(
     return { success: false, error: "Error inesperado al crear el instituto" };
   }
 }
+
+// ─── BULK ENROLLMENTS ───────────────────────────────────────────
+
+export async function bulkEnrollStudents(
+  courseId: string,
+  students: { email: string; full_name: string; dni: string }[]
+): Promise<{ success: boolean; message?: string; error?: string }> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, error: "No autenticado." };
+
+    // Verify user is teacher or admin
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+      
+    if (!profile || (profile.role !== "profesor" && profile.role !== "admin" && profile.role !== "super_admin")) {
+      return { success: false, error: "No tenés permiso para inscribir alumnos masivamente." };
+    }
+
+    const { data: course } = await supabase
+      .from("courses")
+      .select("institute_id")
+      .eq("id", courseId)
+      .single();
+      
+    if (!course) return { success: false, error: "Curso no encontrado." };
+
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    let adminClient;
+    try {
+      adminClient = createAdminClient();
+    } catch {
+      return { success: false, error: "Error de configuración del servidor (SUPABASE_SERVICE_ROLE_KEY)." };
+    }
+
+    let newUsers = 0;
+    let enrolledUsers = 0;
+
+    for (const student of students) {
+      const email = student.email.toLowerCase().trim();
+      if (!email) continue;
+      
+      let { data: existingProfile } = await adminClient
+        .from("profiles")
+        .select("id")
+        .eq("email", email)
+        .maybeSingle();
+        
+      let studentId = existingProfile?.id;
+
+      if (!studentId) {
+        const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+          email: email,
+          password: student.dni, // Use DNI as password for imported students
+          email_confirm: true,
+          user_metadata: { full_name: student.full_name, role: "alumno", institute_id: course.institute_id },
+        });
+
+        if (authError) {
+          console.error("Error creating user", email, authError);
+          continue; // Skip silently if fails (eg. email taken but missing from profiles?)
+        }
+
+        studentId = authData.user?.id;
+        if (!studentId) continue;
+        
+        await adminClient.from("profiles").upsert({
+          id: studentId,
+          email: email,
+          full_name: student.full_name,
+          legajo: student.dni,
+          role: "alumno",
+          institute_id: course.institute_id
+        });
+
+        newUsers++;
+      } else {
+        // Update DNI/Legajo if they don't have one and were provided one
+        await adminClient.from("profiles").update({ legajo: student.dni }).eq("id", studentId).is("legajo", null);
+      }
+
+      const { error: enrollError } = await adminClient.from("enrollments").insert({
+        student_id: studentId,
+        course_id: courseId,
+        progress: 0,
+        completed: false,
+      });
+
+      if (!enrollError) {
+        enrolledUsers++;
+      }
+    }
+
+    const { revalidatePath } = await import("next/cache");
+    revalidatePath(`/dashboard/teacher/courses/${courseId}/students`);
+    revalidatePath(`/dashboard/admin/courses/${courseId}/students`);
+
+    return { 
+      success: true, 
+      message: `Proceso completado. ${enrolledUsers} inscripciones exitosas (${newUsers} cuentas nuevas creadas).` 
+    };
+
+  } catch (error: any) {
+    console.error("bulkEnrollStudents error:", error);
+    return { success: false, error: "Error inesperado procesando el Excel." };
+  }
+}
+
