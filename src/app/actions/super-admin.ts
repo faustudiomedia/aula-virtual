@@ -15,6 +15,7 @@ const instituteSchema = z.object({
   domain:          z.string().optional().nullable(),
   primary_color:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#1A56DB'),
   secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#38BDF8'),
+  director_name:   z.string().optional().nullable(),
   active:          z.boolean().default(true),
 })
 
@@ -89,6 +90,7 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
     domain:          (formData.get('domain') as string) || null,
     primary_color:   (formData.get('primary_color') as string) || '#1A56DB',
     secondary_color: (formData.get('secondary_color') as string) || '#38BDF8',
+    director_name:   (formData.get('director_name') as string) || null,
     active:          formData.get('active') === 'on',
   }
 
@@ -107,9 +109,36 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
 
   if (existing) return { success: false, error: `El slug "${parsed.data.slug}" ya está en uso.` }
 
+  let director_signature_url: string | undefined = undefined;
+  const signatureFile = formData.get("signature") as File | null;
+  if (signatureFile && signatureFile.size > 0) {
+    const MAX_SIZE = 2 * 1024 * 1024;
+    if (signatureFile.size > MAX_SIZE) return { success: false, error: "La firma no puede superar 2 MB" };
+    const format = signatureFile.type;
+    if (format !== 'image/png' && format !== 'image/webp') return { success: false, error: "La firma debe ser PNG o WebP sin fondo." };
+    
+    const ext = signatureFile.name.split('.').pop()?.toLowerCase() ?? 'png';
+    const sigPath = `institute_sig_${id}.${ext}`;
+    const bytes = await signatureFile.arrayBuffer();
+
+    const { error: uploadError } = await auth.supabase.storage
+      .from("avatars")
+      .upload(sigPath, bytes, { contentType: signatureFile.type, upsert: true });
+
+    if (uploadError) return { success: false, error: "Error al subir la firma: " + uploadError.message };
+
+    const { data: { publicUrl } } = auth.supabase.storage.from("avatars").getPublicUrl(sigPath);
+    director_signature_url = `${publicUrl}?t=${Date.now()}`;
+  }
+
+  const updatePayload = { ...parsed.data } as Record<string, any>;
+  if (director_signature_url !== undefined) {
+     updatePayload.director_signature_url = director_signature_url;
+  }
+
   const { error } = await auth.supabase
     .from('institutes')
-    .update(parsed.data)
+    .update(updatePayload)
     .eq('id', id)
 
   if (error) return { success: false, error: error.message }

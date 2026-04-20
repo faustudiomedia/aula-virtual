@@ -38,8 +38,32 @@ export async function updateProfile(formData: FormData): Promise<ActionResult> {
       avatarUrl = publicUrl
     }
 
+    let signatureUrl: string | null | undefined = undefined
+    const signatureFile = formData.get("signature") as File | null
+    if (signatureFile && signatureFile.size > 0) {
+      const MAX_SIZE = 2 * 1024 * 1024
+      if (signatureFile.size > MAX_SIZE) return { success: false, error: "La firma no puede superar 2 MB" }
+      const format = signatureFile.type;
+      if (format !== 'image/png' && format !== 'image/webp') return { success: false, error: "La firma debe ser PNG o WebP sin fondo." }
+      
+      const ext = signatureFile.name.split('.').pop()?.toLowerCase() ?? 'png'
+      const sigPath = `signature_${user.id}.${ext}`
+      const bytes = await signatureFile.arrayBuffer()
+
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(sigPath, bytes, { contentType: signatureFile.type, upsert: true })
+
+      if (uploadError) return { success: false, error: "Error al subir la firma: " + uploadError.message }
+
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(sigPath)
+      // Agregamos un querystring para evitar la caché vieja al reemplazarla
+      signatureUrl = `${publicUrl}?t=${Date.now()}`
+    }
+
     const update: Record<string, unknown> = { full_name: fullName }
     if (avatarUrl !== undefined) update.avatar_url = avatarUrl
+    if (signatureUrl !== undefined) update.signature_url = signatureUrl
 
     const { error } = await supabase.from("profiles").update(update).eq("id", user.id)
     if (error) return { success: false, error: error.message }

@@ -113,37 +113,40 @@ export default function TeacherCoursesView({ teacherId }: Props) {
                 </div>
 
                 {/* Actions row */}
-                <div className="flex items-center gap-2 px-5 py-3 flex-wrap border-t border-black/5">
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/materials`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                  >
-                    Materiales
-                  </Link>
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/students`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                  >
-                    Alumnos
-                  </Link>
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/assignments`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                  >
-                    Tareas
-                  </Link>
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/quizzes`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
-                  >
-                    Quizzes
-                  </Link>
-                  <div className="flex-1" />
-                  <EditCourseButton course={course} />
-                  <DeleteCourseButton
-                    courseId={course.id}
-                    courseTitle={course.title}
-                  />
+                <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-black/5 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Link
+                      href={`/dashboard/teacher/courses/${course.id}/materials`}
+                      className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    >
+                      Materiales
+                    </Link>
+                    <Link
+                      href={`/dashboard/teacher/courses/${course.id}/students`}
+                      className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    >
+                      Alumnos
+                    </Link>
+                    <Link
+                      href={`/dashboard/teacher/courses/${course.id}/assignments`}
+                      className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    >
+                      Tareas
+                    </Link>
+                    <Link
+                      href={`/dashboard/teacher/courses/${course.id}/quizzes`}
+                      className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    >
+                      Quizzes
+                    </Link>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <EditCourseButton course={course} />
+                    <DeleteCourseButton
+                      courseId={course.id}
+                      courseTitle={course.title}
+                    />
+                  </div>
                 </div>
               </div>
             );

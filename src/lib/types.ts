@@ -8,6 +8,8 @@ export interface Institute {
   primary_color: string;
   secondary_color: string;
   logo_url: string | null;
+  director_name?: string | null;
+  director_signature_url?: string | null;
   active: boolean;
   created_at: string;
 }
@@ -19,6 +21,7 @@ export interface Profile {
   role: UserRole;
   institute_id: string | null;
   avatar_url: string | null;
+  signature_url?: string | null;
   created_at: string;
 }
 
@@ -143,4 +146,19 @@ export interface CalendarEvent {
   end_at: string | null;
   created_at: string;
   courses?: { title: string } | null;
+}
+
+export type CertificateStatus = "pending" | "approved" | "rejected";
+
+export interface CertificateRequest {
+  id: string;
+  student_id: string;
+  course_id: string;
+  status: CertificateStatus;
+  approved_by: string | null;
+  approved_at: string | null;
+  certificate_code: string | null;
+  created_at: string;
+  profiles?: { full_name: string; email: string } | null;
+  courses?: { title: string; teacher_id: string } | null;
 }

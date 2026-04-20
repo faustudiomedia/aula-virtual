@@ -543,3 +543,46 @@ export async function bulkEnrollStudents(
   }
 }
 
+// ─── CERTIFICATES ───────────────────────────────────────────────
+
+export async function requestCertificate(courseId: string): Promise<ActionResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return { success: false, error: "No autenticado" };
+
+    // Validar que realmente completó el curso al 100%
+    const { data: enrollment } = await supabase
+      .from("enrollments")
+      .select("completed")
+      .eq("course_id", courseId)
+      .eq("student_id", user.id)
+      .single();
+
+    if (!enrollment || !enrollment.completed) {
+      return { success: false, error: "Debes completar el 100% del curso primero." };
+    }
+
+    // Insertar request (si ya existe, ignorará por Unique pero lanzará error)
+    const { error } = await supabase
+      .from("certificate_requests")
+      .insert({
+        student_id: user.id,
+        course_id: courseId,
+        status: 'pending'
+      });
+    
+    if (error) {
+       // Code 23505 is unique violation in Postgres
+       if (error.code === '23505') {
+          return { success: true }; // Ya estaba solicitado
+       }
+       return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (_e) {
+    return { success: false, error: "Error inesperado al solicitar certificado" };
+  }
+}
+

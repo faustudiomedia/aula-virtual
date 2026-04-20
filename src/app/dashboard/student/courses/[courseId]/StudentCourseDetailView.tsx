@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCourseMaterials, useMaterialCompletions } from "@/lib/hooks/use-data";
 import { toggleMaterialCompletion } from "@/app/actions/courses";
+import { requestCertificate } from "@/app/actions/courses";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { StudentCourseNavTabs } from "@/components/ui/StudentCourseNavTabs";
 import type { Course, Material } from "@/lib/types";
@@ -21,6 +22,7 @@ interface Props {
   course: Course;
   enrollment: Enrollment;
   userId: string;
+  initialCertificateRequest?: { status: string; certificate_code: string | null } | null;
 }
 
 const FILE_ICONS: Record<string, any> = {
@@ -46,13 +48,16 @@ function getEmbedUrl(url: string | null) {
   return url;
 }
 
-export default function StudentCourseDetailView({ course, enrollment, userId }: Props) {
+export default function StudentCourseDetailView({ course, enrollment, userId, initialCertificateRequest }: Props) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [isPending, startTransition] = useTransition();
   const [localProgress, setLocalProgress] = useState(enrollment.progress);
   const [localCompleted, setLocalCompleted] = useState(enrollment.completed);
   const [pendingMaterialId, setPendingMaterialId] = useState<string | null>(null);
+
+  const [certRequest, setCertRequest] = useState(initialCertificateRequest);
+  const [certIsPending, setCertIsPending] = useState(false);
 
   const [activeMaterialId, setActiveMaterialId] = useState<string | null>(null);
   const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set([0, 1]));
@@ -147,6 +152,17 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
     }
   };
 
+  const handleRequestCertificate = () => {
+     setCertIsPending(true);
+     startTransition(async () => {
+        const result = await requestCertificate(course.id);
+        if (result.success) {
+           setCertRequest({ status: 'pending', certificate_code: null });
+        }
+        setCertIsPending(false);
+     });
+  };
+
   return (
     <div className="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8 flex flex-col min-h-screen">
       {/* Course hero */}
@@ -161,6 +177,39 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
           </div>
         </div>
       </div>
+
+      {/* Certificate Banner */}
+      {localCompleted && (
+         <div className={`p-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-l border-r border-[#1A56DB]/20 bg-gradient-to-r from-blue-50 to-indigo-50`}>
+            <div>
+               <h3 className="font-bold text-[#1A56DB] flex items-center gap-2">
+                  <CheckCircle2 size={20} /> ¡Felicitaciones! Has completado el curso
+               </h3>
+               <p className="text-sm text-[#050F1F]/60 mt-0.5">
+                  Ya podés solicitar la emisión de tu certificado digital para compartirlo en tus redes.
+               </p>
+            </div>
+            <div className="flex-shrink-0">
+               {!certRequest ? (
+                  <button onClick={handleRequestCertificate} disabled={certIsPending} className="px-6 py-2.5 bg-[#1A56DB] hover:bg-[#1A56DB]/90 text-white text-sm font-bold rounded-xl shadow-lg shadow-[#1A56DB]/20 transition-all disabled:opacity-50">
+                     {certIsPending ? "Solicitando..." : "Solicitar Certificado"}
+                  </button>
+               ) : certRequest.status === 'pending' ? (
+                  <span className="px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-bold rounded-xl border border-yellow-200">
+                     ⏳ Certificado en revisión
+                  </span>
+               ) : certRequest.status === 'approved' ? (
+                  <a href={`/certificates/${certRequest.certificate_code}`} target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-green-500/20 transition-all block text-center">
+                     🎉 Ver mi Certificado
+                  </a>
+               ) : (
+                  <span className="px-4 py-2 bg-red-100 text-red-800 text-sm font-bold rounded-xl border border-red-200">
+                     ❌ Solicitud rechazada
+                  </span>
+               )}
+            </div>
+         </div>
+      )}
 
       {/* Progress bar + stats */}
       <div className="bg-white border text-sm border-black/5 px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

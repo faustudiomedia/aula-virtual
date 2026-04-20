@@ -2,6 +2,7 @@ import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { updateInstitute, toggleInstituteStatus } from '@/app/actions/super-admin'
 import SubmitButton from '@/components/ui/SubmitButton'
+import { SignatureUpload } from '@/components/ui/SignatureUpload'
 import Link from 'next/link'
 
 interface Props {
@@ -84,7 +85,7 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
 
         <form action={handleUpdate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Nombre <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Nombre Institución <span className="text-red-500">*</span></label>
             <input name="name" required defaultValue={institute.name}
               className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]" />
           </div>
@@ -93,6 +94,16 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
             <input name="slug" required defaultValue={institute.slug}
               pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
               className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]" />
+          </div>
+          <div className="pt-4 border-t border-black/5">
+             <h2 className="text-sm font-bold text-[#050F1F] mb-4">Autoridad y Certificaciones</h2>
+             <div className="mb-4">
+                <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Nombre del Director / Institución</label>
+                <input name="director_name" defaultValue={institute.director_name ?? ''}
+                  placeholder="Ej: Ing. Juan Pérez / Universidad MAVIC"
+                  className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]" />
+             </div>
+             <SignatureUpload currentUrl={institute.director_signature_url || null} />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Dominio personalizado</label>

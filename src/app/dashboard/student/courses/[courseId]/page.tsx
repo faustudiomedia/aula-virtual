@@ -41,12 +41,19 @@ export default async function StudentCourseDetailPage({ params }: Props) {
     .maybeSingle();
 
   if (!enrollment) redirect("/dashboard/student/courses");
+  const { data: certificateReq } = await supabase
+    .from("certificate_requests")
+    .select("status, certificate_code")
+    .eq("student_id", user.id)
+    .eq("course_id", courseId)
+    .maybeSingle();
 
   return (
     <StudentCourseDetailView
       course={course}
       enrollment={enrollment}
       userId={user.id}
+      initialCertificateRequest={certificateReq}
     />
   );
 }

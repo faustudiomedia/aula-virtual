@@ -4,12 +4,14 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/actions/profile";
 import { AvatarUpload } from "@/components/ui/AvatarUpload";
+import { SignatureUpload } from "@/components/ui/SignatureUpload";
 import FormError from "@/components/ui/FormError";
 
 interface Props {
   fullName: string;
   email: string;
   avatarUrl: string | null;
+  signatureUrl?: string | null;
   role: string;
 }
 
@@ -20,7 +22,7 @@ const roleLabel: Record<string, string> = {
   super_admin: "Super Admin",
 };
 
-export default function ProfileForm({ fullName, email, avatarUrl, role }: Props) {
+export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, role }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +82,12 @@ export default function ProfileForm({ fullName, email, avatarUrl, role }: Props)
           className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 transition-all"
         />
       </div>
+
+      {(role === "profesor" || role === "super_admin" || role === "admin") && (
+        <div className="pt-4 border-t border-black/5">
+          <SignatureUpload currentUrl={signatureUrl || null} />
+        </div>
+      )}
 
       <button
         type="submit"
