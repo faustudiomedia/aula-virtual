@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ import { toggleMaterialCompletion } from "@/app/actions/courses";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { StudentCourseNavTabs } from "@/components/ui/StudentCourseNavTabs";
 import type { Course, Material } from "@/lib/types";
+import { PlayCircle, FileText, Link as LinkIcon, Image as ImageIcon, CheckCircle2, ChevronDown, ChevronRight, Menu } from "lucide-react";
 
 interface Enrollment {
   id: string;
@@ -22,30 +23,28 @@ interface Props {
   userId: string;
 }
 
-const FILE_ICONS: Record<string, string> = {
-  video: "🎬",
-  pdf: "📄",
-  link: "🔗",
-  image: "🖼️",
+const FILE_ICONS: Record<string, any> = {
+  video: PlayCircle,
+  pdf: FileText,
+  link: LinkIcon,
+  image: ImageIcon,
 };
-
-const GRADIENTS = [
-  ["#1A56DB", "#38BDF8"],
-  ["#7C3AED", "#A78BFA"],
-  ["#059669", "#34D399"],
-  ["#D97706", "#FCD34D"],
-  ["#DC2626", "#F87171"],
-  ["#0891B2", "#67E8F9"],
-  ["#BE185D", "#F9A8D4"],
-  ["#92400E", "#FDE68A"],
-];
 
 const FILE_LABELS: Record<string, string> = {
   video: "VIDEO",
-  pdf: "PDF",
-  link: "ENLACE",
-  image: "IMAGEN",
+  pdf: "DOC",
+  link: "LINK",
+  image: "IMG",
 };
+
+function getEmbedUrl(url: string | null) {
+  if (!url) return null;
+  const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&]{11})/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?rel=0`;
+  const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)(?:$|\/|\?)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[3]}`;
+  return url;
+}
 
 export default function StudentCourseDetailView({ course, enrollment, userId }: Props) {
   const router = useRouter();
@@ -54,7 +53,10 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
   const [localProgress, setLocalProgress] = useState(enrollment.progress);
   const [localCompleted, setLocalCompleted] = useState(enrollment.completed);
   const [pendingMaterialId, setPendingMaterialId] = useState<string | null>(null);
-  const [activeModule, setActiveModule] = useState<number | null>(null);
+
+  const [activeMaterialId, setActiveMaterialId] = useState<string | null>(null);
+  const [expandedModules, setExpandedModules] = useState<Set<number>>(new Set([0, 1]));
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const { data: materials = [], isLoading: loadingMaterials } = useCourseMaterials(course.id);
   const { data: completed = new Set<string>(), isLoading: loadingCompletions } =
@@ -62,7 +64,7 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
 
   const isLoading = loadingMaterials || loadingCompletions;
 
-  // Group materials by module_number; null/0 → key 0 (shown as "General")
+  // Group materials
   const moduleGroups = useMemo(() => {
     const map = new Map<number, { title: string | null; materials: Material[] }>();
     materials.forEach((m: Material) => {
@@ -72,7 +74,6 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
       }
       map.get(key)!.materials.push(m);
     });
-    // Sort: numbered modules ascending, then "General" (0) at end
     return [...map.entries()].sort(([a], [b]) => {
       if (a === 0) return 1;
       if (b === 0) return -1;
@@ -80,11 +81,21 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
     });
   }, [materials]);
 
-  const hasModules = moduleGroups.some(([k]) => k !== 0);
-  const firstKey = moduleGroups[0]?.[0] ?? 0;
-  const currentModule = activeModule ?? firstKey;
-  const currentGroup = moduleGroups.find(([k]) => k === currentModule)?.[1];
-  const currentMaterials = currentGroup?.materials ?? materials;
+  // Set initial active material
+  useEffect(() => {
+    if (!activeMaterialId && materials.length > 0 && !isLoading) {
+      // Find first incomplete
+      const firstIncomplete = materials.find((m: Material) => !completed.has(m.id));
+      setActiveMaterialId(firstIncomplete ? firstIncomplete.id : materials[0].id);
+      
+      // Auto expand the module of the active material
+      const activeMat = firstIncomplete || materials[0];
+      const mod = activeMat.module_number ?? 0;
+      setExpandedModules(prev => new Set([...prev, mod]));
+    }
+  }, [materials, completed, activeMaterialId, isLoading]);
+
+  const activeMaterial = useMemo(() => materials.find((m: Material) => m.id === activeMaterialId), [materials, activeMaterialId]);
 
   function handleToggle(materialId: string) {
     setPendingMaterialId(materialId);
@@ -101,239 +112,231 @@ export default function StudentCourseDetailView({ course, enrollment, userId }: 
         setLocalCompleted(newProgress >= 100);
         queryClient.invalidateQueries({ queryKey: ["material_completions", course.id, userId] });
         queryClient.invalidateQueries({ queryKey: ["enrollments"] });
-        router.refresh();
+        router.refresh(); // Refresh layout to update server comps
       }
       setPendingMaterialId(null);
     });
   }
 
+  function toggleModule(modNum: number) {
+    setExpandedModules(prev => {
+      const next = new Set(prev);
+      if (next.has(modNum)) next.delete(modNum);
+      else next.add(modNum);
+      return next;
+    });
+  }
+
+  const navigateNext = () => {
+     if (!activeMaterialId) return;
+     const currentIndex = materials.findIndex((m: Material) => m.id === activeMaterialId);
+     if (currentIndex < materials.length - 1) {
+        setActiveMaterialId(materials[currentIndex + 1].id);
+        const nextMod = materials[currentIndex + 1].module_number ?? 0;
+        setExpandedModules(prev => new Set([...prev, nextMod]));
+     }
+  };
+
+  const navigatePrev = () => {
+    if (!activeMaterialId) return;
+    const currentIndex = materials.findIndex((m: Material) => m.id === activeMaterialId);
+    if (currentIndex > 0) {
+       setActiveMaterialId(materials[currentIndex - 1].id);
+       const prevMod = materials[currentIndex - 1].module_number ?? 0;
+       setExpandedModules(prev => new Set([...prev, prevMod]));
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8 flex flex-col min-h-screen">
       {/* Course hero */}
-      <div
-        className="relative h-40 md:h-52 flex items-end bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] overflow-hidden"
-      >
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "40px 40px" }}
-        />
-        <div className="relative z-10 p-6 md:p-8 w-full">
-          <Link
-            href="/dashboard/student/courses"
-            className="inline-flex items-center gap-1 text-white/70 hover:text-white text-xs mb-3 transition-colors"
-          >
-            ← Mis cursos
-          </Link>
-          <h1 className="text-2xl md:text-3xl font-black text-white leading-tight">
-            {course.title}
-          </h1>
-          {course.description && (
-            <p className="text-white/70 text-sm mt-1 line-clamp-1">{course.description}</p>
-          )}
+      <div className="relative rounded-t-3xl h-32 md:h-40 flex items-end bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] overflow-hidden flex-shrink-0">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div className="relative z-10 p-6 w-full flex justify-between items-end">
+          <div>
+            <Link href="/dashboard/student/courses" className="inline-flex items-center gap-1 text-white/70 hover:text-white text-xs mb-2 transition-colors">
+              ← Mis cursos
+            </Link>
+            <h1 className="text-xl md:text-2xl font-black text-white leading-tight">{course.title}</h1>
+          </div>
         </div>
       </div>
 
       {/* Progress bar + stats */}
-      <div className="bg-white border-b border-black/5 px-6 md:px-8 py-4">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <ProgressBar value={localProgress} />
+      <div className="bg-white border text-sm border-black/5 px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+         <StudentCourseNavTabs courseId={course.id} />
+         <div className="flex items-center gap-4 w-full md:w-auto">
+          <div className="w-32 md:w-48">
+             <ProgressBar value={localProgress} />
           </div>
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <span className="text-xs text-[#050F1F]/50">
-              {completed.size}/{materials.length} materiales
-            </span>
-            {localCompleted && (
-              <span className="px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                ✓ Completado
-              </span>
-            )}
+          <div className="flex items-center gap-2 flex-shrink-0 text-[#050F1F]/60">
+             <span className="font-semibold text-[#050F1F]">{completed.size}</span> de {materials.length} temas
           </div>
-        </div>
+         </div>
       </div>
 
-      <div className="p-4 md:p-8">
-        <StudentCourseNavTabs courseId={course.id} />
+      <div className="flex-1 flex flex-col lg:flex-row bg-white border-x border-b border-black/5 rounded-b-3xl overflow-hidden min-h-[600px] relative">
+         
+         {/* Mobile Toggle */}
+         <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden w-full p-4 bg-[#F0F9FF] text-[#1A56DB] font-semibold flex items-center justify-center gap-2 border-b border-black/5">
+            <Menu size={18} /> {sidebarOpen ? "Ocultar temario" : "Mostrar temario"}
+         </button>
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-black/5 p-6 animate-pulse h-40" />
-            ))}
-          </div>
-        ) : materials.length === 0 ? (
-          <div className="mt-6 rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-            <p className="text-[#050F1F]/50 text-sm">
-              Este curso todavía no tiene materiales cargados.
-            </p>
-          </div>
-        ) : (
-          <>
-            {/* Module tabs — only shown when there are named modules */}
-            {hasModules && (
-              <div className="flex items-center gap-2 mt-4 mb-6 overflow-x-auto pb-1 scrollbar-none">
-                {moduleGroups.map(([key, group]) => {
-                  const isActive = currentModule === key;
-                  const label = key === 0 ? "General" : `M${key}`;
-                  const moduleCompleted = group.materials.every(m => completed.has(m.id));
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setActiveModule(key)}
-                      className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
-                        isActive
-                          ? "bg-[#1A56DB] text-white shadow-lg shadow-[#1A56DB]/20"
-                          : "bg-white border border-black/10 text-[#050F1F]/60 hover:border-[#1A56DB]/30 hover:text-[#1A56DB]"
-                      }`}
-                    >
-                      {label}
-                      {moduleCompleted && group.materials.length > 0 && (
-                        <span className={`text-[10px] ${isActive ? "text-white/70" : "text-green-500"}`}>✓</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Module title */}
-            {hasModules && currentModule !== 0 && (
-              <div className="mb-5">
-                <h2 className="text-lg font-bold text-[#050F1F]">
-                  Módulo {currentModule}
-                  {currentGroup?.title && (
-                    <span className="text-[#050F1F]/50 font-normal ml-2">— {currentGroup.title}</span>
-                  )}
-                </h2>
-                <p className="text-sm text-[#050F1F]/40 mt-0.5">
-                  {currentGroup?.materials.filter(m => completed.has(m.id)).length ?? 0} / {currentGroup?.materials.length ?? 0} completados
-                </p>
-              </div>
-            )}
-
-            {/* Materials grid */}
-            <div className={`grid gap-5 ${hasModules ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
-              {currentMaterials.map((material, idx) => {
-                const isDone = completed.has(material.id);
-                const isThisPending = isPending && pendingMaterialId === material.id;
-                const [from, to] = GRADIENTS[idx % GRADIENTS.length];
-
-                return (
-                  <div
-                    key={material.id}
-                    className={`relative bg-white rounded-2xl overflow-hidden card-shine flex flex-col h-full
-                      transition-all duration-300 hover:-translate-y-1
-                      ${isDone
-                        ? "shadow-md shadow-green-500/10 ring-1 ring-green-200 glow-enrolled"
-                        : "border border-black/5 shadow-sm hover:shadow-xl hover:shadow-black/8"
-                      }`}
-                  >
-                    {/* Header Strip with depth */}
-                    <div
-                      className="h-24 flex items-center justify-between px-5 relative overflow-hidden flex-shrink-0"
-                      style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
-                    >
-                      <div
-                        className="absolute inset-0 opacity-10"
-                        style={{
-                          backgroundImage: `radial-gradient(circle at 20% 80%, rgba(255,255,255,0.4) 0%, transparent 50%),
-                                            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 50%)`,
-                        }}
-                      />
-                      <span className="text-4xl font-black text-white/30 select-none relative z-10 font-mono tracking-tighter">
-                        {String(idx + 1).padStart(2, "0")}
-                      </span>
-                      
-                      {isDone && (
-                        <div className="w-8 h-8 rounded-full bg-green-500/90 backdrop-blur-sm flex items-center justify-center shadow-lg relative z-10">
-                          <svg className="check-animate" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="p-5 flex flex-col flex-1">
-                      {/* Badge */}
-                      <div className="flex justify-end mb-3 mt-[-36px] relative z-20">
-                         {material.file_type && (
-                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-sm border border-white/50 backdrop-blur-md ${
-                            isDone
-                              ? "bg-green-50 text-green-700 border-green-200"
-                              : "bg-white text-[#1A56DB]"
-                          }`}>
-                            {FILE_ICONS[material.file_type] ?? "📎"} {FILE_LABELS[material.file_type] ?? material.file_type.toUpperCase()}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Title + description */}
-                      <h3 className="font-bold text-[#050F1F] text-[15px] leading-snug mb-1.5 flex-1">
-                        {material.title}
-                      </h3>
-                      {material.description && (
-                        <p className="text-[13px] text-[#050F1F]/50 line-clamp-2 mb-4">
-                          {material.description}
-                        </p>
-                      )}
-
-                      {/* Actions */}
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-4 mt-auto border-t border-black/5">
-                        {material.file_url ? (
-                          <a
-                            href={material.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[13px] text-[#1A56DB] hover:underline font-medium text-center sm:text-left"
-                          >
-                            Ir al material →
-                          </a>
-                        ) : (
-                          <span />
-                        )}
-                        <button
-                          onClick={() => handleToggle(material.id)}
-                          disabled={isThisPending}
-                          className={`text-xs px-4 py-2 rounded-xl font-bold transition-all disabled:opacity-50
-                            ${isDone
-                              ? "bg-green-50 text-green-700 hover:bg-green-100 hover:scale-105 active:scale-95"
-                              : "bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] text-white shadow-md hover:shadow-lg hover:brightness-110 active:scale-95"
-                            }`}
+         {/* SIDEBAR */}
+         <aside className={`${sidebarOpen ? 'block' : 'hidden'} lg:block w-full lg:w-80 flex-shrink-0 bg-[#F9FAFB] border-r border-black/5 overflow-y-auto max-h-[800px]`}>
+            {isLoading ? (
+               <div className="p-6 space-y-4 animate-pulse">
+                  <div className="h-4 bg-black/10 rounded w-1/2"></div>
+                  <div className="h-10 bg-black/5 rounded"></div>
+                  <div className="h-10 bg-black/5 rounded"></div>
+               </div>
+            ) : materials.length === 0 ? (
+               <div className="p-8 text-center text-[#050F1F]/40 text-sm">Este curso aún no tiene temas.</div>
+            ) : (
+               <div className="py-2">
+                 {moduleGroups.map(([key, group]) => {
+                    const isExpanded = expandedModules.has(key);
+                    const label = key === 0 ? "General" : `Módulo ${key}`;
+                    const moduleCompleted = group.materials.every(m => completed.has(m.id));
+                    
+                    return (
+                      <div key={key} className="mb-1">
+                        <button 
+                           onClick={() => toggleModule(key)}
+                           className="w-full px-5 py-3.5 flex items-center justify-between text-left hover:bg-black/5 transition-colors"
                         >
-                          {isThisPending ? "..." : isDone ? "✓ Visto" : "Marcar visto"}
+                           <div>
+                              <div className="text-xs font-bold text-[#1A56DB] uppercase tracking-wider mb-0.5">{label}</div>
+                              {group.title && <div className="text-sm font-semibold text-[#050F1F] line-clamp-1">{group.title}</div>}
+                           </div>
+                           <div className="flex items-center gap-2">
+                              {moduleCompleted && group.materials.length > 0 && <CheckCircle2 size={16} className="text-green-500" />}
+                              {isExpanded ? <ChevronDown size={18} className="text-[#050F1F]/40" /> : <ChevronRight size={18} className="text-[#050F1F]/40" />}
+                           </div>
                         </button>
+                        
+                        {isExpanded && (
+                           <div className="bg-white">
+                              {group.materials.map((mat, idx) => {
+                                 const isDone = completed.has(mat.id);
+                                 const isActive = activeMaterialId === mat.id;
+                                 const Icon = FILE_ICONS[mat.file_type || 'link'] || FileText;
+                                 
+                                 return (
+                                   <button 
+                                      key={mat.id}
+                                      onClick={() => setActiveMaterialId(mat.id)}
+                                      className={`w-full text-left px-5 py-3 border-l-4 transition-all flex items-start gap-3
+                                         ${isActive 
+                                           ? "border-[#1A56DB] bg-[#EFF6FF]" 
+                                           : "border-transparent hover:bg-black/5"
+                                         }`}
+                                   >
+                                      <div className={`mt-0.5 flex-shrink-0 ${isDone ? "text-green-500" : isActive ? "text-[#1A56DB]" : "text-[#050F1F]/40"}`}>
+                                         {isDone ? <CheckCircle2 size={16} /> : <Icon size={16} />}
+                                      </div>
+                                      <div>
+                                         <div className={`text-sm leading-tight mb-1 ${isActive ? "font-bold text-[#1A56DB]" : "font-medium text-[#050F1F]/80"}`}>
+                                            {idx + 1}. {mat.title}
+                                         </div>
+                                         <div className="text-[10px] uppercase font-bold text-[#050F1F]/40">
+                                            {FILE_LABELS[mat.file_type || 'link'] || mat.file_type}
+                                         </div>
+                                      </div>
+                                   </button>
+                                 );
+                              })}
+                           </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Bottom module navigation */}
-            {hasModules && moduleGroups.length > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-black/5">
-                {moduleGroups.map(([key], i) => {
-                  const isActive = currentModule === key;
-                  const prev = moduleGroups[i - 1];
-                  const next = moduleGroups[i + 1];
-                  void prev; void next;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setActiveModule(key)}
-                      className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
-                        isActive
-                          ? "bg-[#1A56DB] text-white shadow-md"
-                          : "bg-black/5 text-[#050F1F]/40 hover:bg-[#EFF6FF] hover:text-[#1A56DB]"
-                      }`}
-                    >
-                      {key === 0 ? "G" : `M${key}`}
-                    </button>
-                  );
-                })}
-              </div>
+                    )
+                 })}
+               </div>
             )}
-          </>
-        )}
+         </aside>
+
+         {/* MAIN VIEWER */}
+         <main className="flex-1 bg-white flex flex-col relative min-h-[500px]">
+           {activeMaterial ? (
+             <div className="h-full flex flex-col">
+                {/* Visualizador de medios */}
+                <div className="w-full bg-[#050F1F] flex-shrink-0 relative overflow-hidden" style={{ minHeight: '400px', height: '55vh' }}>
+                   {activeMaterial.file_url ? (
+                      activeMaterial.file_type === 'image' ? (
+                         // eslint-disable-next-line @next/next/no-img-element
+                         <img src={activeMaterial.file_url} alt={activeMaterial.title} className="w-full h-full object-contain absolute inset-0" />
+                      ) : activeMaterial.file_type === 'video' ? (
+                         <iframe 
+                           src={getEmbedUrl(activeMaterial.file_url) || ''} 
+                           className="w-full h-full absolute inset-0 border-0" 
+                           allowFullScreen
+                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                         ></iframe>
+                      ) : activeMaterial.file_type === 'pdf' ? (
+                         <iframe src={activeMaterial.file_url} className="w-full h-full absolute inset-0 border-0"></iframe>
+                      ) : (
+                         <div className="absolute inset-0 flex flex-col items-center justify-center text-white/70">
+                            <LinkIcon size={48} className="mb-4 opacity-50" />
+                            <p className="mb-4 text-center px-4">Este material es un enlace externo o un formato no embebible.</p>
+                            <a href={activeMaterial.file_url} target="_blank" rel="noopener noreferrer" className="px-6 py-2 bg-[#1A56DB] text-white rounded-xl font-semibold hover:bg-[#1A56DB]/90">
+                               Abrir material en nueva pestaña
+                            </a>
+                         </div>
+                      )
+                   ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-white/50">
+                         <p>Este tema no tiene un archivo o enlace adjunto.</p>
+                      </div>
+                   )}
+                </div>
+
+                {/* Detalles y Acciones */}
+                <div className="p-6 md:p-8 flex-1 flex flex-col bg-white">
+                   <h2 className="text-2xl font-bold text-[#050F1F] mb-2">{activeMaterial.title}</h2>
+                   {activeMaterial.description && (
+                      <p className="text-[#050F1F]/70 text-sm whitespace-pre-wrap mb-8">
+                         {activeMaterial.description}
+                      </p>
+                   )}
+                   
+                   <div className="mt-auto pt-6 border-t border-black/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      {/* Navigator Prev */}
+                      <button onClick={navigatePrev} className="text-[#050F1F]/40 hover:text-[#050F1F] font-semibold text-sm transition-colors px-4 py-2">
+                         Anterior
+                      </button>
+
+                      {/* Marcar visto */}
+                      {(() => {
+                         const isDone = completed.has(activeMaterial.id);
+                         const isThisPending = isPending && pendingMaterialId === activeMaterial.id;
+                         return (
+                           <button
+                             onClick={() => handleToggle(activeMaterial.id)}
+                             disabled={isThisPending}
+                             className={`px-8 py-3 rounded-full font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
+                               isDone 
+                                 ? "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200 shadow-green-500/10"
+                                 : "bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] text-white hover:brightness-110 shadow-blue-500/20"
+                             }`}
+                           >
+                             {isThisPending ? "Guardando..." : isDone ? <><CheckCircle2 size={18} /> Tema completado</> : "Marcar como terminado"}
+                           </button>
+                         );
+                      })()}
+
+                      {/* Navigator Next */}
+                      <button onClick={navigateNext} className="text-[#1A56DB] hover:text-[#1A56DB]/70 font-semibold text-sm transition-colors px-4 py-2">
+                         Siguiente →
+                      </button>
+                   </div>
+                </div>
+             </div>
+           ) : (
+              <div className="flex-1 flex items-center justify-center text-[#050F1F]/40 p-8 text-center min-h-[400px]">
+                 Seleccioná un tema del temario para comenzar a estudiar.
+              </div>
+           )}
+         </main>
       </div>
     </div>
   );
