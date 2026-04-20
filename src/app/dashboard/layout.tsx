@@ -56,6 +56,7 @@ export default async function DashboardLayout({
         primaryColor={primaryColor}
         logoUrl={logoUrl}
         avatarUrl={profile.avatar_url ?? null}
+        userId={user.id}
       >
         {children}
       </DashboardShell>
