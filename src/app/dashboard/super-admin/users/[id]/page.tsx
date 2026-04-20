@@ -4,11 +4,11 @@ import { createClient } from "@/lib/supabase/server";
 import EditUserForm from "./EditUserForm";
 
 interface Props {
-  params: Promise<{ userId: string }>;
+  params: Promise<{ id: string }>;
 }
 
 export default async function EditUserPage({ params }: Props) {
-  const { userId } = await params;
+  const { id: userId } = await params;
   const supabase = await createClient();
 
   const {

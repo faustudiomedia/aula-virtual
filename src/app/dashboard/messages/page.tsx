@@ -31,7 +31,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
   // Fetch all messages involving this user
   const { data: messages } = await supabase
     .from('messages')
-    .select('id, sender_id, recipient_id, content, read_at, created_at, is_starred')
+    .select('id, sender_id, recipient_id, content, read_at, created_at')
     .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
 
@@ -41,7 +41,6 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
     lastMessage: string
     lastAt: string
     unread: number
-    isStarred: boolean
     lastSenderId: string
   }>()
 
@@ -53,13 +52,11 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
         lastMessage: m.content,
         lastAt: m.created_at,
         unread: (!m.read_at && m.recipient_id === user.id) ? 1 : 0,
-        isStarred: m.is_starred ?? false,
         lastSenderId: m.sender_id,
       })
     } else {
       const ex = conversationMap.get(otherId)!
       if (!m.read_at && m.recipient_id === user.id) ex.unread++
-      if (m.is_starred) ex.isStarred = true
     }
   }
 
@@ -68,7 +65,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
   // Apply tab filter
   if (activeTab === 'unread')  conversations = conversations.filter(c => c.unread > 0)
   if (activeTab === 'sent')    conversations = conversations.filter(c => c.lastSenderId === user.id)
-  if (activeTab === 'starred') conversations = conversations.filter(c => c.isStarred)
+  if (activeTab === 'starred') conversations = [] // is_starred column not yet in DB
 
   // Fetch names
   const otherIds = [...conversationMap.values()].map(c => c.userId)
@@ -217,8 +214,8 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
                     {conv.unread > 9 ? '9+' : conv.unread}
                   </span>
                 )}
-                {conv.isStarred && conv.unread === 0 && (
-                  <span className="text-amber-400 flex-shrink-0">⭐</span>
+                {conv.unread === 0 && (
+                  <span className="text-[#050F1F]/20 flex-shrink-0">→</span>
                 )}
               </Link>
             )
