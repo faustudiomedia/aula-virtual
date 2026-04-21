@@ -242,13 +242,14 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                   <Link
                     key={m.id}
                     href={`/dashboard/meetings/${m.id}`}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-green-50 hover:bg-green-100 transition-all group"
+                    className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 hover:border-green-300 hover:shadow-sm transition-all group"
                   >
-                    <div className="w-2 h-2 rounded-full bg-green-500 flex-shrink-0" />
+                    <div className="w-9 h-9 rounded-xl bg-green-100 group-hover:bg-green-200 flex items-center justify-center text-base flex-shrink-0 transition-colors">🎥</div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-[#050F1F] truncate group-hover:text-green-700">🎥 {m.displayName}</p>
-                      <p className="text-xs text-[#050F1F]/50">{new Date(m.scheduledAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}</p>
+                      <p className="text-sm font-semibold text-[#050F1F] truncate group-hover:text-green-700 transition-colors">{m.displayName}</p>
+                      <p className="text-xs text-green-600">{new Date(m.scheduledAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
                     </div>
+                    <span className="text-green-400 group-hover:text-green-600 text-sm transition-colors">→</span>
                   </Link>
                 ))}
                 {(byDay.get(selected) ?? []).map(a => (
@@ -274,21 +275,32 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
       {/* ── Sidebar ──────────────────────────── */}
       <div className="space-y-4">
         {upcomingMeetings.length > 0 && (
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
-            <h3 className="text-sm font-semibold text-[#050F1F] mb-3">Próximas reuniones</h3>
-            <div className="space-y-2">
+          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-2 px-5 pt-4 pb-3 border-b border-black/5">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <h3 className="text-sm font-semibold text-[#050F1F]">Próximas reuniones</h3>
+            </div>
+            <div className="divide-y divide-black/5">
               {upcomingMeetings.map(m => {
                 const d = new Date(m.scheduledAt)
+                const dayNum = d.getDate()
+                const monthStr = d.toLocaleDateString('es-AR', { month: 'short' }).toUpperCase()
+                const timeStr = d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
                 return (
                   <Link
                     key={m.id}
                     href={`/dashboard/meetings/${m.id}`}
-                    className="block p-3 rounded-xl border border-green-100 bg-green-50 hover:bg-green-100 transition-all"
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-green-50 transition-all group"
                   >
-                    <p className="text-sm font-medium text-[#050F1F] line-clamp-1">🎥 {m.displayName}</p>
-                    <p className="text-xs text-green-700 mt-1">
-                      {d.toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'short' })} · {d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
+                    <div className="flex flex-col items-center justify-center bg-green-50 group-hover:bg-green-100 rounded-xl w-10 h-10 flex-shrink-0 transition-colors">
+                      <span className="text-[9px] font-bold text-green-600 leading-none">{monthStr}</span>
+                      <span className="text-base font-black text-green-500 leading-none">{dayNum}</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold text-[#050F1F] line-clamp-1 group-hover:text-green-700 transition-colors">{m.displayName}</p>
+                      <p className="text-xs text-green-600 mt-0.5">{timeStr} hs</p>
+                    </div>
+                    <span className="text-green-400 group-hover:text-green-600 text-xs transition-colors">→</span>
                   </Link>
                 )
               })}
