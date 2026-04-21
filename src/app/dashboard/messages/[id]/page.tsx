@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { markMessagesAsRead } from '@/app/actions/messages'
 import { ConversationClient } from './ConversationClient'
 
 interface Props { params: Promise<{ id: string }> }
@@ -15,8 +14,6 @@ export default async function ConversationPage({ params }: Props) {
   const { data: otherProfile } = await supabase
     .from('profiles').select('id, full_name, role').eq('id', otherUserId).single()
   if (!otherProfile) redirect('/dashboard/messages')
-
-  await markMessagesAsRead(otherUserId)
 
   const { data: messages } = await supabase
     .from('messages')

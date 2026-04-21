@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useTransition } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { sendMessage } from '@/app/actions/messages'
+import { sendMessage, markMessagesAsRead } from '@/app/actions/messages'
 
 interface Message {
   id: string
@@ -25,32 +25,56 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
+  // Mark incoming messages as read when conversation opens
+  useEffect(() => {
+    markMessagesAsRead(otherUserId)
+  }, [otherUserId])
+
   // Scroll to bottom whenever messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // Realtime: listen for incoming messages from the other user
+  // Realtime: listen for incoming AND outgoing messages
   useEffect(() => {
     const supabase = createClient()
+
     const channel = supabase
       .channel(`conv:${[currentUserId, otherUserId].sort().join(':')}`)
+      // Incoming: messages sent TO me by the other user
       .on(
         'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-          filter: `recipient_id=eq.${currentUserId}`,
-        },
+        { event: 'INSERT', schema: 'public', table: 'messages', filter: `recipient_id=eq.${currentUserId}` },
         (payload) => {
-          if (payload.new.sender_id === otherUserId) {
-            setMessages(prev => {
-              // Avoid duplicates
-              if (prev.some(m => m.id === payload.new.id)) return prev
+          if (payload.new.sender_id !== otherUserId) return
+          setMessages(prev => {
+            if (prev.some(m => m.id === payload.new.id)) return prev
+            return [...prev, payload.new as Message]
+          })
+          // Mark as read immediately since the conversation is open
+          markMessagesAsRead(otherUserId)
+        },
+      )
+      // Outgoing confirmed: my messages saved to DB — replace temp
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages', filter: `sender_id=eq.${currentUserId}` },
+        (payload) => {
+          if (payload.new.recipient_id !== otherUserId) return
+          setMessages(prev => {
+            // Replace the first temp message that matches content
+            const tempIdx = prev.findIndex(m => m.id.startsWith('temp-') && m.content === payload.new.content)
+            if (tempIdx >= 0) {
+              const updated = [...prev]
+              updated[tempIdx] = payload.new as Message
+              return updated
+            }
+            // Fallback: add if not duplicate (e.g. sent from another device)
+            if (!prev.some(m => m.id === payload.new.id)) {
               return [...prev, payload.new as Message]
-            })
-          }
+            }
+            return prev
+          })
         },
       )
       .subscribe()

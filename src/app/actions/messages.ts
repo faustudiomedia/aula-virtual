@@ -67,6 +67,6 @@ export async function markMessagesAsRead(otherUserId: string) {
     .eq('sender_id', otherUserId)
     .eq('recipient_id', user.id)
     .is('read_at', null)
-  // No revalidatePath here — this runs during Server Component render
-  // The messages list refreshes via RealtimeMessages (router.refresh)
+
+  revalidatePath('/dashboard/messages')
 }
