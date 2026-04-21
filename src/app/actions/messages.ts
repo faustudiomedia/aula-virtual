@@ -24,22 +24,23 @@ export async function searchUsers(query: string) {
   return data ?? []
 }
 
-export async function sendMessage(recipientId: string, formData: FormData) {
+export async function sendMessage(recipientId: string, content: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  if (!user) return null
 
-  const content = formData.get('content') as string
-  if (!content?.trim()) return
+  const trimmed = content.trim()
+  if (!trimmed) return null
 
-  await supabase.from('messages').insert({
-    sender_id: user.id,
-    recipient_id: recipientId,
-    content: content.trim(),
-  })
+  const { data } = await supabase
+    .from('messages')
+    .insert({ sender_id: user.id, recipient_id: recipientId, content: trimmed })
+    .select('id, sender_id, content, created_at, read_at')
+    .single()
 
-  revalidatePath(`/dashboard/messages/${recipientId}`)
+  // Only revalidate inbox list, NOT the conversation page (client manages its own state)
   revalidatePath('/dashboard/messages')
+  return data
 }
 
 export async function toggleStarMessage(messageId: string, starred: boolean) {
