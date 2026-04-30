@@ -148,7 +148,7 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
     <aside className="w-64 h-full min-h-screen flex flex-col"
       style={{ background: "var(--ag-sidebar-bg)" }}>
 
-      {/* ── Brand header ── */}
+      {/* Brand header */}
       <div className="p-4" style={{ borderBottom: "1px solid var(--ag-sidebar-border)" }}>
         <div className="flex items-center justify-between">
           <AgorifyLogo size={34} variant="full" theme="light" showSub />
@@ -170,14 +170,13 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
         )}
       </div>
 
-      {/* ── User card ── */}
+      {/* User card */}
       <Link href="/dashboard/profile" onClick={onClose}
         className="mx-3 mt-3 p-3 rounded-xl flex items-center gap-3 transition-all"
         style={{ border: "1px solid var(--ag-sidebar-border)" }}
         onMouseEnter={e => (e.currentTarget.style.background = "var(--ag-sidebar-hover)")}
         onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
-        <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0"
-          style={{ ring: "2px solid rgba(255,255,255,0.15)" }}>
+        <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={avatarUrl} alt="" className="w-full h-full object-cover" />
@@ -199,7 +198,7 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
         </div>
       </Link>
 
-      {/* ── Navigation ── */}
+      {/* Navigation */}
       <nav className="flex-1 p-3 overflow-y-auto mt-2 ag-sidebar-scroll">
         {sections.map((section, si) => (
           <div key={si} className={si > 0 ? "mt-6" : ""}>
@@ -235,7 +234,7 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
         ))}
       </nav>
 
-      {/* ── Logout ── */}
+      {/* Logout */}
       <div className="p-3" style={{ borderTop: "1px solid var(--ag-sidebar-border)" }}>
         <form action={logout}>
           <button type="submit"
@@ -251,4 +250,3 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
     </aside>
   );
 }
-                                                                                                                                                                                            
