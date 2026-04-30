@@ -100,7 +100,7 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
              <div className="mb-4">
                 <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Nombre del Director / Institución</label>
                 <input name="director_name" defaultValue={institute.director_name ?? ''}
-                  placeholder="Ej: Ing. Juan Pérez / Universidad MAVIC"
+                  placeholder="Ej: Ing. Juan Pérez / Universidad"
                   className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]" />
              </div>
              <SignatureUpload currentUrl={institute.director_signature_url || null} />

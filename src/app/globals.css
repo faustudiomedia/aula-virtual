@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --mavic-navy: #050F1F;
-  --mavic-blue: #1A56DB;
-  --mavic-sky: #38BDF8;
-  --mavic-light: #BAE6FD;
-  --mavic-pale: #F0F9FF;
-  --background: var(--mavic-pale);
-  --foreground: var(--mavic-navy);
+  --agorify-navy: #050F1F;
+  --agorify-blue: #1A56DB;
+  --agorify-sky: #38BDF8;
+  --agorify-light: #BAE6FD;
+  --agorify-pale: #F0F9FF;
+  --background: var(--agorify-pale);
+  --foreground: var(--agorify-navy);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-mavic-navy: var(--mavic-navy);
-  --color-mavic-blue: var(--mavic-blue);
-  --color-mavic-sky: var(--mavic-sky);
-  --color-mavic-light: var(--mavic-light);
-  --color-mavic-pale: var(--mavic-pale);
+  --color-agorify-navy: var(--agorify-navy);
+  --color-agorify-blue: var(--agorify-blue);
+  --color-agorify-sky: var(--agorify-sky);
+  --color-agorify-light: var(--agorify-light);
+  --color-agorify-pale: var(--agorify-pale);
 }
 
 body {
@@ -29,9 +29,9 @@ body {
 
 /* Institute CSS custom properties (set by middleware via headers → root) */
 :root {
-  --inst-primary: var(--mavic-blue);
-  --inst-secondary: var(--mavic-sky);
-  --inst-name: "MAVIC";
+  --inst-primary: var(--agorify-blue);
+  --inst-secondary: var(--agorify-sky);
+  --inst-name: "Agorify";
 }
 
 /* ── Gamified Card Animations ─────────────────────────── */

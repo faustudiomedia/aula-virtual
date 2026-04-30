@@ -60,7 +60,7 @@ export default async function SuperAdminDashboard() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#050F1F]">Panel Global</h1>
         <p className="text-[#050F1F]/50 mt-1">
-          Bienvenido, {profile?.full_name ?? 'Super Admin'} — Vista completa de la plataforma MAVIC
+          Bienvenido, {profile?.full_name ?? 'Super Admin'} — Vista completa de la plataforma Agorify
         </p>
       </div>
 

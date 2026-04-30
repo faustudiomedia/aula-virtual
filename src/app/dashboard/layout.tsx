@@ -29,7 +29,7 @@ export default async function DashboardLayout({
   const activeInstituteId =
     cookieStore.get("active_institute_id")?.value ?? profile.institute_id ?? null;
 
-  let instituteName = "MAVIC";
+  let instituteName = "Agorify";
   let primaryColor = "#1A56DB";
   let logoUrl: string | null = null;
 

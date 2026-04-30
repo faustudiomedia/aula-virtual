@@ -12,7 +12,7 @@ function generateSlug(name: string): string {
     .replace(/^-|-$/g, '')
     .slice(0, 30)
   const suffix = Math.random().toString(36).slice(2, 7)
-  return `mavic-${base}-${suffix}`
+  return `agorify-${base}-${suffix}`
 }
 
 export async function createMeeting(formData: FormData) {

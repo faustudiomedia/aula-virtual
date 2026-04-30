@@ -612,8 +612,8 @@ export async function approveCertificate(requestId: string): Promise<ActionResul
         return { success: false, error: "Sin permisos" };
     }
 
-    // Generate a unique readable code: MAVIC-XXXXXX
-    const code = "CERT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    // Generate a unique readable code: AGFY-XXXXXX
+    const code = "AGFY-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 
     const { error } = await supabase
       .from("certificate_requests")

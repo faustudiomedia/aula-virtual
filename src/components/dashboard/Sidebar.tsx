@@ -214,7 +214,7 @@ export default function Sidebar({
           )}
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-[#050F1F] leading-none truncate">
-              {instituteName ?? "MAVIC"}
+              {instituteName ?? "Agorify"}
             </p>
             <p className="text-xs text-[#050F1F]/40 mt-0.5">Plataforma Educativa</p>
           </div>

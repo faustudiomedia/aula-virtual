@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import CertificatesTable from "./CertificatesTable";
+import CertificatesTable from "../../teacher/certificates/CertificatesTable";
 
-export default async function TeacherCertificatesPage() {
+export default async function AdminCertificatesPage() {
   const supabase = await createClient();
 
   const {
@@ -12,24 +12,31 @@ export default async function TeacherCertificatesPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, institute_id")
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "profesor") redirect("/dashboard");
+  if (profile?.role !== "admin" && profile?.role !== "super_admin") {
+    redirect("/dashboard");
+  }
 
-  // Fetch certificate requests for courses taught by this teacher
-  const { data: requests } = await supabase
+  // Fetch certificate requests. If admin, only for their institute.
+  let query = supabase
     .from("certificate_requests")
     .select(`
       id,
       status,
       created_at,
-      profiles ( full_name, email ),
-      courses!inner ( id, title, teacher_id )
+      profiles!student_id ( full_name, email ),
+      courses!inner ( id, title, institute_id )
     `)
-    .eq("courses.teacher_id", user.id)
     .order("created_at", { ascending: false });
+
+  if (profile.role === "admin" && profile.institute_id) {
+    query = query.eq("courses.institute_id", profile.institute_id);
+  }
+
+  const { data: requests } = await query;
 
   // Map the response so it's easier to use in the client component
   const mappedRequests = (requests || []).map((req: any) => ({
@@ -44,9 +51,9 @@ export default async function TeacherCertificatesPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F] mb-2">Solicitudes de Certificados</h1>
+        <h1 className="text-2xl font-bold text-[#050F1F] mb-2">Administración de Certificados</h1>
         <p className="text-[#050F1F]/50 text-sm">
-          Aprobá o rechazá los certificados solicitados por los alumnos que finalizaron tus cursos al 100%.
+          Aprobá o rechazá los certificados solicitados por los alumnos en la institución.
         </p>
       </div>
 

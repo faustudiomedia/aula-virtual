@@ -59,7 +59,7 @@ export default async function SuperAdminStatsPage() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-[#050F1F]">Estadísticas globales</h1>
-        <p className="text-[#050F1F]/50 mt-1">Métricas generales de toda la plataforma MAVIC</p>
+        <p className="text-[#050F1F]/50 mt-1">Métricas generales de toda la plataforma Agorify</p>
       </div>
 
       {/* ── KPIs ── */}

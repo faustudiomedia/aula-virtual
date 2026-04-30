@@ -4,7 +4,7 @@ import { Providers } from "@/lib/providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MAVIC – Plataforma Educativa",
+  title: "Agorify – Learning Management System",
   description: "Plataforma SaaS educativa multi-instituto",
 };
 
