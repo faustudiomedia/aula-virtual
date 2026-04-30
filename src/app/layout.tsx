@@ -14,8 +14,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const headersList = await headers();
-  const primaryColor = headersList.get("x-institute-primary") ?? "#1A56DB";
-  const secondaryColor = headersList.get("x-institute-secondary") ?? "#38BDF8";
+  const primaryColor = headersList.get("x-institute-primary") ?? "#1E3A5F";
+  const secondaryColor = headersList.get("x-institute-secondary") ?? "#2a4f80";
 
   const cssVars = `
     :root {
@@ -28,10 +28,6 @@ export default async function RootLayout({
     <html lang="es" className="h-full antialiased">
       <head>
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#F0F9FF] text-[#050F1F]">
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  );
-}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapi
