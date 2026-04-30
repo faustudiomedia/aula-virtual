@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agorify — Preview de Diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #F0EFE9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  /* ── Página tabs arriba para cambiar entre diseños ─── */
+  .tabs {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: white;
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    gap: 4px;
+    padding: 10px 16px;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .tab {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #E2E8F0;
+    color: #64748B;
+    background: white;
+    transition: all 0.15s;
+  }
+  .tab:hover { background: #F8FAFC; color: #1E293B; }
+  .tab.active { background: #1E3A5F; color: white; border-color: #1E3A5F; }
+
+  .page { display: none; margin-top: 60px; width: 100%; }
+  .page.active { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 60px); }
+
+  /* ════════════════════════════════════════
+     DISEÑO 1 — Navy Institucional (Split)
+  ════════════════════════════════════════ */
+  .d1-wrap {
+    display: flex;
+    width: 100%;
+    max-width: 960px;
+    min-height: 560px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+  .d1-left {
+    width: 340px;
+    flex-shrink: 0;
+    background: #1E3A5F;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .d1-brand { display: flex; align-items: center; gap: 12px; }
+  .d1-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .d1-brand-name { font-size: 22px; font-weight: 700; color: white; letter-spacing: -0.3px; }
+  .d1-tagline { color: rgba(255,255,255,0.55); font-size: 13px; margin-top: 4px; }
+  .d1-quote { color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.6; font-style: italic; }
+  .d1-right {
+    flex: 1;
+    background: white;
+    padding: 48px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .d1-heading { font-size: 24px; font-weight: 700; color: #0F172A; margin-bottom: 6px; }
+  .d1-sub { font-size: 14px; color: #64748B; margin-bottom: 32px; }
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 6px; }
+  .form-input {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 14px; color: #111827;
+    font-family: inherit;
+    background: #FAFAFA;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input:focus { border-color: #1E3A5F; box-shadow: 0 0 0 3px rgba(30,58,95,0.08); background: white; }
+  .btn-primary {
+    width: 100%; padding: 11px;
+    background: #1E3A5F;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #162d4a; }
+  .form-links { display: flex; justify-content: space-between; margin-top: 14px; }
+  .form-link { font-size: 12.5px; color: #6B7280; text-decoration: none; }
+  .form-link:hover { color: #1E3A5F; }
+
+  /* ════════════════════════════════════════
+     DISEÑO 2 — Slate Minimalista (Card)
+  ════════════════════════════════════════ */
+  #page2 { background: #F8FAFC; }
+  .d2-wrap {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    border-radius: 16px;
+    padding: 40px 40px 36px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid #E9ECF1;
+  }
+  .d2-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .d2-icon {
+    width: 36px; height: 36px;
+    background: #1E293B;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: white;
+  }
+  .d2-name { font-size: 18px; font-weight: 700; color: #0F172A; }
+  .d2-heading { font-size: 22px; font-weight: 700; color: #0F172A; margin-bottom: 4px; }
+  .d2-sub { font-size: 13.5px; color: #94A3B8; margin-bottom: 28px; }
+  .d2-btn {
+    width: 100%; padding: 11px;
+    background: #2563EB;
+    color: white; border: none;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+  }
+  .d2-btn:hover { background: #1D4ED8; }
+
+  /* ════════════════════════════════════════
+     DISEÑO 3 — Verde Bosque Natural
+  ════════════════════════════════════════ */
+  #page3 { background: #F2F0EB; }
+  .d3-wrap {
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .d3-header {
+    background: #14532D;
+    padding: 28px 36px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .d3-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .d3-title { color: white; font-size: 20px; font-weight: 700; }
+  .d3-body { padding: 36px; }
+  .d3-heading { font-size: 20px; font-weight: 600; color: #1C1917; margin-bottom: 4px; }
+  .d3-sub { font-size: 13px; color: #78716C; margin-bottom: 24px; }
+  .d3-btn {
+    width: 100%; padding: 11px;
+    background: #14532D;
+    color: white; border: none;
+    border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    font-family: inherit; cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.15s;
+  }
+  .d3-btn:hover { background: #166534; }
+  .d3-input:focus { border-color: #14532D !important; box-shadow: 0 0 0 3px rgba(20,83,45,0.08) !important; }
+</style>
+</head>
+<body>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showPage(1)">🔷 Diseño 1 — Navy Institucional</button>
+  <button class="tab" onclick="showPage(2)">⬜ Diseño 2 — Slate Minimalista</button>
+  <button class="tab" onclick="showPage(3)">🌿 Diseño 3 — Verde Natural</button>
+</div>
+
+<!-- DISEÑO 1 -->
+<div class="page active" id="page1" style="background:#F0EFE9;">
+  <div class="d1-wrap">
+    <div class="d1-left">
+      <div>
+        <div class="d1-brand">
+          <div class="d1-icon">A</div>
+          <div>
+            <div class="d1-brand-name">Agorify</div>
+            <div class="d1-tagline">Campus Virtual</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="d1-quote">"El conocimiento es el único bien que crece cuando se comparte."</p>
+        <p style="color:rgba(255,255,255,0.25);font-size:12px;margin-top:12px;">Plataforma educativa institucional</p>
+      </div>
+    </div>
+    <div class="d1-right">
+      <div class="d1-heading">Iniciar sesión</div>
+      <div class="d1-sub">Ingresá con tu cuenta institucional</div>
+      <div class="form-group">
+        <label class="form-label">Instituto</label>
+        <select class="form-input"><option>Seleccioná tu instituto...</option><option>MAVIC</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input" type="email" placeholder="usuario@instituto.edu" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary">Ingresar</button>
+      <div class="form-links">
+        <a class="form-link" href="#">¿Olvidaste tu contraseña?</a>
+        <a class="form-link" href="#">Crear cuenta</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DISEÑO 2 -->
+<div class="page" id="page2">
+  <div class="d2-wrap">
+    <div class="d2-brand">
+      <div class="d2-icon">A</div>
+      <span class="d2-name">Agorify</span>
+    </div>
+    <div class="d2-heading">Iniciar sesión</div>
+    <div class="d2-sub">Ingresá con tu cuenta institucional</div>
+    <div class="form-group">
+      <label class="form-label">Instituto</label>
+      <select class="form-input"><option>Seleccioná tu instituto...</option><option>MAVIC</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" placeholder="usuario@instituto.edu" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" placeholder="••••••••" />
+    </div>
+    <button class="d2-btn">Ingresar</button>
+    <div class="form-links">
+      <a class="form-link" href="#">¿Olvidaste tu contraseña?</a>
+      <a class="form-link" href="#">Crear cuenta</a>
+    </div>
+    <p style="font-size:11px;color:#CBD5E1;text-align:center;margin-top:24px;">© 2025 Agorify · Todos los derechos reservados</p>
+  </div>
+</div>
+
+<!-- DISEÑO 3 -->
+<div class="page" id="page3">
+  <div class="d3-wrap">
+    <div class="d3-header">
+      <div class="d3-icon">A</div>
+      <span class="d3-title">Agorify</span>
+    </div>
+    <div class="d3-body">
+      <div class="d3-heading">Iniciar sesión</div>
+      <div class="d3-sub">Ingresá con tu cuenta institucional</div>
+      <div class="form-group">
+        <label class="form-label">Instituto</label>
+        <select class="form-input d3-input"><option>Seleccioná tu instituto...</option><option>MAVIC</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input class="form-input d3-input" type="email" placeholder="usuario@instituto.edu" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input d3-input" type="password" placeholder="••••••••" />
+      </div>
+      <button class="d3-btn">Ingresar</button>
+      <div class="form-links">
+        <a class="form-link" href="#">¿Olvidaste tu contraseña?</a>
+        <a class="form-link" href="#">Crear cuenta</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(n) {
+  document.querySelectorAll('.page').forEach((p, i) => {
+    p.classList.toggle('active', i === n - 1);
+  });
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === n - 1);
+  });
+}
+</script>
+</body>
+</html>
