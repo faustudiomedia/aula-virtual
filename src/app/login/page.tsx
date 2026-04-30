@@ -1,5 +1,6 @@
 import { LoginForm } from "./LoginForm";
 import { createClient } from "@/lib/supabase/server";
+import { AgorifyLogo } from "@/components/ui/AgorifyLogo";
 
 interface Props {
   searchParams: Promise<{ error?: string; message?: string }>;
@@ -18,66 +19,61 @@ export default async function LoginPage({ searchParams }: Props) {
     .order("name");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#050F1F] px-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[#1A56DB] opacity-10 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-[#38BDF8] opacity-10 blur-3xl" />
-      </div>
+    <div className="min-h-screen flex items-center justify-center p-6"
+      style={{ background: "var(--ag-bg)" }}>
 
-      <div className="relative w-full max-w-md">
-        {/* Logo / Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] mb-4 shadow-lg shadow-[#1A56DB]/30">
-            <span className="text-white font-bold text-2xl">A</span>
+      {/* ── Card contenedor ── */}
+      <div className="w-full max-w-[900px] flex rounded-2xl overflow-hidden shadow-xl"
+        style={{ border: "1px solid var(--ag-border-light)" }}>
+
+        {/* ── Panel izquierdo (Navy) ── */}
+        <div className="hidden md:flex flex-col justify-between w-80 flex-shrink-0 p-10"
+          style={{ background: "var(--ag-navy)" }}>
+
+          {/* Brand */}
+          <div className="flex items-center gap-3">
+            <AgorifyLogo size={40} variant="full" theme="light" showSub={true} />
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
-            Agorify
-          </h1>
-          <p className="text-[#BAE6FD] mt-1 text-sm">Plataforma Educativa</p>
+
+          {/* Quote */}
+          <div>
+            <p className="text-sm leading-relaxed italic" style={{ color: "var(--ag-sidebar-muted)" }}>
+              &ldquo;El conocimiento es el único bien que crece cuando se comparte.&rdquo;
+            </p>
+            <p className="text-xs mt-3" style={{ color: "rgba(255,255,255,0.2)" }}>
+              Plataforma educativa institucional
+            </p>
+          </div>
         </div>
 
-        {/* Card */}
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <h2 className="text-xl font-semibold text-white mb-2">
+        {/* ── Panel derecho (Formulario) ── */}
+        <div className="flex-1 bg-white p-10 flex flex-col justify-center">
+
+          {/* Mobile brand */}
+          <div className="flex items-center gap-2 mb-8 md:hidden">
+            <AgorifyLogo size={32} variant="full" theme="dark" />
+          </div>
+
+          <h1 className="text-2xl font-bold mb-1" style={{ color: "var(--ag-text)" }}>
             Iniciar sesión
-          </h2>
-          <p className="text-[#BAE6FD] text-sm mb-6">
+          </h1>
+          <p className="text-sm mb-8" style={{ color: "var(--ag-text-muted)" }}>
             Ingresá con tu cuenta institucional
           </p>
 
           {successMsg && (
-            <div className="mb-4 px-4 py-3 rounded-lg bg-green-500/10 border border-green-500/20 text-green-300 text-sm">
+            <div className="mb-5 px-4 py-3 rounded-lg text-sm"
+              style={{ background: "#D1FAE5", color: "#065F46", border: "1px solid #A7F3D0" }}>
               {successMsg}
             </div>
           )}
+
           <LoginForm initialError={errorMsg} institutes={institutes ?? []} />
 
-          {/* Role indicator */}
-          <div className="mt-6 pt-6 border-t border-white/10">
-            <p className="text-xs text-center text-white/40 mb-3">
-              Roles disponibles
-            </p>
-            <div className="flex gap-2 justify-center">
-              {[
-                { label: "Alumno", color: "#38BDF8" },
-                { label: "Profesor", color: "#1A56DB" },
-                { label: "Admin", color: "#050F1F" },
-              ].map((r) => (
-                <span
-                  key={r.label}
-                  className="px-3 py-1 rounded-full text-xs font-medium border border-white/10 text-[#BAE6FD]"
-                >
-                  {r.label}
-                </span>
-              ))}
-            </div>
-          </div>
+          <p className="text-xs text-center mt-8" style={{ color: "var(--ag-text-light)" }}>
+            © {new Date().getFullYear()} Agorify · Todos los derechos reservados
+          </p>
         </div>
-
-        <p className="text-center text-white/30 text-xs mt-6">
-          © {new Date().getFullYear()} Agorify · Todos los derechos reservados
-        </p>
       </div>
     </div>
   );

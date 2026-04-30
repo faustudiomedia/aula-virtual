@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { NotificationBell } from "@/components/ui/NotificationBell";
 import type { UserRole } from "@/lib/types";
@@ -18,69 +18,52 @@ interface Props {
 }
 
 export default function DashboardShell({
-  role,
-  instituteName,
-  userName,
-  primaryColor,
-  logoUrl,
-  avatarUrl,
-  userId,
-  children,
+  role, instituteName, userName, primaryColor, logoUrl, avatarUrl, userId, children,
 }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#F0F9FF]">
+    <div className="flex min-h-screen" style={{ background: "var(--ag-content-bg)" }}>
 
-      {/* ── Mobile backdrop ── */}
+      {/* Mobile backdrop */}
       {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/40 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+        <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setSidebarOpen(false)} />
       )}
 
-      {/* ── Sidebar ── */}
-      {/* Desktop: static in the flex flow. Mobile: fixed drawer */}
-      <div
-        className={[
-          "fixed inset-y-0 left-0 z-50 transition-transform duration-300",
-          "md:static md:translate-x-0 md:z-auto",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full",
-        ].join(" ")}
-      >
+      {/* Sidebar */}
+      <div className={[
+        "fixed inset-y-0 left-0 z-50 transition-transform duration-300",
+        "md:static md:translate-x-0 md:z-auto",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full",
+      ].join(" ")}>
         <Sidebar
-          role={role}
-          instituteName={instituteName}
-          userName={userName}
-          primaryColor={primaryColor}
-          logoUrl={logoUrl}
-          avatarUrl={avatarUrl}
+          role={role} instituteName={instituteName} userName={userName}
+          primaryColor={primaryColor} logoUrl={logoUrl} avatarUrl={avatarUrl}
           onClose={() => setSidebarOpen(false)}
         />
       </div>
 
-      {/* ── Right side: top bar + main ── */}
+      {/* Right side */}
       <div className="flex-1 flex flex-col min-w-0">
 
-        {/* Top bar — mobile + desktop */}
-        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-white border-b border-black/5 shadow-sm">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors text-[#050F1F]/70"
-            aria-label="Abrir menú"
-          >
-            <Menu size={22} />
+        {/* Top bar */}
+        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-white/80 backdrop-blur-md border-b border-slate-200/70 shadow-sm">
+          <button onClick={() => setSidebarOpen(true)}
+            className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors text-slate-500"
+            aria-label="Abrir menú">
+            <Menu size={20} />
           </button>
-          <span className="font-semibold text-[#050F1F] text-sm truncate flex-1 md:hidden">
+
+          {/* Mobile institute name */}
+          <span className="font-semibold text-slate-800 text-sm truncate flex-1 md:hidden">
             {instituteName}
           </span>
-          <div className="hidden md:block flex-1" />
-          <NotificationBell userId={userId} />
-        </header>
 
-        <main className="flex-1 overflow-auto">{children}</main>
-      </div>
-    </div>
-  );
-}
+          {/* Desktop spacer */}
+          <div className="hidden md:flex flex-1 items-center gap-3">
+            <div className="relative max-w-sm w-full">
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                placeholder="Buscar..."
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl bg-slate-100 border border-transparent focus:border-vio

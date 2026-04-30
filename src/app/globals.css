@@ -1,103 +1,79 @@
 @import "tailwindcss";
 
+/* ── Agorify Design System — Navy Institucional ─────────── */
 :root {
-  --agorify-navy: #050F1F;
-  --agorify-blue: #1A56DB;
-  --agorify-sky: #38BDF8;
-  --agorify-light: #BAE6FD;
-  --agorify-pale: #F0F9FF;
-  --background: var(--agorify-pale);
-  --foreground: var(--agorify-navy);
+  /* Core brand colors */
+  --ag-navy:           #1E3A5F;
+  --ag-navy-dark:      #162d4a;
+  --ag-navy-light:     #2a4f80;
+  --ag-navy-muted:     rgba(30,58,95,0.08);
+
+  /* Content surfaces */
+  --ag-bg:             #F0EFE9;
+  --ag-surface:        #FFFFFF;
+  --ag-surface-alt:    #FAFAFA;
+  --ag-border:         #D1D5DB;
+  --ag-border-light:   #E9ECF1;
+
+  /* Sidebar */
+  --ag-sidebar-bg:     #1E3A5F;
+  --ag-sidebar-hover:  rgba(255,255,255,0.07);
+  --ag-sidebar-active: rgba(255,255,255,0.12);
+  --ag-sidebar-border: rgba(255,255,255,0.10);
+  --ag-sidebar-text:   rgba(255,255,255,0.90);
+  --ag-sidebar-muted:  rgba(255,255,255,0.45);
+
+  /* Text */
+  --ag-text:           #0F172A;
+  --ag-text-secondary: #374151;
+  --ag-text-muted:     #6B7280;
+  --ag-text-light:     #94A3B8;
+
+  /* Accent & states */
+  --ag-accent:         #1E3A5F;
+  --ag-accent-hover:   #162d4a;
+  --ag-focus-ring:     rgba(30,58,95,0.12);
+  --ag-success:        #059669;
+  --ag-error:          #DC2626;
+
+  /* Legacy compat */
+  --agorify-navy:      #1E3A5F;
+  --agorify-blue:      #1E3A5F;
+  --agorify-sky:       #93C5FD;
+  --agorify-light:     #DBEAFE;
+  --agorify-pale:      #F0EFE9;
+  --background:        var(--ag-bg);
+  --foreground:        var(--ag-text);
+  --inst-primary:      var(--ag-navy);
+  --inst-secondary:    var(--ag-navy-light);
+  --inst-name:         "Agorify";
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-agorify-navy: var(--agorify-navy);
-  --color-agorify-blue: var(--agorify-blue);
-  --color-agorify-sky: var(--agorify-sky);
+  --color-background:    var(--background);
+  --color-foreground:    var(--foreground);
+  --color-agorify-navy:  var(--ag-navy);
+  --color-agorify-blue:  var(--ag-navy);
+  --color-agorify-sky:   var(--agorify-sky);
   --color-agorify-light: var(--agorify-light);
-  --color-agorify-pale: var(--agorify-pale);
+  --color-agorify-pale:  var(--agorify-pale);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--ag-bg);
+  color: var(--ag-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Institute CSS custom properties (set by middleware via headers → root) */
-:root {
-  --inst-primary: var(--agorify-blue);
-  --inst-secondary: var(--agorify-sky);
-  --inst-name: "Agorify";
-}
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(30,58,95,0.2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(30,58,95,0.4); }
+.ag-sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+.ag-sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
-/* ── Gamified Card Animations ─────────────────────────── */
-
-/* Premium skeleton shimmer */
-@keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
-}
-
-.skeleton-shimmer {
-  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
-}
-
-/* Animated gradient border for enrolled cards */
-@keyframes gradient-spin {
-  0% { --angle: 0deg; }
-  100% { --angle: 360deg; }
-}
-
-/* Glow pulse for enrolled badge */
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 6px 1px rgba(34, 197, 94, 0.3); }
-  50% { box-shadow: 0 0 14px 4px rgba(34, 197, 94, 0.5); }
-}
-
-.glow-enrolled {
-  animation: glow-pulse 2.5s ease-in-out infinite;
-}
-
-/* SVG check draw animation */
-@keyframes check-draw {
-  to { stroke-dashoffset: 0; }
-}
-
-.check-animate path {
-  stroke-dasharray: 24;
-  stroke-dashoffset: 24;
-  animation: check-draw 0.5s ease-out 0.3s forwards;
-}
-
-/* Card shine sweep on hover */
-@keyframes shine-sweep {
-  0% { transform: translateX(-100%) skewX(-15deg); }
-  100% { transform: translateX(200%) skewX(-15deg); }
-}
-
-.card-shine::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.15) 45%,
-    rgba(255, 255, 255, 0.25) 50%,
-    rgba(255, 255, 255, 0.15) 55%,
-    transparent 60%
-  );
-  transform: translateX(-100%) skewX(-15deg);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.card-shine:hover::after {
-  animation: shine-sweep 0.7s ease-out;
-}
+/* ── Primary button ────�
