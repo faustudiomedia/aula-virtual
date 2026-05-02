@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useRef, useState } from "react";
+import { useTransition, useRef, useState, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCourse, useCourseMaterials, queryKeys } from "@/lib/hooks/use-data";
 import { addMaterial } from "@/app/actions/courses";
@@ -11,26 +11,144 @@ import {
   EditMaterialButton,
   DeleteMaterialButton,
 } from "@/components/ui/MaterialActions";
+import type { Material } from "@/lib/types";
 
 interface Props {
   courseId: string;
 }
 
-export default function CourseMaterialsView({ courseId }: Props) {
-  const queryClient = useQueryClient();
-  const { data: course, isLoading: loadingCourse } = useCourse(courseId);
-  const { data: materials = [], isLoading: loadingMaterials } =
-    useCourseMaterials(courseId);
+// ── Type config (same palette as AllMaterialsView) ───────────────────────────
+const TYPE_CONFIG: Record<
+  string,
+  { label: string; icon: string; bg: string; color: string; border: string }
+> = {
+  pdf: {
+    label: "PDF",
+    icon: "📄",
+    bg: "rgba(239,68,68,0.08)",
+    color: "#DC2626",
+    border: "rgba(239,68,68,0.18)",
+  },
+  video: {
+    label: "Video",
+    icon: "🎬",
+    bg: "rgba(124,58,237,0.08)",
+    color: "#7C3AED",
+    border: "rgba(124,58,237,0.18)",
+  },
+  image: {
+    label: "Imagen",
+    icon: "🖼️",
+    bg: "rgba(16,185,129,0.08)",
+    color: "#059669",
+    border: "rgba(16,185,129,0.18)",
+  },
+  link: {
+    label: "Enlace",
+    icon: "🔗",
+    bg: "rgba(59,130,246,0.08)",
+    color: "#2563EB",
+    border: "rgba(59,130,246,0.18)",
+  },
+};
+const DEFAULT_TYPE = {
+  label: "Archivo",
+  icon: "📎",
+  bg: "rgba(107,114,128,0.08)",
+  color: "#6B7280",
+  border: "rgba(107,114,128,0.18)",
+};
 
-  const [_isPending, startTransition] = useTransition();
-  const [formError, setFormError] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [fileUrl, setFileUrl] = useState("");
+function typeCfg(t?: string | null) {
+  return TYPE_CONFIG[t ?? ""] ?? DEFAULT_TYPE;
+}
+
+// ── TypeBadge ────────────────────────────────────────────────────────────────
+function TypeBadge({ type }: { type?: string | null }) {
+  const cfg = typeCfg(type);
+  return (
+    <span
+      style={{
+        background: cfg.bg,
+        color: cfg.color,
+        border: `1px solid ${cfg.border}`,
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "3px",
+        padding: "2px 9px",
+        borderRadius: "999px",
+        fontSize: "11px",
+        fontWeight: 600,
+        flexShrink: 0,
+      }}
+    >
+      <span style={{ fontSize: "10px" }}>{cfg.icon}</span>
+      {cfg.label}
+    </span>
+  );
+}
+
+// ── Input helper ─────────────────────────────────────────────────────────────
+function Field({
+  children,
+  label,
+}: {
+  children: React.ReactNode;
+  label?: string;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+      {label && (
+        <label
+          style={{
+            fontSize: "11px",
+            fontWeight: 600,
+            color: "var(--ag-text-muted)",
+            textTransform: "uppercase",
+            letterSpacing: "0.04em",
+          }}
+        >
+          {label}
+        </label>
+      )}
+      {children}
+    </div>
+  );
+}
+
+const INPUT_STYLE: React.CSSProperties = {
+  width: "100%",
+  padding: "8px 12px",
+  borderRadius: "8px",
+  border: "1px solid var(--ag-border)",
+  background: "var(--ag-bg)",
+  color: "var(--ag-text)",
+  fontSize: "13px",
+  outline: "none",
+  boxSizing: "border-box",
+};
+
+// ── Add Material Form (collapsible) ──────────────────────────────────────────
+function AddMaterialForm({
+  courseId,
+  totalMaterials,
+  onSuccess,
+}: {
+  courseId: string;
+  totalMaterials: number;
+  onSuccess: () => void;
+}) {
+  const [open, setOpen] = useState(false);
   const [urlMode, setUrlMode] = useState<"url" | "file">("url");
+  const [fileUrl, setFileUrl] = useState("");
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
 
-  function handleAddMaterial(formData: FormData) {
+  function handleAdd(formData: FormData) {
     formData.set("file_url", fileUrl);
+    formData.set("order_index", String(totalMaterials));
     setFormError(null);
     startTransition(async () => {
       const result = await addMaterial(courseId, formData);
@@ -40,107 +158,171 @@ export default function CourseMaterialsView({ courseId }: Props) {
       }
       formRef.current?.reset();
       setFileUrl("");
+      setUrlMode("url");
       setUploadError(null);
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.courseMaterials(courseId),
-      });
+      onSuccess();
     });
   }
 
-  if (loadingCourse || loadingMaterials) {
+  if (!open) {
     return (
-      <div className="p-8 max-w-4xl mx-auto">
-        <div className="animate-pulse space-y-4">
-          <div className="h-4 bg-gray-200 rounded w-24" />
-          <div className="h-8 bg-gray-200 rounded w-64" />
-          <div className="h-48 bg-white rounded-2xl border border-black/5 shadow-sm" />
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-white rounded-xl border border-black/5 shadow-sm" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!course) {
-    return (
-      <div className="p-8 max-w-4xl mx-auto">
-        <p className="text-[var(--ag-text-muted)]">Curso no encontrado.</p>
-      </div>
+      <button
+        onClick={() => setOpen(true)}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          background: "var(--ag-navy)",
+          color: "#fff",
+          border: "none",
+          padding: "8px 18px",
+          borderRadius: "9px",
+          fontSize: "13px",
+          fontWeight: 600,
+          cursor: "pointer",
+          flexShrink: 0,
+        }}
+      >
+        <span style={{ fontSize: "16px", lineHeight: 1 }}>＋</span>
+        Agregar material
+      </button>
     );
   }
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="flex items-center gap-3 mb-2">
-        <a href="/dashboard/teacher" className="text-[var(--ag-navy)] hover:underline text-sm">
-          ← Mis cursos
-        </a>
+    <div
+      style={{
+        background: "var(--ag-surface)",
+        border: "1px solid var(--ag-border)",
+        borderRadius: "14px",
+        padding: "20px",
+        marginBottom: "28px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "16px",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "var(--ag-text)",
+          }}
+        >
+          Nuevo material
+        </p>
+        <button
+          onClick={() => setOpen(false)}
+          style={{
+            background: "none",
+            border: "none",
+            color: "var(--ag-text-muted)",
+            fontSize: "18px",
+            cursor: "pointer",
+            lineHeight: 1,
+            padding: "2px 6px",
+          }}
+        >
+          ×
+        </button>
       </div>
-      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">{course.title}</h1>
-      <p className="text-[var(--ag-text-muted)] mb-8">Materiales del curso</p>
 
-      {/* Add material form */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
-        <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-4">Agregar material</h2>
-        <FormError message={formError} />
-        <form ref={formRef} action={handleAddMaterial} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
+      <FormError message={formError} />
+
+      <form
+        ref={formRef}
+        action={handleAdd}
+        style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+      >
+        {/* Row 1: title + type */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 160px", gap: "10px" }}>
+          <Field label="Título *">
             <input
               name="title"
               required
-              placeholder="Título *"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              placeholder="Ej: Clase 1 — Introducción"
+              style={INPUT_STYLE}
             />
-            <select
-              name="file_type"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 bg-white"
-            >
-              <option value="">Tipo de archivo</option>
-              <option value="pdf">PDF</option>
-              <option value="video">Video</option>
-              <option value="link">Enlace</option>
-              <option value="image">Imagen</option>
+          </Field>
+          <Field label="Tipo">
+            <select name="file_type" style={{ ...INPUT_STYLE, background: "var(--ag-bg)" }}>
+              <option value="">— Tipo —</option>
+              <option value="pdf">📄 PDF</option>
+              <option value="video">🎬 Video</option>
+              <option value="link">🔗 Enlace</option>
+              <option value="image">🖼️ Imagen</option>
             </select>
-          </div>
+          </Field>
+        </div>
 
-          {/* Module fields */}
-          <div className="grid grid-cols-3 gap-3">
+        {/* Row 2: module number + module title */}
+        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: "10px" }}>
+          <Field label="Módulo #">
             <input
               name="module_number"
               type="number"
               min="1"
-              placeholder="Módulo # (ej: 1)"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              placeholder="1"
+              style={INPUT_STYLE}
             />
+          </Field>
+          <Field label="Título del módulo">
             <input
               name="module_title"
-              placeholder="Título del módulo (opcional)"
-              className="col-span-2 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              placeholder="Ej: Introducción al curso"
+              style={INPUT_STYLE}
             />
-          </div>
+          </Field>
+        </div>
 
+        {/* Row 3: description */}
+        <Field label="Descripción (opcional)">
           <input
             name="description"
-            placeholder="Descripción del material (opcional)"
-            className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            placeholder="Breve descripción del material"
+            style={INPUT_STYLE}
           />
+        </Field>
 
-          {/* URL vs Upload toggle */}
+        {/* Row 4: URL / File toggle */}
+        <Field label="Contenido">
           <div>
-            <div className="flex gap-1 mb-2">
+            <div style={{ display: "flex", gap: "6px", marginBottom: "8px" }}>
               {(["url", "file"] as const).map((mode) => (
                 <button
                   key={mode}
                   type="button"
-                  onClick={() => { setUrlMode(mode); setFileUrl(""); setUploadError(null); }}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
-                    urlMode === mode
-                      ? "bg-[var(--ag-navy)] text-white"
-                      : "bg-black/5 text-[var(--ag-text-muted)] hover:bg-black/10"
-                  }`}
+                  onClick={() => {
+                    setUrlMode(mode);
+                    setFileUrl("");
+                    setUploadError(null);
+                  }}
+                  style={{
+                    padding: "4px 12px",
+                    borderRadius: "7px",
+                    border: "1px solid",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.12s",
+                    ...(urlMode === mode
+                      ? {
+                          background: "var(--ag-navy)",
+                          color: "#fff",
+                          borderColor: "var(--ag-navy)",
+                        }
+                      : {
+                          background: "transparent",
+                          color: "var(--ag-text-muted)",
+                          borderColor: "var(--ag-border)",
+                        }),
+                  }}
                 >
                   {mode === "url" ? "🔗 URL / Enlace" : "📎 Subir archivo"}
                 </button>
@@ -152,91 +334,4 @@ export default function CourseMaterialsView({ courseId }: Props) {
                 value={fileUrl}
                 onChange={(e) => setFileUrl(e.target.value)}
                 placeholder="https://... (Google Drive, YouTube, etc.)"
-                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
-              />
-            ) : (
-              <div>
-                <FileUpload
-                  folder={`courses/${courseId}`}
-                  accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.webm,.png,.jpg,.jpeg,.gif"
-                  onUpload={(url) => { setFileUrl(url); setUploadError(null); }}
-                  onError={(msg) => setUploadError(msg)}
-                />
-                {uploadError && (
-                  <p className="text-xs text-red-500 mt-1">{uploadError}</p>
-                )}
-                {fileUrl && urlMode === "file" && (
-                  <p className="text-xs text-green-600 mt-1">Archivo subido correctamente.</p>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex gap-3 items-center">
-            <input
-              name="order_index"
-              type="number"
-              min="0"
-              defaultValue={materials.length}
-              placeholder="Orden"
-              className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
-            />
-            <SubmitButton label="Agregar" loadingLabel="Agregando..." className="px-5 py-2 rounded-lg" />
-          </div>
-        </form>
-      </div>
-
-      {/* Materials list */}
-      {materials.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
-          <p className="text-[var(--ag-text-muted)]">Este curso aún no tiene materiales.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {materials.map((m, idx) => (
-            <div
-              key={m.id}
-              className="bg-white rounded-xl border border-black/5 p-4 flex items-center gap-4 shadow-sm"
-            >
-              <span className="w-8 h-8 rounded-lg bg-[rgba(30,58,95,0.06)] border border-[var(--ag-border-light)] flex items-center justify-center text-xs font-bold text-[var(--ag-navy)] flex-shrink-0">
-                {idx + 1}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-medium text-[var(--ag-text)] text-sm">{m.title}</p>
-                  {m.module_number && (
-                    <span className="px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-600 text-[10px] font-semibold">
-                      M{m.module_number}
-                    </span>
-                  )}
-                </div>
-                {m.description && (
-                  <p className="text-xs text-[var(--ag-text-muted)] mt-0.5">{m.description}</p>
-                )}
-              </div>
-              {m.file_type && (
-                <span className="px-2 py-0.5 rounded-full bg-[rgba(30,58,95,0.06)] border border-[var(--ag-border-light)] text-[var(--ag-navy)] text-xs font-medium flex-shrink-0">
-                  {m.file_type}
-                </span>
-              )}
-              {m.file_url && (
-                <a
-                  href={m.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[var(--ag-navy)] hover:underline text-xs flex-shrink-0"
-                >
-                  Ver →
-                </a>
-              )}
-              <div className="flex gap-1 flex-shrink-0">
-                <EditMaterialButton material={m} />
-                <DeleteMaterialButton materialId={m.id} materialTitle={m.title} />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+                style={IN
