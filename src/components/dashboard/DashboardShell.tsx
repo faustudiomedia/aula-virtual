@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { NotificationBell } from "@/components/ui/NotificationBell";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
