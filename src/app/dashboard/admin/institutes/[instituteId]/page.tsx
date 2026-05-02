@@ -119,7 +119,7 @@ export default async function InstituteDetailPage({ params }: Props) {
             <input type="hidden" name="instituteId" value={instituteId} />
             <button
               type="submit"
-              className="px-3 py-2 rounded-xl border border-red-200 text-red-500 text-xs font-medium hover:bg-red-50 transition-all"
+              className="px-3 py-2 rounded-xl border border-red-300/50 text-red-500 text-xs font-medium hover:bg-red-50 transition-all"
             >
               Eliminar instituto
             </button>
@@ -134,7 +134,7 @@ export default async function InstituteDetailPage({ params }: Props) {
           { label: "Profesores", value: teachers,        bg: "#F5F3FF", color: "#7C3AED" },
           { label: "Cursos",    value: courseList.length, bg: "#FFFBEB", color: "#D97706" },
         ].map(s => (
-          <div key={s.label} className="rounded-xl p-4 border border-black/5" style={{ background: s.bg }}>
+          <div key={s.label} className="rounded-xl p-4 border border-[var(--ag-border-light)]" style={{ background: s.bg }}>
             <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
             <p className="text-xs text-[var(--ag-text-muted)] mt-1">{s.label}</p>
           </div>
@@ -142,44 +142,44 @@ export default async function InstituteDetailPage({ params }: Props) {
       </div>
 
       {/* Edit form */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
         <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-4">Configuración</h2>
         <form action={boundUpdate} className="space-y-4" encType="multipart/form-data">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre *</label>
               <input name="name" required defaultValue={institute.name}
-                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+                className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Slug</label>
               <input value={institute.slug} disabled
-                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm bg-black/5 text-[var(--ag-text-muted)] font-mono" />
+                className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-surface-alt)] text-[var(--ag-text-muted)] font-mono" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Dominio personalizado</label>
             <input name="domain" defaultValue={institute.domain ?? ""}
               placeholder="Ej: miinstituto.edu.ar"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Color primario</label>
               <input type="color" name="primary_color" defaultValue={institute.primary_color}
-                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Color secundario</label>
               <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
-                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre del Director/a</label>
             <input name="director_name" defaultValue={institute.director_name ?? ""}
               placeholder="Ej: Lic. María González"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">
@@ -191,14 +191,14 @@ export default async function InstituteDetailPage({ params }: Props) {
                 <img
                   src={institute.director_signature_url}
                   alt="Firma actual"
-                  className="h-14 max-w-[160px] object-contain border border-black/10 rounded-xl p-2 bg-white mix-blend-multiply"
+                  className="h-14 max-w-[160px] object-contain border border-[var(--ag-border)] rounded-xl p-2 bg-[var(--ag-surface)] mix-blend-multiply"
                 />
               )}
               <input
                 type="file"
                 name="director_signature"
                 accept="image/png"
-                className="text-xs text-[var(--ag-text-muted)] file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-black/10 file:text-xs file:font-medium file:bg-white file:text-[var(--ag-text)]/70 hover:file:bg-black/5 transition"
+                className="text-xs text-[var(--ag-text-muted)] file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-[var(--ag-border)] file:text-xs file:font-medium file:bg-[var(--ag-surface)] file:text-[var(--ag-text)]/70 hover:file:bg-[var(--ag-surface-alt)] transition"
               />
             </div>
           </div>
@@ -215,7 +215,7 @@ export default async function InstituteDetailPage({ params }: Props) {
       </div>
 
       {/* Members */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-[var(--ag-text)]">Usuarios del instituto</h2>
           <a href={`/dashboard/admin/users/new`}
@@ -229,7 +229,7 @@ export default async function InstituteDetailPage({ params }: Props) {
         ) : (
           <div className="space-y-2">
             {memberList.map(m => (
-              <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-black/5 hover:bg-black/[0.01]">
+              <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-[var(--ag-border-light)] hover:bg-[var(--ag-surface-alt)]">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
                   style={{ background: "var(--ag-navy)" }}>
                   {(m.full_name || m.email || "?").charAt(0).toUpperCase()}
@@ -238,61 +238,8 @@ export default async function InstituteDetailPage({ params }: Props) {
                   <p className="text-sm font-medium text-[var(--ag-text)] truncate">{m.full_name || "(sin nombre)"}</p>
                   <p className="text-xs text-[var(--ag-text-muted)] truncate">{m.email}</p>
                 </div>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLOR[m.role] ?? "bg-black/5 text-[var(--ag-text-muted)]"}`}>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLOR[m.role] ?? "bg-[var(--ag-surface-alt)] text-[var(--ag-text-muted)]"}`}>
                   {ROLE_LABEL[m.role] ?? m.role}
                 </span>
                 {m.role !== "admin" && m.role !== "super_admin" && (
-                  <div className="flex gap-1 flex-shrink-0">
-                    {m.role === "alumno" ? (
-                      <form action={changeUserRoleAction}>
-                        <input type="hidden" name="userId" value={m.id} />
-                        <input type="hidden" name="role" value="profesor" />
-                        <button type="submit"
-                          className="text-xs px-2.5 py-1 rounded-lg border border-violet-200 text-violet-600 hover:bg-violet-50 transition-all">
-                          → Profesor
-                        </button>
-                      </form>
-                    ) : (
-                      <form action={changeUserRoleAction}>
-                        <input type="hidden" name="userId" value={m.id} />
-                        <input type="hidden" name="role" value="alumno" />
-                        <button type="submit"
-                          className="text-xs px-2.5 py-1 rounded-lg border border-sky-200 text-sky-600 hover:bg-sky-50 transition-all">
-                          → Alumno
-                        </button>
-                      </form>
-                    )}
-                    <form action={removeUserFromInstituteAction}>
-                      <input type="hidden" name="userId" value={m.id} />
-                      <button type="submit"
-                        className="text-xs px-2 py-1 rounded-lg border border-black/10 text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
-                        ✕
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Courses */}
-      {courseList.length > 0 && (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
-          <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Cursos</h2>
-          <div className="space-y-2">
-            {courseList.map(c => (
-              <div key={c.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-black/5 text-sm">
-                <span className="font-medium text-[var(--ag-text)] truncate">{c.title}</span>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${c.published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
-                  {c.published ? "Publicado" : "Borrador"}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+            

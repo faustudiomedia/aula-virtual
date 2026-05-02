@@ -59,7 +59,7 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
         <div className="flex items-start justify-between gap-4 mb-3">
           <h2 className="text-lg font-semibold text-[var(--ag-text)]">{a.title}</h2>
           {a.due_date && (
-            <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0 ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
+            <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0 ${overdue ? 'bg-red-100/60 text-red-600' : 'bg-amber-100/60 text-amber-600'}`}>
               Vence: {new Date(a.due_date).toLocaleDateString('es-AR', { dateStyle: 'short' })}
             </span>
           )}
@@ -72,7 +72,7 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
 
       {/* Grade & feedback (if graded) */}
       {s?.graded_at && (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6">
+        <div className="bg-green-100/50 border border-green-300/50/70 rounded-2xl p-5 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-2xl font-bold text-green-700">{s.score ?? '—'}</span>
             <span className="text-green-600 font-medium">/ {a.max_score} pts</span>
@@ -121,10 +121,4 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
         </h3>
         <SubmitAssignmentForm
           assignmentId={assignmentId}
-          defaultContent={s?.content ?? ''}
-          isResubmit={!!s}
-        />
-      </div>
-    </div>
-  )
-}
+          defaultContent={s?.c

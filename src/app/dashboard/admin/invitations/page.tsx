@@ -32,7 +32,7 @@ export default async function InvitationsPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         <InviteForm institutes={(institutes ?? []) as Institute[]} />
       </div>
 
@@ -43,9 +43,4 @@ export default async function InvitationsPage() {
           <li>El usuario recibirá un correo con un link seguro de activación.</li>
           <li>Al hacer clic, podrá crear su contraseña y accederá con el rol asignado.</li>
           <li>El link expira en 24 horas por seguridad.</li>
-          <li>Requiere que <code className="bg-[var(--ag-border-light)]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurada en tu servidor.</li>
-        </ul>
-      </div>
-    </div>
-  )
-}
+          <li>Requiere que <code className="bg-[var(--ag-border-light)]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurad

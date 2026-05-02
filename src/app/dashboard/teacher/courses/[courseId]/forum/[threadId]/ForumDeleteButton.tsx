@@ -25,9 +25,7 @@ export function ForumDeleteButton({ threadId, courseId }: Props) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all disabled:opacity-50"
+      className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-300/50 transition-all disabled:opacity-50"
     >
       {isPending ? 'Eliminando...' : 'Eliminar tema'}
     </button>
-  )
-}

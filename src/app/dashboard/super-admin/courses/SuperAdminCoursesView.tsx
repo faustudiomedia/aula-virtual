@@ -65,7 +65,7 @@ export default function SuperAdminCoursesView() {
             name="q"
             defaultValue={q}
             placeholder="Buscar cursos por título..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
         <button
@@ -77,7 +77,7 @@ export default function SuperAdminCoursesView() {
         {q && (
           <a
             href="/dashboard/super-admin/courses"
-            className="px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] hover:bg-black/5 transition"
+            className="px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] transition"
           >
             Limpiar
           </a>
@@ -85,7 +85,7 @@ export default function SuperAdminCoursesView() {
       </form>
 
       {isLoading ? (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4 animate-pulse">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden mb-4 animate-pulse">
           <div className="h-64" />
         </div>
       ) : courses.length === 0 ? (
@@ -96,10 +96,10 @@ export default function SuperAdminCoursesView() {
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4">
+          <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden mb-4">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-sm">
-              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
+              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-[var(--ag-border-light)]">
                 <tr>
                   <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Curso
@@ -119,7 +119,7 @@ export default function SuperAdminCoursesView() {
                   <th className="px-5 py-3" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
+              <tbody className="divide-y divide-[var(--ag-border-light)]">
                 {courses.map((c) => (
                   <tr
                     key={c.id}
@@ -192,7 +192,7 @@ export default function SuperAdminCoursesView() {
                 {currentPage > 1 && (
                   <a
                     href={buildUrl({ page: String(currentPage - 1) })}
-                    className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)]/70 font-medium hover:bg-black/5 transition"
+                    className="px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)]/70 font-medium hover:bg-[var(--ag-surface-alt)] transition"
                   >
                     ← Anterior
                   </a>
@@ -200,16 +200,4 @@ export default function SuperAdminCoursesView() {
                 {currentPage < totalPages && (
                   <a
                     href={buildUrl({ page: String(currentPage + 1) })}
-                    className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:opacity-90 transition"
-                  >
-                    Siguiente →
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
+                    className="px-4 py-2 rounded

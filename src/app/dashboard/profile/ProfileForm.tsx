@@ -43,7 +43,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
     <form action={handleSubmit} className="space-y-5">
       <FormError message={error} />
       {success && (
-        <div className="px-4 py-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm">
+        <div className="px-4 py-3 rounded-xl bg-green-100/50 border border-green-300/50/70 text-green-700 text-sm">
           Perfil actualizado correctamente.
         </div>
       )}
@@ -85,17 +85,4 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
 
       {(role === "profesor" || role === "super_admin" || role === "admin") && (
         <div className="pt-4 border-t border-black/5">
-          <SignatureUpload currentUrl={signatureUrl || null} />
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={isPending}
-        className="px-6 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:bg-[var(--ag-navy)]/90 transition-all disabled:opacity-60 shadow-lg "
-      >
-        {isPending ? "Guardando..." : "Guardar cambios"}
-      </button>
-    </form>
-  );
-}
+          <SignatureUpload currentUrl={signa

@@ -14,10 +14,10 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  present: 'bg-green-50 text-green-700',
-  absent: 'bg-red-50 text-red-700',
-  late: 'bg-yellow-50 text-yellow-700',
-  justified: 'bg-blue-50 text-blue-700',
+  present: 'bg-green-100/60 text-green-700',
+  absent: 'bg-red-100/60 text-red-700',
+  late: 'bg-yellow-100/60 text-yellow-700',
+  justified: 'bg-blue-100/60 text-blue-700',
 }
 
 function formatDate(d: string) {
@@ -119,11 +119,4 @@ export default async function StudentAttendancePage({ params }: Props) {
                     </td>
                   </tr>
                 )
-              })}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  )
-}
+         

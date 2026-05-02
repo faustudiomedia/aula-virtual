@@ -37,7 +37,7 @@ export default async function NewCoursePage({ searchParams }: Props) {
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -85,10 +85,4 @@ export default async function NewCoursePage({ searchParams }: Props) {
               className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
             >
               Cancelar
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+  

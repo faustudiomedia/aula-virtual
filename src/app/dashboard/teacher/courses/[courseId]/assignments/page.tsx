@@ -59,7 +59,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
       <CourseNavTabs courseId={courseId} />
 
       {error && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
           ⚠️ {error}
         </div>
       )}
@@ -74,7 +74,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-[var(--ag-text)]">{a.title}</h3>
                     {a.due_date && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-100/60 text-red-600' : 'bg-amber-100/60 text-amber-600'}`}>
                         {overdue ? 'Vencida' : 'Activa'}
                       </span>
                     )}
@@ -111,10 +111,4 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
         })}
         {(assignments ?? []).length === 0 && (
           <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
-            No hay tareas creadas. Creá la primera con el botón de arriba.
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+            No hay tareas creadas. Creá la primera con el botón d

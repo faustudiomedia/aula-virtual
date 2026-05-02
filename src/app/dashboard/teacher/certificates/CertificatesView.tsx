@@ -14,9 +14,9 @@ interface Props {
 type Status = "all" | "pending" | "approved" | "rejected";
 
 const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
-  pending:  { label: "Pendiente",  cls: "bg-amber-50 text-amber-700 border-amber-200" },
-  approved: { label: "Aprobado",   cls: "bg-green-50 text-green-700 border-green-200" },
-  rejected: { label: "Rechazado",  cls: "bg-red-50   text-red-700   border-red-200"   },
+  pending:  { label: "Pendiente",  cls: "bg-amber-100/60 text-amber-700 border-amber-300/50" },
+  approved: { label: "Aprobado",   cls: "bg-green-100/60 text-green-700 border-green-300/50" },
+  rejected: { label: "Rechazado",  cls: "bg-red-50   text-red-700   border-red-300/50"   },
 };
 
 type CertReq = {
@@ -229,7 +229,7 @@ export default function CertificatesView({ teacherId, role }: Props) {
                             href={`/certificates/${req.certificate_code}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all"
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100/60 text-green-700 border border-green-300/50 hover:bg-green-200/60 transition-all"
                           >
                             Ver →
                           </a>
@@ -239,14 +239,14 @@ export default function CertificatesView({ teacherId, role }: Props) {
                             <button
                               onClick={() => handleApprove(req.id)}
                               disabled={isActing}
-                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all disabled:opacity-50"
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100/60 text-green-700 border border-green-300/50 hover:bg-green-200/60 transition-all disabled:opacity-50"
                             >
                               {isActing ? "..." : "Aprobar"}
                             </button>
                             <button
                               onClick={() => handleReject(req.id)}
                               disabled={isActing}
-                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all disabled:opacity-50"
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-100/60 text-red-600 border border-red-300/50 hover:bg-red-200/60 transition-all disabled:opacity-50"
                             >
                               Rechazar
                             </button>

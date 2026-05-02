@@ -86,7 +86,7 @@ export default async function StudentForumPage({ params }: Props) {
               >
                 <div className="flex items-center gap-2 mb-1">
                   {t.pinned && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 font-medium">📌 Fijado</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100/60 text-amber-600 font-medium">📌 Fijado</span>
                   )}
                   <p className="text-base font-semibold text-[var(--ag-text)] hover:text-[var(--ag-navy)]">{t.title}</p>
                 </div>
@@ -94,11 +94,4 @@ export default async function StudentForumPage({ params }: Props) {
                 <p className="text-xs text-[var(--ag-text)]/30">
                   {author?.full_name ?? 'Desconocido'} · {new Date(t.created_at).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </p>
-              </Link>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
+  

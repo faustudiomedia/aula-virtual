@@ -50,7 +50,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
         <h2 className="text-base font-semibold text-[var(--ag-text)] mb-5">Nueva tarea</h2>
 
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -104,13 +104,4 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
             <SubmitButton label="Crear tarea" loadingLabel="Creando..." />
             <Link
               href={`/dashboard/teacher/courses/${courseId}/assignments`}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
-            >
-              Cancelar
-            </Link>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
-}
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-a

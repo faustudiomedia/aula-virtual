@@ -84,8 +84,8 @@ export default async function AdminDashboard() {
             value: instituteList.length,
             Icon: Building2,
             color: "var(--ag-navy)",
-            bg: "#EFF6FF",
-            border: "#BFDBFE",
+            bg: "rgba(30,58,95,0.08)",
+            border: "rgba(30,58,95,0.16)",
           },
           {
             label: "Alumnos totales",
@@ -95,8 +95,8 @@ export default async function AdminDashboard() {
             ),
             Icon: GraduationCap,
             color: "#059669",
-            bg: "#ECFDF5",
-            border: "#A7F3D0",
+            bg: "rgba(5,150,105,0.08)",
+            border: "rgba(5,150,105,0.16)",
           },
           {
             label: "Profesores",
@@ -106,16 +106,16 @@ export default async function AdminDashboard() {
             ),
             Icon: UserCog,
             color: "#7C3AED",
-            bg: "#F5F3FF",
-            border: "#DDD6FE",
+            bg: "rgba(124,58,237,0.08)",
+            border: "rgba(124,58,237,0.16)",
           },
           {
             label: "Cursos",
             value: Object.values(coursesByInstitute).reduce((s, n) => s + n, 0),
             Icon: BookOpen,
             color: "#D97706",
-            bg: "#FFFBEB",
-            border: "#FDE68A",
+            bg: "rgba(217,119,6,0.08)",
+            border: "rgba(217,119,6,0.16)",
           },
         ].map((stat) => (
           <div
@@ -155,7 +155,7 @@ export default async function AdminDashboard() {
           {instituteList.map((inst) => (
             <div
               key={inst.id}
-              className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden hover:shadow-md transition-shadow"
             >
               {/* Color header */}
               <div
@@ -214,12 +214,12 @@ export default async function AdminDashboard() {
                 {/* Color swatches */}
                 <div className="flex items-center gap-2 mb-4">
                   <div
-                    className="w-5 h-5 rounded-full border border-black/10"
+                    className="w-5 h-5 rounded-full border border-[var(--ag-border)]"
                     style={{ background: inst.primary_color }}
                     title={inst.primary_color}
                   />
                   <div
-                    className="w-5 h-5 rounded-full border border-black/10"
+                    className="w-5 h-5 rounded-full border border-[var(--ag-border)]"
                     style={{ background: inst.secondary_color }}
                     title={inst.secondary_color}
                   />
@@ -233,12 +233,4 @@ export default async function AdminDashboard() {
                   className="flex items-center justify-center w-full py-1.5 rounded-lg border border-[var(--ag-border-light)] text-[var(--ag-navy)] text-xs font-medium hover:bg-[rgba(30,58,95,0.06)] transition-colors"
                 >
                   Gestionar →
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+ 

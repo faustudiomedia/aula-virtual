@@ -156,7 +156,7 @@ export default async function AdminStatsPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl p-5 border border-black/5"
+            className="rounded-2xl p-5 border border-[var(--ag-border-light)]"
             style={{ background: stat.bg }}
           >
             <div className="text-2xl mb-2">{stat.icon}</div>

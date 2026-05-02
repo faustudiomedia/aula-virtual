@@ -47,10 +47,10 @@ export default async function SuperAdminDashboard() {
   }, {})
 
   const stats = [
-    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: 'var(--ag-navy)' },
-    { label: 'Usuarios',      value: totalUsers ?? 0,          Icon: Users,          href: '/dashboard/super-admin/users',      color: '#0EA5E9' },
-    { label: 'Cursos',        value: totalCourses ?? 0,        Icon: BookOpen,       href: '#',                                 color: '#6366F1' },
-    { label: 'Inscripciones', value: totalEnrollments ?? 0,    Icon: ClipboardList,  href: '#',                                 color: '#10B981' },
+    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: 'var(--ag-navy)',  bg: 'rgba(30,58,95,0.10)' },
+    { label: 'Usuarios',      value: totalUsers ?? 0,          Icon: Users,          href: '/dashboard/super-admin/users',      color: '#0EA5E9',         bg: 'rgba(14,165,233,0.10)' },
+    { label: 'Cursos',        value: totalCourses ?? 0,        Icon: BookOpen,       href: '#',                                 color: '#6366F1',         bg: 'rgba(99,102,241,0.10)' },
+    { label: 'Inscripciones', value: totalEnrollments ?? 0,    Icon: ClipboardList,  href: '#',                                 color: '#10B981',         bg: 'rgba(16,185,129,0.10)' },
   ]
 
   return (
@@ -70,11 +70,11 @@ export default async function SuperAdminDashboard() {
           <Link
             key={s.label}
             href={s.href}
-            className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:shadow-md transition-shadow group"
+            className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 hover:shadow-md transition-shadow group"
           >
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
-              style={{ background: s.color + '18' }}
+              style={{ background: s.bg }}
             >
               <s.Icon size={20} style={{ color: s.color }} />
             </div>
@@ -87,7 +87,7 @@ export default async function SuperAdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* ── Últimos institutos ── */}
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-base font-semibold text-[var(--ag-text)]">Institutos recientes</h2>
             <Link
@@ -102,7 +102,7 @@ export default async function SuperAdminDashboard() {
               <p className="text-sm text-[var(--ag-text-muted)] text-center py-4">No hay institutos todavía</p>
             )}
             {(recentInstitutes ?? []).map((inst) => (
-              <div key={inst.id} className="flex items-center justify-between py-2 border-b border-black/5 last:border-0">
+              <div key={inst.id} className="flex items-center justify-between py-2 border-b border-[var(--ag-border-light)] last:border-0">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[var(--ag-navy)]/10 flex items-center justify-center text-sm font-bold text-[var(--ag-navy)]">
                     {inst.name.charAt(0).toUpperCase()}
@@ -114,8 +114,8 @@ export default async function SuperAdminDashboard() {
                 </div>
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                   inst.active
-                    ? 'bg-green-50 text-green-600'
-                    : 'bg-red-50 text-red-500'
+                    ? 'bg-green-100/60 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-red-100/60 text-red-600 dark:bg-red-900/30 dark:text-red-400'
                 }`}>
                   {inst.active ? 'Activo' : 'Inactivo'}
                 </span>
@@ -131,7 +131,7 @@ export default async function SuperAdminDashboard() {
         </div>
 
         {/* ── Distribución de usuarios ── */}
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-base font-semibold text-[var(--ag-text)]">Usuarios por rol</h2>
             <Link
@@ -160,18 +160,8 @@ export default async function SuperAdminDashboard() {
                     </span>
                     <span className="text-sm font-semibold text-[var(--ag-text)]">{count}</span>
                   </div>
-                  <div className="h-2 bg-black/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all"
                       style={{ width: `${pct}%`, background: color }}
-                    />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+               

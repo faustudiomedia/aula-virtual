@@ -57,16 +57,16 @@ export default async function StudentAssignmentsPage({ params }: Props) {
           const overdue = a.due_date && new Date(a.due_date) < new Date()
 
           let statusLabel = 'Pendiente'
-          let statusColor = 'bg-amber-50 text-amber-600'
+          let statusColor = 'bg-amber-100/60 text-amber-600'
           if (submission?.graded_at) {
             statusLabel = `${submission.score ?? 0}/${a.max_score} pts`
-            statusColor = 'bg-green-50 text-green-700'
+            statusColor = 'bg-green-100/60 text-green-700'
           } else if (submission) {
             statusLabel = 'Entregado'
             statusColor = 'bg-sky-50 text-sky-700'
           } else if (overdue) {
             statusLabel = 'Vencida'
-            statusColor = 'bg-red-50 text-red-600'
+            statusColor = 'bg-red-100/60 text-red-600'
           }
 
           return (
@@ -97,10 +97,4 @@ export default async function StudentAssignmentsPage({ params }: Props) {
         })}
         {(assignments ?? []).length === 0 && (
           <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
-            No hay tareas asignadas todavía.
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+            No hay tareas asignadas to

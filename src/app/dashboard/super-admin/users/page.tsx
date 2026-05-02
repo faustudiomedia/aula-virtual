@@ -12,9 +12,9 @@ const PAGE_SIZE = 25
 
 const ROLE_LABELS: Record<string, { label: string; color: string }> = {
   alumno:      { label: 'Alumno',      color: 'bg-sky-50 text-sky-700' },
-  profesor:    { label: 'Profesor',    color: 'bg-blue-50 text-blue-700' },
+  profesor:    { label: 'Profesor',    color: 'bg-blue-100/60 text-blue-700' },
   admin:       { label: 'Admin',       color: 'bg-violet-50 text-violet-700' },
-  super_admin: { label: 'Super Admin', color: 'bg-amber-50 text-amber-700' },
+  super_admin: { label: 'Super Admin', color: 'bg-amber-100/60 text-amber-700' },
 }
 
 export default async function SuperAdminUsersPage({ searchParams }: Props) {
@@ -59,18 +59,18 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
       </div>
 
       {/* ── Filtros ── */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm mb-6 p-4">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm mb-6 p-4">
         <form className="flex gap-3 flex-wrap">
           <input
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre o email..."
-            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
           <select
             name="role"
             defaultValue={role}
-            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           >
             <option value="all">Todos los roles</option>
             <option value="alumno">Alumnos</option>
@@ -84,7 +84,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           </button>
           {(q || role !== 'all') && (
             <Link href="/dashboard/super-admin/users"
-              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-black/10 hover:bg-black/5 transition-all">
+              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-[var(--ag-border)] hover:bg-[var(--ag-surface-alt)] transition-all">
               Limpiar
             </Link>
           )}
@@ -92,7 +92,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
       </div>
 
       {/* ── Tabla ── */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
         {(users ?? []).length === 0 ? (
 
           <div className="py-16 text-center">
@@ -103,7 +103,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           <div className="overflow-x-auto">
           <table className="w-full min-w-[650px] text-sm">
             <thead>
-              <tr className="border-b border-black/5 bg-black/[0.02]">
+              <tr className="border-b border-[var(--ag-border-light)] bg-[var(--ag-surface-alt)]">
                 <th className="text-left px-6 py-3.5 font-semibold text-[var(--ag-text-muted)]">Usuario</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Rol</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Instituto</th>
@@ -113,13 +113,13 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
             </thead>
             <tbody>
               {(users ?? []).map((u: any) => {
-                const roleInfo = ROLE_LABELS[u.role] ?? { label: u.role, color: 'bg-gray-50 text-gray-600' }
+                const roleInfo = ROLE_LABELS[u.role] ?? { label: u.role, color: 'bg-gray-50 text-[var(--ag-text-muted)]' }
                 const instituteName = (u.institutes as any)?.name ?? '—'
                 const date = new Date(u.created_at).toLocaleDateString('es-AR', {
                   day: '2-digit', month: '2-digit', year: 'numeric',
                 })
                 return (
-                  <tr key={u.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.01]">
+                  <tr key={u.id} className="border-b border-[var(--ag-border-light)] last:border-0 hover:bg-[var(--ag-surface-alt)]">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-[var(--ag-navy)]/10 flex items-center justify-center text-sm font-bold text-[var(--ag-navy)] flex-shrink-0">
@@ -164,13 +164,4 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <Link key={p} href={`?q=${q}&role=${role}&page=${p}`}
               className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
-                p === currentPage ? 'text-white bg-[var(--ag-text)]' : 'text-[var(--ag-text-muted)] hover:bg-black/5'
-              }`}>
-              {p}
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+                p === currentPa

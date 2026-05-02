@@ -64,12 +64,12 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
         <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Nuevo anuncio</h2>
 
         {error && (
-          <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-4 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
         {success && (
-          <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
+          <div className="mb-4 rounded-lg bg-green-100/50 border border-green-300/50/70 px-4 py-3 text-sm text-green-700">
             ✓ Anuncio publicado correctamente.
           </div>
         )}
@@ -132,10 +132,4 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
         ))}
         {(announcements ?? []).length === 0 && (
           <div className="text-center py-12 text-[var(--ag-text-muted)] text-sm">
-            No hay anuncios todavía. Publicá el primero arriba.
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+    

@@ -18,9 +18,9 @@ const ROLES = [
 
 const ROLE_COLORS: Record<string, string> = {
   alumno:      "border-sky-300 bg-sky-50 text-sky-700",
-  profesor:    "border-blue-300 bg-blue-50 text-blue-700",
+  profesor:    "border-blue-300 bg-blue-100/60 text-blue-700",
   admin:       "border-violet-300 bg-violet-50 text-violet-700",
-  super_admin: "border-amber-300 bg-amber-50 text-amber-700",
+  super_admin: "border-amber-300 bg-amber-100/60 text-amber-700",
 };
 
 export default function NewUserForm({ institutes }: { institutes: Institute[] }) {
@@ -63,7 +63,7 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
             name="full_name"
             required
             placeholder="Ej: María García"
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
 
@@ -76,7 +76,7 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
             type="email"
             required
             placeholder="usuario@ejemplo.com"
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
 
@@ -91,7 +91,7 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
               required
               minLength={8}
               placeholder="Mínimo 8 caracteres"
-              className="w-full px-4 py-2.5 pr-12 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+              className="w-full px-4 py-2.5 pr-12 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
             />
             <button
               type="button"
@@ -122,7 +122,7 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
               className={`text-left p-3 rounded-xl border-2 transition-all ${
                 selectedRole === r.value
                   ? ROLE_COLORS[r.value]
-                  : "border-black/10 hover:border-black/20 text-[var(--ag-text)]/70"
+                  : "border-[var(--ag-border)] hover:border-black/20 text-[var(--ag-text)]/70"
               }`}
             >
               <p className="text-sm font-semibold">{r.label}</p>
@@ -139,14 +139,14 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
             Instituto <span className="text-red-500">*</span>
           </label>
           {institutes.length === 0 ? (
-            <p className="text-sm text-[var(--ag-text-muted)] bg-amber-50 border border-amber-200 rounded-xl p-3">
+            <p className="text-sm text-[var(--ag-text-muted)] bg-amber-100/50 border border-amber-300/50/70 rounded-xl p-3">
               No hay institutos activos. Creá uno primero.
             </p>
           ) : (
             <select
               name="institute_id"
               required={needsInstitute}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-white"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-[var(--ag-surface)]"
             >
               <option value="">Seleccionar instituto...</option>
               {institutes.map((inst) => (
@@ -161,7 +161,7 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600">
+        <div className="bg-red-100/50 border border-red-300/50/70 rounded-xl p-3 text-sm text-red-600">
           {error}
         </div>
       )}
@@ -177,11 +177,4 @@ export default function NewUserForm({ institutes }: { institutes: Institute[] })
         </button>
         <a
           href="/dashboard/super-admin/users"
-          className="px-4 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[var(--ag-text-muted)] hover:bg-black/5 transition text-center"
-        >
-          Cancelar
-        </a>
-      </div>
-    </form>
-  );
-}
+          className="px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-s

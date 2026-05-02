@@ -34,10 +34,10 @@ const STATUS_LABELS: Record<AttendanceStatus, string> = {
 }
 
 const STATUS_COLORS: Record<AttendanceStatus, string> = {
-  present: 'bg-green-100 text-green-700 border-green-200',
-  absent: 'bg-red-100 text-red-700 border-red-200',
+  present: 'bg-green-100 text-green-700 border-green-300/50',
+  absent: 'bg-red-100 text-red-700 border-red-300/50',
   late: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  justified: 'bg-blue-100 text-blue-700 border-blue-200',
+  justified: 'bg-blue-100 text-blue-700 border-blue-300/50',
 }
 
 function formatDate(d: string) {
@@ -224,16 +224,4 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
                           >
                             {STATUS_LABELS[st]}
                           </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
+                     

@@ -65,9 +65,9 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
         .
       </p>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -82,7 +82,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               name="full_name"
               required
               placeholder="Ej: María García"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -96,7 +96,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               type="email"
               required
               placeholder="Ej: maria@instituto.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -111,7 +111,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               required
               minLength={8}
               placeholder="Mínimo 8 caracteres"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
             <p className="text-xs text-[var(--ag-text-muted)] mt-1">
               El usuario podrá cambiarla después de iniciar sesión.
@@ -127,7 +127,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               name="role"
               required
               defaultValue="alumno"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-surface)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             >
               <option value="alumno">🎓 Alumno</option>
               <option value="profesor">👨‍🏫 Profesor</option>
@@ -139,13 +139,4 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
             <SubmitButton label="Crear usuario" loadingLabel="Creando..." />
             <Link
               href="/dashboard/admin/users"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
-            >
-              Cancelar
-            </Link>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-cen

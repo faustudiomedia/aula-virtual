@@ -14,9 +14,9 @@ interface Props {
 type Status = "all" | "pending" | "approved" | "rejected";
 
 const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
-  pending:  { label: "Pendiente",  cls: "bg-amber-50 text-amber-700 border-amber-200" },
-  approved: { label: "Aprobado",   cls: "bg-green-50 text-green-700 border-green-200" },
-  rejected: { label: "Rechazado",  cls: "bg-red-50 text-red-700 border-red-200" },
+  pending:  { label: "Pendiente",  cls: "bg-amber-100/60 text-amber-700 border-amber-300/50" },
+  approved: { label: "Aprobado",   cls: "bg-green-100/60 text-green-700 border-green-300/50" },
+  rejected: { label: "Rechazado",  cls: "bg-red-100/60 text-red-700 border-red-300/50" },
 };
 
 export default function AdminCertificatesView({ adminId, role, instituteId }: Props) {
@@ -126,7 +126,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
             onClick={() => setActiveStatus(t.key)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeStatus === t.key
-                ? "bg-white text-[var(--ag-text)] shadow-sm"
+                ? "bg-[var(--ag-surface)] text-[var(--ag-text)] shadow-sm"
                 : "text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]"
             }`}
           >
@@ -146,7 +146,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
       {isLoading ? (
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl border border-black/5 p-4 animate-pulse h-16" />
+            <div key={i} className="bg-[var(--ag-surface)] rounded-xl border border-[var(--ag-border-light)] p-4 animate-pulse h-16" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
@@ -159,9 +159,9 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-white border-b border-black/5">
+            <thead className="bg-[var(--ag-surface)] border-b border-[var(--ag-border-light)]">
               <tr>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Alumno</th>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Curso</th>
@@ -171,7 +171,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/5">
+            <tbody className="divide-y divide-[var(--ag-border-light)]">
               {filtered.map((req: {
                 id: string;
                 status: string;
@@ -183,7 +183,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                 const st = STATUS_LABEL[req.status] ?? STATUS_LABEL.pending;
                 const isActing = isPending && actionId === req.id;
                 return (
-                  <tr key={req.id} className="hover:bg-white/60 transition-colors">
+                  <tr key={req.id} className="hover:bg-[var(--ag-surface)]/60 transition-colors">
                     <td className="px-5 py-3.5">
                       <p className="font-medium text-[var(--ag-text)]">{req.profiles?.full_name ?? "—"}</p>
                       <p className="text-xs text-[var(--ag-text-muted)]">{req.profiles?.email}</p>
@@ -211,7 +211,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                             href={`/certificates/${req.certificate_code}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all"
+                            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100/60 text-green-700 border border-green-300/50 hover:bg-green-200/60 transition-all"
                           >
                             Ver →
                           </a>
@@ -221,14 +221,14 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                             <button
                               onClick={() => handleApprove(req.id)}
                               disabled={isActing}
-                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all disabled:opacity-50"
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-green-100/60 text-green-700 border border-green-300/50 hover:bg-green-200/60 transition-all disabled:opacity-50"
                             >
                               {isActing ? "..." : "Aprobar"}
                             </button>
                             <button
                               onClick={() => handleReject(req.id)}
                               disabled={isActing}
-                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-all disabled:opacity-50"
+                              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-red-100/60 text-red-600 border border-red-300/50 hover:bg-red-200/60 transition-all disabled:opacity-50"
                             >
                               Rechazar
                             </button>

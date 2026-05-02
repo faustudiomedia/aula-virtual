@@ -59,7 +59,7 @@ export default async function AuditPage({
         <select
           name="entity_type"
           defaultValue={params.entity_type ?? ''}
-          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-white"
+          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
         >
           <option value="">Todas las entidades</option>
           {['course', 'institute', 'user', 'material', 'quiz'].map((e) => (
@@ -70,7 +70,7 @@ export default async function AuditPage({
         <select
           name="action"
           defaultValue={params.action ?? ''}
-          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-white"
+          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
         >
           <option value="">Todas las acciones</option>
           {['CREATE', 'UPDATE', 'DELETE'].map((a) => (
@@ -88,7 +88,7 @@ export default async function AuditPage({
         {(params.entity_type || params.action) && (
           <a
             href="/dashboard/admin/audit"
-            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] hover:bg-black/5 transition"
+            className="px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] transition"
           >
             Limpiar
           </a>
@@ -106,9 +106,9 @@ export default async function AuditPage({
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4">
+          <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden mb-4">
             <table className="w-full text-sm">
-              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
+              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-[var(--ag-border-light)]">
                 <tr>
                   <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Usuario</th>
                   <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Acción</th>
@@ -116,7 +116,7 @@ export default async function AuditPage({
                   <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Fecha</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
+              <tbody className="divide-y divide-[var(--ag-border-light)]">
                 {logList.map((log) => {
                   const actionMeta = ACTION_LABELS[log.action]
                   const prof = log.profiles
@@ -170,7 +170,7 @@ export default async function AuditPage({
               {page > 1 && (
                 <a
                   href={`/dashboard/admin/audit?page=${page - 1}${params.entity_type ? `&entity_type=${params.entity_type}` : ''}${params.action ? `&action=${params.action}` : ''}`}
-                  className="px-3 py-2 rounded-lg border border-black/10 text-sm hover:bg-black/5 transition"
+                  className="px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm hover:bg-[var(--ag-surface-alt)] transition"
                 >
                   ← Anterior
                 </a>
@@ -179,15 +179,4 @@ export default async function AuditPage({
               {page < totalPages && (
                 <a
                   href={`/dashboard/admin/audit?page=${page + 1}${params.entity_type ? `&entity_type=${params.entity_type}` : ''}${params.action ? `&action=${params.action}` : ''}`}
-                  className="px-3 py-2 rounded-lg border border-black/10 text-sm hover:bg-black/5 transition"
-                >
-                  Siguiente →
-                </a>
-              )}
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  )
-}
+                  className="px-3 py-2 rounded-lg border 

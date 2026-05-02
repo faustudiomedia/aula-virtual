@@ -72,7 +72,7 @@ export default async function SuperAdminStatsPage() {
           { label: 'Cursos completados', value: completedEnrollments ?? 0, icon: '✅', sub: `${completionRate}% de tasa` },
           { label: 'Publicados',         value: publishedCourses ?? 0,     icon: '🟢', sub: 'cursos activos' },
         ].map((kpi) => (
-          <div key={kpi.label} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+          <div key={kpi.label} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
             <div className="text-2xl mb-2">{kpi.icon}</div>
             <p className="text-3xl font-bold text-[var(--ag-text)]">{kpi.value.toLocaleString()}</p>
             <p className="text-sm font-medium text-[var(--ag-text)] mt-1">{kpi.label}</p>
@@ -83,25 +83,25 @@ export default async function SuperAdminStatsPage() {
 
       {/* ── Ratios visuales ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
           <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Tasa de completitud</h2>
           <div className="flex items-end gap-4">
             <span className="text-5xl font-bold text-[var(--ag-text)]">{completionRate}%</span>
             <span className="text-sm text-[var(--ag-text-muted)] mb-2">de inscripciones completadas</span>
           </div>
-          <div className="mt-4 h-3 bg-black/5 rounded-full overflow-hidden">
+          <div className="mt-4 h-3 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r bg-[var(--ag-navy)] rounded-full"
               style={{ width: `${completionRate}%` }} />
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
           <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Cursos publicados</h2>
           <div className="flex items-end gap-4">
             <span className="text-5xl font-bold text-[var(--ag-text)]">{publishedRate}%</span>
             <span className="text-sm text-[var(--ag-text-muted)] mb-2">del total de cursos</span>
           </div>
-          <div className="mt-4 h-3 bg-black/5 rounded-full overflow-hidden">
+          <div className="mt-4 h-3 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-[#6366F1] to-[#A78BFA] rounded-full"
               style={{ width: `${publishedRate}%` }} />
           </div>
@@ -110,7 +110,7 @@ export default async function SuperAdminStatsPage() {
 
       {/* ── Top institutos ── */}
       {topInstitutes.length > 0 && (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
           <h2 className="text-base font-semibold text-[var(--ag-text)] mb-5">Institutos por alumnos</h2>
           <div className="space-y-3">
             {topInstitutes.map((inst, i) => {
@@ -127,15 +127,7 @@ export default async function SuperAdminStatsPage() {
                       {inst.students} alumnos · {inst.teachers} prof · {inst.admins} admin
                     </span>
                   </div>
-                  <div className="h-2 bg-black/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
                     <div className="h-full bg-[var(--ag-navy)] rounded-full" style={{ width: `${pct}%` }} />
                   </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
+ 

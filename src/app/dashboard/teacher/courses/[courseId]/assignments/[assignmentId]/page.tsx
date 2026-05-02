@@ -104,12 +104,12 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
       </div>
 
       {success && (
-        <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
+        <div className="mb-4 rounded-lg bg-green-100/50 border border-green-300/50/70 px-4 py-3 text-sm text-green-700">
           ✓ Calificación guardada correctamente.
         </div>
       )}
       {error && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
           ⚠️ {error}
         </div>
       )}
@@ -207,12 +207,4 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
           </div>
         ))}
 
-        {studentList.length === 0 && (
-          <div className="text-center py-12 text-[var(--ag-text-muted)] text-sm">
-            No hay alumnos inscriptos en este curso.
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+        {studentList.le

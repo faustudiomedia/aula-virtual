@@ -84,10 +84,10 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden flex flex-col">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden flex flex-col">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5 whitespace-nowrap">
+            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-[var(--ag-border-light)] whitespace-nowrap">
               <tr>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Usuario</th>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Rol</th>
@@ -96,9 +96,9 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/5">
+            <tbody className="divide-y divide-[var(--ag-border-light)]">
               {userList.map((u) => {
-                const roleInfo = roleLabels[u.role] ?? { label: u.role, color: "bg-gray-100 text-gray-600" };
+                const roleInfo = roleLabels[u.role] ?? { label: u.role, color: "bg-gray-100 text-[var(--ag-text-muted)]" };
                 return (
                   <tr key={u.id} className="hover:bg-[rgba(30,58,95,0.06)]/50 transition-colors">
                     <td className="px-5 py-3.5">
@@ -145,11 +145,4 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                   </td>
                 </tr>
               )}
-            </tbody>
-          </table>
-        </div>
-        <Pagination totalPages={totalPages} />
-      </div>
-    </div>
-  );
-}
+         

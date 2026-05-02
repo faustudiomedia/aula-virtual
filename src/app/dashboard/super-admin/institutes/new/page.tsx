@@ -35,9 +35,9 @@ export default async function NewInstitutePage({ searchParams }: Props) {
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -52,7 +52,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
               name="name"
               required
               placeholder="Ej: Instituto San Martín"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -67,7 +67,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
               placeholder="Ej: san-martin"
               pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
               title="Solo letras minúsculas, números y guiones"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
             <p className="text-xs text-[var(--ag-text-muted)] mt-1">Solo minúsculas, números y guiones. Ej: san-martin</p>
           </div>
@@ -80,7 +80,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
             <input
               name="domain"
               placeholder="Ej: aula.sanmartin.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -95,13 +95,13 @@ export default async function NewInstitutePage({ searchParams }: Props) {
                   type="color"
                   name="primary_color"
                   defaultValue="var(--ag-navy)"
-                  className="w-10 h-10 rounded-lg border border-black/10 cursor-pointer p-0.5"
+                  className="w-10 h-10 rounded-lg border border-[var(--ag-border)] cursor-pointer p-0.5"
                 />
                 <input
                   type="text"
                   defaultValue="var(--ag-navy)"
                   placeholder="var(--ag-navy)"
-                  className="flex-1 px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                  className="flex-1 px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                   readOnly
                 />
               </div>
@@ -115,13 +115,13 @@ export default async function NewInstitutePage({ searchParams }: Props) {
                   type="color"
                   name="secondary_color"
                   defaultValue="var(--ag-navy)"
-                  className="w-10 h-10 rounded-lg border border-black/10 cursor-pointer p-0.5"
+                  className="w-10 h-10 rounded-lg border border-[var(--ag-border)] cursor-pointer p-0.5"
                 />
                 <input
                   type="text"
                   defaultValue="var(--ag-navy)"
                   placeholder="var(--ag-navy)"
-                  className="flex-1 px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                  className="flex-1 px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                   readOnly
                 />
               </div>
@@ -144,16 +144,4 @@ export default async function NewInstitutePage({ searchParams }: Props) {
 
           {/* Botones */}
           <div className="flex gap-3 pt-2">
-            <SubmitButton label="Crear instituto" loadingLabel="Creando..." />
-            <a
-              href="/dashboard/super-admin/institutes"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
-            >
-              Cancelar
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
-}
+            <SubmitButton label="Crear instituto" loadingLabel="Crea

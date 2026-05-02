@@ -64,9 +64,9 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
         Completá los datos para publicar el curso.
       </p>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -79,7 +79,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
               name="title"
               required
               placeholder="Ej: Inglés Nivel A2"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             />
           </div>
 
@@ -91,7 +91,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
               name="description"
               rows={4}
               placeholder="Describí brevemente de qué trata el curso..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm resize-none bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             />
           </div>
 
@@ -101,7 +101,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
             </label>
             <select
               name="institute_id"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm bg-[var(--ag-surface)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             >
               <option value="">Sin instituto asignado</option>
               {(institutes ?? []).map((inst) => (
@@ -118,7 +118,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
             </label>
             <select
               name="teacher_id"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm bg-[var(--ag-surface)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             >
               <option value="">Sin profesor asignado</option>
               {(teachers ?? []).map((t) => (
@@ -148,13 +148,4 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
             <SubmitButton label="Crear curso" loadingLabel="Creando..." />
             <a
               href="/dashboard/super-admin/courses"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
-            >
-              Cancelar
-            </a>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-[var(--ag-surface-alt)] tra

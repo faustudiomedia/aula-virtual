@@ -61,9 +61,5 @@ export default async function EditUserPage({ params }: Props) {
         <p className="text-[var(--ag-text-muted)] mt-1">{targetProfile.email}</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-        <EditUserForm profile={targetProfile} institutes={instituteList} />
-      </div>
-    </div>
-  );
-}
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+        <EditUserForm profile={targetProfile} institutes={ins
