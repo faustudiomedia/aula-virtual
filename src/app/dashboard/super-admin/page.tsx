@@ -47,7 +47,7 @@ export default async function SuperAdminDashboard() {
   }, {})
 
   const stats = [
-    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: var(--ag-navy) },
+    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: 'var(--ag-navy)' },
     { label: 'Usuarios',      value: totalUsers ?? 0,          Icon: Users,          href: '/dashboard/super-admin/users',      color: '#0EA5E9' },
     { label: 'Cursos',        value: totalCourses ?? 0,        Icon: BookOpen,       href: '#',                                 color: '#6366F1' },
     { label: 'Inscripciones', value: totalEnrollments ?? 0,    Icon: ClipboardList,  href: '#',                                 color: '#10B981' },
@@ -144,7 +144,7 @@ export default async function SuperAdminDashboard() {
           <div className="space-y-4">
             {[
               { role: 'alumno',      label: 'Alumnos',    Icon: GraduationCap, color: '#10B981' },
-              { role: 'profesor',    label: 'Profesores', Icon: UserCog,       color: var(--ag-navy) },
+              { role: 'profesor',    label: 'Profesores', Icon: UserCog,       color: 'var(--ag-navy)' },
               { role: 'admin',       label: 'Admins',     Icon: ShieldCheck,   color: '#6366F1' },
               { role: 'super_admin', label: 'Super Admin',Icon: ShieldCheck,   color: '#F59E0B' },
             ].map(({ role, label, Icon, color }) => {

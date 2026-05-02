@@ -14,7 +14,7 @@ const FILE_TYPE_META: Record<string, { icon: string; label: string; color: strin
   pdf:   { icon: '📄', label: 'PDF',    color: '#DC2626', bg: '#FEF2F2' },
   video: { icon: '🎥', label: 'Video',  color: '#7C3AED', bg: '#F5F3FF' },
   image: { icon: '🖼️', label: 'Imagen', color: '#059669', bg: '#ECFDF5' },
-  link:  { icon: '🔗', label: 'Enlace', color: var(--ag-navy), bg: rgba(30,58,95,0.06) },
+  link:  { icon: '🔗', label: 'Enlace', color: 'var(--ag-navy)', bg: rgba(30,58,95,0.06) },
 }
 
 export default function MaterialProgress({ materials, enrollmentId }: Props) {

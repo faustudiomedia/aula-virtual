@@ -13,8 +13,8 @@ const instituteSchema = z.object({
                      .min(2)
                      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Solo minúsculas, números y guiones'),
   domain:          z.string().optional().nullable(),
-  primary_color:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).default(var(--ag-navy)),
-  secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('var(--ag-navy)'),
+  primary_color:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#1E3A5F'),
+  secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#1E3A5F'),
   director_name:   z.string().optional().nullable(),
   active:          z.boolean().default(true),
 })

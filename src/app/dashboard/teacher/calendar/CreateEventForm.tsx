@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { createCalendarEvent } from '@/app/actions/calendar'
 
-const COLORS = [var(--ag-navy),'#059669','#7C3AED','#D97706','#DC2626','#0891B2','#BE185D']
+const COLORS = ['var(--ag-navy)','#059669','#7C3AED','#D97706','#DC2626','#0891B2','#BE185D']
 
 export function CreateEventForm() {
   const [open, setOpen] = useState(false)

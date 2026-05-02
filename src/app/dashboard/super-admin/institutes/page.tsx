@@ -60,7 +60,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
         <Link
           href="/dashboard/super-admin/institutes/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-          style={{ background: var(--ag-text) }}
+          style={{ background: 'var(--ag-navy)' }}
         >
           <span>＋</span> Nuevo instituto
         </Link>

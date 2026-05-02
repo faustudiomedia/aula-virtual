@@ -92,7 +92,7 @@ describe('instituteSchema', () => {
     const result = instituteSchema.safeParse({
       name: 'Instituto San Martín',
       slug: 'san-martin',
-      primary_color: var(--ag-navy),
+      primary_color: '#1E3A5F',
       secondary_color: 'var(--ag-navy)',
     })
     expect(result.success).toBe(true)
