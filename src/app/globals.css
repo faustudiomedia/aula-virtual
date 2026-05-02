@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ── Agorify Design System — Navy Institucional ─────────── */
+/* Agorify Design System - Navy Institucional */
 :root {
   /* Core brand colors */
   --ag-navy:           #1E3A5F;
@@ -68,7 +68,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Scrollbar ──────────────────────────────────────────── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(30,58,95,0.2); border-radius: 99px; }
@@ -76,4 +76,83 @@ body {
 .ag-sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
 .ag-sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 
-/* ── Primary button ────�
+/* Primary button */
+.ag-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  background: var(--ag-navy);
+  color: #ffffff;
+}
+.ag-btn-primary:hover:not(:disabled) {
+  background: var(--ag-navy-dark);
+}
+.ag-btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.ag-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary button */
+.ag-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: transparent;
+  border: 1px solid var(--ag-border);
+  color: var(--ag-text-secondary);
+}
+.ag-btn-secondary:hover:not(:disabled) {
+  background: var(--ag-navy-muted);
+  border-color: var(--ag-navy);
+  color: var(--ag-navy);
+}
+
+/* Card */
+.ag-card {
+  background: var(--ag-surface);
+  border: 1px solid var(--ag-border-light);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+/* Badge */
+.ag-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Focus ring utility */
+.ag-focus:focus-visible {
+  outline: 2px solid var(--ag-navy);
+  outline-offset: 2px;
+}
+
+/* Content background for dashboard pages */
+.ag-page-content {
+  padding: 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
