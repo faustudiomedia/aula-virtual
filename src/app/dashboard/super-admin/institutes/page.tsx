@@ -134,7 +134,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
                     <div className="flex items-center gap-3">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                        style={{ background: inst.primary_color ?? var(--ag-navy) }}
+                        style={{ background: inst.primary_color ?? 'var(--ag-navy)' }}
                       >
                         {inst.name.charAt(0).toUpperCase()}
                       </div>

@@ -61,7 +61,7 @@ export function CreateEventForm() {
           <div className="flex gap-2 flex-wrap">
             {COLORS.map(c => (
               <label key={c} className="cursor-pointer">
-                <input type="radio" name="color" value={c} className="sr-only" defaultChecked={c === var(--ag-navy)} />
+                <input type="radio" name="color" value={c} className="sr-only" defaultChecked={c === 'var(--ag-navy)'} />
                 <span className="w-6 h-6 rounded-full inline-block ring-2 ring-offset-1 ring-transparent has-[:checked]:ring-current" style={{ background: c }} />
               </label>
             ))}

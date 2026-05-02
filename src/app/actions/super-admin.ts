@@ -48,8 +48,8 @@ export async function createInstitute(formData: FormData): Promise<ActionResult>
     name:            formData.get('name') as string,
     slug:            formData.get('slug') as string,
     domain:          (formData.get('domain') as string) || null,
-    primary_color:   (formData.get('primary_color') as string) || var(--ag-navy),
-    secondary_color: (formData.get('secondary_color') as string) || 'var(--ag-navy)',
+    primary_color:   (formData.get('primary_color') as string) || '#1E3A5F',
+    secondary_color: (formData.get('secondary_color') as string) || '#1E3A5F',
     active:          formData.get('active') === 'on',
   }
 
@@ -88,8 +88,8 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
     name:            formData.get('name') as string,
     slug:            formData.get('slug') as string,
     domain:          (formData.get('domain') as string) || null,
-    primary_color:   (formData.get('primary_color') as string) || var(--ag-navy),
-    secondary_color: (formData.get('secondary_color') as string) || 'var(--ag-navy)',
+    primary_color:   (formData.get('primary_color') as string) || '#1E3A5F',
+    secondary_color: (formData.get('secondary_color') as string) || '#1E3A5F',
     director_name:   (formData.get('director_name') as string) || null,
     active:          formData.get('active') === 'on',
   }
