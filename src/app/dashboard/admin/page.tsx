@@ -84,8 +84,8 @@ export default async function AdminDashboard() {
             value: instituteList.length,
             Icon: Building2,
             color: "var(--ag-navy)",
-            bg: "rgba(30,58,95,0.08)",
-            border: "rgba(30,58,95,0.16)",
+            bg: "#EFF6FF",
+            border: "#BFDBFE",
           },
           {
             label: "Alumnos totales",
@@ -95,8 +95,8 @@ export default async function AdminDashboard() {
             ),
             Icon: GraduationCap,
             color: "#059669",
-            bg: "rgba(5,150,105,0.08)",
-            border: "rgba(5,150,105,0.16)",
+            bg: "#ECFDF5",
+            border: "#A7F3D0",
           },
           {
             label: "Profesores",
@@ -106,16 +106,16 @@ export default async function AdminDashboard() {
             ),
             Icon: UserCog,
             color: "#7C3AED",
-            bg: "rgba(124,58,237,0.08)",
-            border: "rgba(124,58,237,0.16)",
+            bg: "#F5F3FF",
+            border: "#DDD6FE",
           },
           {
             label: "Cursos",
             value: Object.values(coursesByInstitute).reduce((s, n) => s + n, 0),
             Icon: BookOpen,
             color: "#D97706",
-            bg: "rgba(217,119,6,0.08)",
-            border: "rgba(217,119,6,0.16)",
+            bg: "#FFFBEB",
+            border: "#FDE68A",
           },
         ].map((stat) => (
           <div
@@ -233,4 +233,12 @@ export default async function AdminDashboard() {
                   className="flex items-center justify-center w-full py-1.5 rounded-lg border border-[var(--ag-border-light)] text-[var(--ag-navy)] text-xs font-medium hover:bg-[rgba(30,58,95,0.06)] transition-colors"
                 >
                   Gestionar →
- 
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

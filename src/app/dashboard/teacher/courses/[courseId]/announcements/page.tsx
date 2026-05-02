@@ -60,7 +60,7 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
       <CourseNavTabs courseId={courseId} />
 
       {/* Form */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 mb-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6 mb-6">
         <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Nuevo anuncio</h2>
 
         {error && (
@@ -83,7 +83,7 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
               name="title"
               required
               placeholder="Ej: Recordatorio de entrega"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
           <div>
@@ -92,7 +92,7 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
               name="content"
               rows={4}
               placeholder="Escribí el contenido del anuncio..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
           <button
@@ -107,7 +107,7 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
       {/* List */}
       <div className="space-y-4">
         {(announcements as Announcement[] ?? []).map((a) => (
-          <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+          <div key={a.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <h3 className="font-semibold text-[var(--ag-text)] mb-1">{a.title}</h3>

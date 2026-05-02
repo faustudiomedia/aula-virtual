@@ -51,8 +51,8 @@ export function NewMessageModal() {
           className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh] bg-black/30 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
-            <div className="p-4 border-b border-black/5">
+          <div className="bg-[var(--ag-surface)] rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
+            <div className="p-4 border-b border-[var(--ag-border-light)]">
               <p className="text-xs font-semibold uppercase tracking-widest text-[var(--ag-text-muted)] mb-2">
                 Nuevo mensaje
               </p>
@@ -62,7 +62,7 @@ export function NewMessageModal() {
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Buscar por nombre..."
-                className="w-full px-3 py-2 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                className="w-full px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
             </div>
 
@@ -76,7 +76,7 @@ export function NewMessageModal() {
                 <button
                   key={u.id}
                   onClick={() => handleSelect(u.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--ag-surface)] transition-colors text-left"
                 >
                   <div className="w-9 h-9 rounded-full bg-[rgba(30,58,95,0.08)] flex items-center justify-center text-[var(--ag-navy)] font-semibold text-sm flex-shrink-0">
                     {u.full_name?.charAt(0) ?? '?'}

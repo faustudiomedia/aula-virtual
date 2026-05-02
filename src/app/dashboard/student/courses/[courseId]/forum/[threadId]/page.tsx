@@ -53,7 +53,7 @@ export default async function StudentThreadPage({ params }: Props) {
       </Link>
 
       {/* Thread */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 mb-4">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6 mb-4">
         <div className="flex items-center gap-2 mb-1">
           {thread.pinned && <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100/60 text-amber-600">📌 Fijado</span>}
           <h2 className="text-xl font-bold text-[var(--ag-text)]">{thread.title}</h2>
@@ -70,7 +70,7 @@ export default async function StudentThreadPage({ params }: Props) {
           const author = r.profiles as unknown as { full_name: string } | null
           const canDelete = r.author_id === user.id
           return (
-            <div key={r.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+            <div key={r.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <p className="text-xs font-medium text-[var(--ag-text-muted)] mb-2">
@@ -82,7 +82,7 @@ export default async function StudentThreadPage({ params }: Props) {
                   <form action={deleteReply.bind(null, r.id, threadId, courseId)}>
                     <button
                       type="submit"
-                      className="text-xs px-2.5 py-1 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-500 transition-all flex-shrink-0"
+                      className="text-xs px-2.5 py-1 rounded-lg border border-[var(--ag-border)] text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-500 transition-all flex-shrink-0"
                     >
                       ✕
                     </button>
@@ -95,14 +95,14 @@ export default async function StudentThreadPage({ params }: Props) {
       </div>
 
       {/* Reply form */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
         <h3 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Responder</h3>
         <form action={handleReply} className="space-y-3">
           <textarea
             name="content"
             required
             rows={3}
-            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
+            className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
             placeholder="Escribe tu respuesta..."
           />
           <button

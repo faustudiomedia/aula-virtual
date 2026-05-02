@@ -66,7 +66,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
 
       <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -82,7 +82,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
               required
               defaultValue={target.full_name ?? ''}
               placeholder="Ej: María García"
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -107,7 +107,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
               name="role"
               required
               defaultValue={target.role}
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-surface)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-surface)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             >
               <option value="alumno">🎓 Alumno</option>
               <option value="profesor">👨‍🏫 Profesor</option>
@@ -123,7 +123,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
               name="legajo"
               defaultValue={target.legajo ?? ''}
               placeholder="Ej: 12345"
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
             <p className="text-xs text-[var(--ag-text-muted)] mt-1">Número de legajo único del usuario en el instituto.</p>
           </div>
@@ -133,4 +133,13 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
             <SubmitButton label="Guardar cambios" loadingLabel="Guardando..." />
             <Link
               href="/dashboard/admin/users"
-              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-[var(--ag-surface-alt)] transition-all"
+            >
+              Cancelar
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}

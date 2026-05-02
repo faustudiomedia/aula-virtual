@@ -80,7 +80,7 @@ export function CourseCard({
   const initial = title.charAt(0).toUpperCase();
 
   return (
-    <div className="group bg-white rounded-xl overflow-visible relative transition-all duration-200"
+    <div className="group bg-[var(--ag-surface)] rounded-xl overflow-visible relative transition-all duration-200"
       style={{
         border: "1px solid var(--ag-border-light)",
         boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
@@ -145,7 +145,7 @@ export function CourseCard({
             {completed ? (
               <><CheckCircle2 size={11} /> Completado</>
             ) : (
-              <><span className="w-1.5 h-1.5 rounded-full bg-white/60 inline-block" /> Inscripto</>
+              <><span className="w-1.5 h-1.5 rounded-full bg-[var(--ag-surface)]/60 inline-block" /> Inscripto</>
             )}
           </span>
         </div>

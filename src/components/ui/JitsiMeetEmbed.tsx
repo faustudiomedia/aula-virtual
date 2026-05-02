@@ -125,13 +125,13 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle, meetingId, 
           {/* Chat toggle — mobile only */}
           <button
             onClick={() => setChatOpen(v => !v)}
-            className="lg:hidden text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
+            className="lg:hidden text-xs px-3 py-1.5 rounded-lg border border-[var(--ag-border)] text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] transition-all"
           >
             {chatOpen ? 'Ver video' : '💬 Chat'}
           </button>
           <button
             onClick={handleLeave}
-            className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 bg-red-50 hover:bg-red-100 transition-all font-medium"
+            className="text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-500 bg-red-50 hover:bg-red-200/60 transition-all font-medium"
           >
             Salir de la reunión
           </button>
@@ -143,14 +143,9 @@ export function JitsiMeetEmbed({ roomName, displayName, courseTitle, meetingId, 
         {/* Jitsi container — hidden on mobile when chat is open */}
         <div
           ref={containerRef}
-          className={`rounded-2xl overflow-hidden border border-black/10 shadow-sm flex-1 min-w-0 ${chatOpen ? 'hidden lg:block' : 'block'}`}
+          className={`rounded-2xl overflow-hidden border border-[var(--ag-border)] shadow-sm flex-1 min-w-0 ${chatOpen ? 'hidden lg:block' : 'block'}`}
         />
 
         {/* Chat — full width on mobile when open, fixed sidebar on desktop */}
         <div className={`w-full lg:w-72 lg:flex-shrink-0 ${chatOpen ? 'block' : 'hidden lg:block'}`}>
           <MeetingChatPanel meetingId={meetingId} userId={userId} displayName={displayName} />
-        </div>
-      </div>
-    </div>
-  )
-}

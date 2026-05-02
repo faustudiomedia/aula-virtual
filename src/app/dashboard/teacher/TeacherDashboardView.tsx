@@ -86,7 +86,7 @@ export default function TeacherDashboardView({
           {[...Array(2)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl border h-20 skeleton-shimmer"
+              className="bg-[var(--ag-surface)] rounded-xl border h-20 skeleton-shimmer"
               style={{ borderColor: "var(--ag-border-light)" }}
             />
           ))}
@@ -106,7 +106,7 @@ export default function TeacherDashboardView({
           return (
             <div
               key={stat.label}
-              className="bg-white rounded-xl p-5 flex flex-col gap-3"
+              className="bg-[var(--ag-surface)] rounded-xl p-5 flex flex-col gap-3"
               style={{
                 border: "1px solid var(--ag-border-light)",
                 boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
@@ -138,7 +138,7 @@ export default function TeacherDashboardView({
 
       {courses.length === 0 ? (
         <div
-          className="rounded-xl p-12 text-center bg-white"
+          className="rounded-xl p-12 text-center bg-[var(--ag-surface)]"
           style={{ border: "2px dashed var(--ag-border-light)" }}
         >
           <p className="text-4xl mb-3">🎓</p>
@@ -169,7 +169,7 @@ export default function TeacherDashboardView({
             return (
               <div
                 key={course.id}
-                className="bg-white rounded-xl overflow-hidden transition-shadow hover:shadow-md"
+                className="bg-[var(--ag-surface)] rounded-xl overflow-hidden transition-shadow hover:shadow-md"
                 style={{
                   border: "1px solid var(--ag-border-light)",
                   boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
@@ -209,57 +209,3 @@ export default function TeacherDashboardView({
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p
-                      className="text-xl font-bold"
-                      style={{ color: "var(--ag-navy)" }}
-                    >
-                      {countMap[course.id] ?? 0}
-                    </p>
-                    <p className="text-xs" style={{ color: "var(--ag-text-muted)" }}>
-                      alumnos
-                    </p>
-                  </div>
-                </div>
-
-                {/* Actions row */}
-                <div
-                  className="flex items-center gap-2 px-4 py-2.5 flex-wrap"
-                  style={{ borderTop: "1px solid var(--ag-border-light)" }}
-                >
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/materials`}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-                    style={{
-                      background: "rgba(30,58,95,0.06)",
-                      color: "var(--ag-navy)",
-                      border: "1px solid rgba(30,58,95,0.12)",
-                    }}
-                  >
-                    Materiales
-                  </Link>
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/students`}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-                    style={{
-                      background: "rgba(30,58,95,0.06)",
-                      color: "var(--ag-navy)",
-                      border: "1px solid rgba(30,58,95,0.12)",
-                    }}
-                  >
-                    Alumnos
-                  </Link>
-                  <div className="flex-1" />
-                  <EditCourseButton course={course} />
-                  <DeleteCourseButton
-                    courseId={course.id}
-                    courseTitle={course.title}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}

@@ -68,7 +68,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
         {(assignments as Assignment[] ?? []).map((a) => {
           const overdue = a.due_date && new Date(a.due_date) < new Date()
           return (
-            <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
+            <div key={a.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -94,7 +94,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <Link
                     href={`/dashboard/teacher/courses/${courseId}/assignments/${a.id}`}
-                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-medium text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition-all"
+                    className="px-3 py-1.5 rounded-lg border border-[var(--ag-border)] text-xs font-medium text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition-all"
                   >
                     Ver entregas
                   </Link>

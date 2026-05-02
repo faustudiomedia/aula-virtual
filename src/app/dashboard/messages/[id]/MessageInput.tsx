@@ -28,7 +28,7 @@ export function MessageInput({ recipientId }: { recipientId: string }) {
 
   return (
     <form ref={formRef} onSubmit={e => { e.preventDefault(); submit() }}
-      className="flex gap-3 p-4 bg-white border-t border-black/5 items-end"
+      className="flex gap-3 p-4 bg-[var(--ag-surface)] border-t border-[var(--ag-border-light)] items-end"
     >
       <textarea
         ref={inputRef}
@@ -37,7 +37,7 @@ export function MessageInput({ recipientId }: { recipientId: string }) {
         rows={1}
         autoComplete="off"
         onKeyDown={handleKeyDown}
-        className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
+        className="flex-1 px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
         placeholder="Escribe un mensaje… (Enter para enviar, Shift+Enter para nueva línea)"
         disabled={pending}
       />

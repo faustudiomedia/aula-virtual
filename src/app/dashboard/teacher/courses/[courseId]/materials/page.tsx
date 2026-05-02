@@ -36,7 +36,4 @@ export default async function MaterialsPage({ params }: Props) {
       </div>
       <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course?.title ?? "Curso"}</h1>
       <CourseNavTabs courseId={courseId} />
-      <CourseMaterialsView courseId={courseId} />
-    </div>
-  );
-}
+      <CourseMaterialsView courseId={courseId} /

@@ -21,10 +21,4 @@ export default function ProgressBar({
       </div>
       {showLabel && (
         <span className="text-xs font-medium w-9 text-right"
-          style={{ color: "var(--ag-text-muted)" }}>
-          {clamped}%
-        </span>
-      )}
-    </div>
-  );
-}
+          

@@ -44,20 +44,20 @@ export default async function StudentForumPage({ params }: Props) {
       <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-4">Foro del curso</h2>
 
       {/* Create thread form */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
         <h3 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Crear nuevo tema</h3>
         <form action={handleCreate} className="space-y-3">
           <input
             name="title"
             required
-            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             placeholder="Título del tema..."
           />
           <textarea
             name="content"
             required
             rows={3}
-            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
+            className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
             placeholder="¿Cuál es tu pregunta o comentario?"
           />
           <button
@@ -82,7 +82,7 @@ export default async function StudentForumPage({ params }: Props) {
               <Link
                 key={t.id}
                 href={`/dashboard/student/courses/${courseId}/forum/${t.id}`}
-                className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
+                className="block bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-2 mb-1">
                   {t.pinned && (

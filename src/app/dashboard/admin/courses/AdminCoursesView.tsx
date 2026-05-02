@@ -57,7 +57,7 @@ export default function AdminCoursesView() {
             name="q"
             defaultValue={q}
             placeholder="Buscar cursos por título..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
         <button
@@ -174,4 +174,17 @@ export default function AdminCoursesView() {
                 )}
                 {currentPage < totalPages && (
                   <a
-                    hre
+                    href={buildUrl({ page: String(currentPage + 1) })}
+                    className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:opacity-90 transition"
+                  >
+                    Siguiente →
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

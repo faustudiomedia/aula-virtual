@@ -36,7 +36,7 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
         placeholder={placeholder || "Buscar..."}
         defaultValue={searchParams.get("q")?.toString()}
         onChange={(e) => handleSearch(e.target.value)}
-        className="px-4 py-2 w-full max-w-sm text-sm bg-transparent border border-black/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+        className="px-4 py-2 w-full max-w-sm text-sm bg-transparent border border-[var(--ag-border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
       />
       {isPending && (
         <span className="absolute right-3 top-2.5 w-4 h-4 border-2 border-[var(--ag-navy)] border-t-transparent rounded-full animate-spin"></span>
@@ -45,4 +45,4 @@ export function SearchInput({ placeholder }: { placeholder?: string }) {
   );
 }
 
-export default SearchInput
+export defa

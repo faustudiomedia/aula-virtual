@@ -76,8 +76,8 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-black/10 overflow-hidden">
-      <div className="px-4 py-3 border-b border-black/5">
+    <div className="flex flex-col h-full bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border)] overflow-hidden">
+      <div className="px-4 py-3 border-b border-[var(--ag-border-light)]">
         <p className="text-sm font-semibold text-[var(--ag-text)]">Chat de la reunión</p>
       </div>
 
@@ -108,23 +108,17 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-3 border-t border-black/5 flex gap-2">
+      <div className="p-3 border-t border-[var(--ag-border-light)] flex gap-2">
         <input
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Mensaje... (Enter para enviar)"
-          className="flex-1 px-3 py-2 rounded-xl border border-black/10 text-xs focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+          className="flex-1 px-3 py-2 rounded-xl border border-[var(--ag-border)] text-xs focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           disabled={sending}
         />
         <button
           onClick={send}
           disabled={sending || !input.trim()}
           className="px-3 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-xs font-semibold hover:bg-[var(--ag-navy)]/90 disabled:opacity-40 transition-all"
-        >
-          ↑
-        </button>
-      </div>
-    </div>
-  )
-}
+ 

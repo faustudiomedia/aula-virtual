@@ -35,8 +35,4 @@ export function useAuth(): UseAuthResult {
       )
     })
 
-    return () => subscription.unsubscribe()
-  }, [])
-
-  return result
-}
+    return () => subscription.unsub

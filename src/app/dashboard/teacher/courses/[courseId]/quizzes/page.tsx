@@ -79,7 +79,7 @@ export default async function TeacherQuizzesPage({ params }: Props) {
             return (
               <div
                 key={quiz.id}
-                className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 flex items-center justify-between gap-4"
+                className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 flex items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white text-lg flex-shrink-0">
@@ -103,11 +103,4 @@ export default async function TeacherQuizzesPage({ params }: Props) {
                   <ToggleQuizButton quizId={quiz.id} isPublished={quiz.is_published} />
                   <DeleteQuizButton quizId={quiz.id} quizTitle={quiz.title} />
                 </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
-    </div>
-  )
-}
+             

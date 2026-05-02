@@ -43,4 +43,9 @@ export default async function InvitationsPage() {
           <li>El usuario recibirá un correo con un link seguro de activación.</li>
           <li>Al hacer clic, podrá crear su contraseña y accederá con el rol asignado.</li>
           <li>El link expira en 24 horas por seguridad.</li>
-          <li>Requiere que <code className="bg-[var(--ag-border-light)]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurad
+          <li>Requiere que <code className="bg-[var(--ag-border-light)]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurada en tu servidor.</li>
+        </ul>
+      </div>
+    </div>
+  )
+}

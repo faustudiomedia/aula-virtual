@@ -24,7 +24,7 @@ export function SignatureUpload({ currentUrl }: Props) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="relative w-48 h-20 rounded-xl border-2 border-dashed border-[var(--ag-navy)]/30 bg-[rgba(30,58,95,0.08)] overflow-hidden flex items-center justify-center group transition-colors hover:border-[var(--ag-navy)] hover:bg-white"
+          className="relative w-48 h-20 rounded-xl border-2 border-dashed border-[var(--ag-navy)]/30 bg-[rgba(30,58,95,0.08)] overflow-hidden flex items-center justify-center group transition-colors hover:border-[var(--ag-navy)] hover:bg-[var(--ag-surface)]"
         >
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -47,7 +47,7 @@ export function SignatureUpload({ currentUrl }: Props) {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="text-xs px-4 py-2 rounded-lg font-semibold border-2 border-black/5 text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
+            className="text-xs px-4 py-2 rounded-lg font-semibold border-2 border-[var(--ag-border-light)] text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] transition-all"
           >
             Elegir archivo local
           </button>

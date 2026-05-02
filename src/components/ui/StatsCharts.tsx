@@ -28,7 +28,7 @@ export function StatsCharts({ enrollmentsByMonth, progressBuckets }: Props) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
       {/* Area chart — enrollments over time */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-1">Inscripciones por mes</h2>
         <p className="text-xs text-[var(--ag-text-muted)] mb-4">Últimos 6 meses</p>
         {enrollmentsByMonth.length === 0 ? (
@@ -64,7 +64,7 @@ export function StatsCharts({ enrollmentsByMonth, progressBuckets }: Props) {
       </div>
 
       {/* Pie chart — progress distribution */}
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-1">Distribución de progreso</h2>
         <p className="text-xs text-[var(--ag-text-muted)] mb-4">{total} inscripciones en total</p>
         {total === 0 ? (

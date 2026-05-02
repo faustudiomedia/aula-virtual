@@ -43,7 +43,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
     <form action={handleSubmit} className="space-y-5">
       <FormError message={error} />
       {success && (
-        <div className="px-4 py-3 rounded-xl bg-green-100/50 border border-green-300/50/70 text-green-700 text-sm">
+        <div className="px-4 py-3 rounded-xl bg-green-100/50 border border-green-300/50 text-green-700 text-sm">
           Perfil actualizado correctamente.
         </div>
       )}
@@ -56,7 +56,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
           <input
             value={email}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/5 cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text-muted)] bg-[var(--ag-surface-alt)] cursor-not-allowed"
           />
         </div>
         <div>
@@ -64,7 +64,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
           <input
             value={roleLabel[role] ?? role}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/5 cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text-muted)] bg-[var(--ag-surface-alt)] cursor-not-allowed"
           />
         </div>
       </div>
@@ -79,10 +79,23 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
           required
           defaultValue={fullName}
           placeholder="Tu nombre completo"
-          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
         />
       </div>
 
       {(role === "profesor" || role === "super_admin" || role === "admin") && (
-        <div className="pt-4 border-t border-black/5">
-          <SignatureUpload currentUrl={signa
+        <div className="pt-4 border-t border-[var(--ag-border-light)]">
+          <SignatureUpload currentUrl={signatureUrl || null} />
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={isPending}
+        className="px-6 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:bg-[var(--ag-navy)]/90 transition-all disabled:opacity-60 shadow-lg "
+      >
+        {isPending ? "Guardando..." : "Guardar cambios"}
+      </button>
+    </form>
+  );
+}

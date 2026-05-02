@@ -119,7 +119,7 @@ export default async function InstituteDetailPage({ params }: Props) {
             <input type="hidden" name="instituteId" value={instituteId} />
             <button
               type="submit"
-              className="px-3 py-2 rounded-xl border border-red-300/50 text-red-500 text-xs font-medium hover:bg-red-50 transition-all"
+              className="px-3 py-2 rounded-xl border border-red-200 text-red-500 text-xs font-medium hover:bg-red-50 transition-all"
             >
               Eliminar instituto
             </button>
@@ -149,7 +149,7 @@ export default async function InstituteDetailPage({ params }: Props) {
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre *</label>
               <input name="name" required defaultValue={institute.name}
-                className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+                className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Slug</label>
@@ -161,7 +161,7 @@ export default async function InstituteDetailPage({ params }: Props) {
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Dominio personalizado</label>
             <input name="domain" defaultValue={institute.domain ?? ""}
               placeholder="Ej: miinstituto.edu.ar"
-              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -179,7 +179,7 @@ export default async function InstituteDetailPage({ params }: Props) {
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre del Director/a</label>
             <input name="director_name" defaultValue={institute.director_name ?? ""}
               placeholder="Ej: Lic. María González"
-              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div>
             <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">
@@ -242,4 +242,57 @@ export default async function InstituteDetailPage({ params }: Props) {
                   {ROLE_LABEL[m.role] ?? m.role}
                 </span>
                 {m.role !== "admin" && m.role !== "super_admin" && (
-            
+                  <div className="flex gap-1 flex-shrink-0">
+                    {m.role === "alumno" ? (
+                      <form action={changeUserRoleAction}>
+                        <input type="hidden" name="userId" value={m.id} />
+                        <input type="hidden" name="role" value="profesor" />
+                        <button type="submit"
+                          className="text-xs px-2.5 py-1 rounded-lg border border-violet-200 text-violet-600 hover:bg-violet-50 transition-all">
+                          → Profesor
+                        </button>
+                      </form>
+                    ) : (
+                      <form action={changeUserRoleAction}>
+                        <input type="hidden" name="userId" value={m.id} />
+                        <input type="hidden" name="role" value="alumno" />
+                        <button type="submit"
+                          className="text-xs px-2.5 py-1 rounded-lg border border-sky-200 text-sky-600 hover:bg-sky-50 transition-all">
+                          → Alumno
+                        </button>
+                      </form>
+                    )}
+                    <form action={removeUserFromInstituteAction}>
+                      <input type="hidden" name="userId" value={m.id} />
+                      <button type="submit"
+                        className="text-xs px-2 py-1 rounded-lg border border-[var(--ag-border)] text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
+                        ✕
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Courses */}
+      {courseList.length > 0 && (
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+          <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Cursos</h2>
+          <div className="space-y-2">
+            {courseList.map(c => (
+              <div key={c.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-[var(--ag-border-light)] text-sm">
+                <span className="font-medium text-[var(--ag-text)] truncate">{c.title}</span>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${c.published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
+                  {c.published ? "Publicado" : "Borrador"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -46,7 +46,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
 
       <CourseNavTabs courseId={courseId} />
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 max-w-2xl">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6 max-w-2xl">
         <h2 className="text-base font-semibold text-[var(--ag-text)] mb-5">Nueva tarea</h2>
 
         {error && (
@@ -64,7 +64,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
               name="title"
               required
               placeholder="Ej: Trabajo práctico N°1"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -74,7 +74,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
               name="description"
               rows={6}
               placeholder="Describí la tarea, los objetivos y los criterios de evaluación..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
@@ -84,7 +84,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
               <input
                 name="due_date"
                 type="datetime-local"
-                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
               />
             </div>
             <div>
@@ -95,7 +95,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
                 min={1}
                 max={1000}
                 defaultValue={100}
-                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
               />
             </div>
           </div>
@@ -104,4 +104,4 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
             <SubmitButton label="Crear tarea" loadingLabel="Creando..." />
             <Link
               href={`/dashboard/teacher/courses/${courseId}/assignments`}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-a
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-[var(--ag-surface-alt)] transition-a

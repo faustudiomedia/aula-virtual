@@ -89,13 +89,13 @@ export default async function GradebookPage({ params }: Props) {
       <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
       <CourseNavTabs courseId={courseId} />
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-x-auto">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-x-auto">
         {students.length === 0 ? (
           <p className="p-6 text-sm text-[var(--ag-text-muted)]">No hay alumnos inscriptos.</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-black/5">
+              <tr className="border-b border-[var(--ag-border-light)]">
                 <th className="text-left px-4 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider whitespace-nowrap">Alumno</th>
                 {assignmentList.map(a => (
                   <th key={a.id} className="px-3 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider text-center whitespace-nowrap max-w-[100px]">
@@ -112,7 +112,7 @@ export default async function GradebookPage({ params }: Props) {
                 <th className="px-4 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider text-center">Promedio</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/5">
+            <tbody className="divide-y divide-[var(--ag-border-light)]">
               {students.map(student => {
                 const assignScores = assignmentList.map(a => {
                   const sub = subMap[student.id]?.[a.id]
@@ -179,12 +179,4 @@ export default async function GradebookPage({ params }: Props) {
                       )}
                     </td>
                   </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </div>
-  )
-}
+              

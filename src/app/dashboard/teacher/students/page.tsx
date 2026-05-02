@@ -71,9 +71,9 @@ export default async function AllStudentsPage() {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
+            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-[var(--ag-border-light)]">
               <tr>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Alumno
@@ -90,7 +90,7 @@ export default async function AllStudentsPage() {
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/5">
+            <tbody className="divide-y divide-[var(--ag-border-light)]">
               {(students ?? []).map((student) => {
                 const stats = statsMap[student.id];
                 const avg = stats
@@ -142,13 +142,4 @@ export default async function AllStudentsPage() {
                         Mensaje
                       </Link>
                     </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
-}
+              

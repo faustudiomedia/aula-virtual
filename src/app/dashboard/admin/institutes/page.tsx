@@ -91,4 +91,13 @@ export default async function AdminInstitutesPage() {
                   {inst.domain ? ` · ${inst.domain}` : ""}
                 </p>
               </div>
-              <span className="text-[var(--ag-navy)] text-sm font-m
+              <span className="text-[var(--ag-navy)] text-sm font-medium flex-shrink-0">
+                Editar →
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

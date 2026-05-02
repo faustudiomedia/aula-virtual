@@ -44,11 +44,11 @@ export default async function MeetingsPage() {
         <div className="hidden sm:flex items-center gap-2">
           {active.length > 0 && (
             <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500 text-white text-xs font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--ag-surface)] animate-pulse" />
               EN VIVO
             </span>
           )}
-          <span className="px-3 py-1.5 rounded-full bg-black/5 text-[var(--ag-text-muted)] text-xs font-medium">
+          <span className="px-3 py-1.5 rounded-full bg-[var(--ag-surface-alt)] text-[var(--ag-text-muted)] text-xs font-medium">
             {(meetings ?? []).length} total
           </span>
         </div>
@@ -108,13 +108,13 @@ export default async function MeetingsPage() {
             <input
               name="display_name"
               required
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] bg-[var(--ag-surface)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
               placeholder="Nombre: ej. Clase de Historia, Repaso Final…"
             />
             <input
               name="external_url"
               type="url"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
+              className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] bg-[var(--ag-surface)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
               placeholder="Link externo: Zoom, Meet, Teams… (opcional)"
             />
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
@@ -123,7 +123,7 @@ export default async function MeetingsPage() {
                 <input
                   type="datetime-local"
                   name="scheduled_at"
-                  className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                  className="w-full px-3 py-2.5 rounded-xl border border-[var(--ag-border)] bg-[var(--ag-surface)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                 />
               </div>
               <button
@@ -173,12 +173,12 @@ function ActiveMeetingCard({ m, host, userId, isTeacher }: {
 
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4 min-w-0">
-          <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl flex-shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-[var(--ag-surface)]/20 flex items-center justify-center text-2xl flex-shrink-0">
             🎥
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <span className="text-xs font-bold text-white/80 bg-white/20 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold text-white/80 bg-[var(--ag-surface)]/20 px-2 py-0.5 rounded-full">
                 ● EN VIVO
               </span>
               <span className="text-xs text-white/60">desde {since}</span>
@@ -191,7 +191,7 @@ function ActiveMeetingCard({ m, host, userId, isTeacher }: {
         <div className="flex items-center gap-2 flex-shrink-0">
           {isHost && isTeacher && (
             <form action={endMeeting.bind(null, m.id)}>
-              <button type="submit" className="text-xs px-3 py-1.5 rounded-lg bg-white/10 text-white/70 hover:bg-red-500/80 hover:text-white border border-white/20 transition-all font-medium">
+              <button type="submit" className="text-xs px-3 py-1.5 rounded-lg bg-[var(--ag-surface)]/10 text-white/70 hover:bg-red-500/80 hover:text-white border border-white/20 transition-all font-medium">
                 Finalizar
               </button>
             </form>
@@ -201,14 +201,14 @@ function ActiveMeetingCard({ m, host, userId, isTeacher }: {
               href={m.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2 rounded-xl bg-white text-green-700 text-sm font-bold hover:bg-green-50 transition-all shadow-md"
+              className="px-5 py-2 rounded-xl bg-[var(--ag-surface)] text-green-700 text-sm font-bold hover:bg-green-50 transition-all shadow-md"
             >
               Unirse →
             </a>
           ) : (
             <Link
               href={`/dashboard/meetings/${m.id}`}
-              className="px-5 py-2 rounded-xl bg-white text-green-700 text-sm font-bold hover:bg-green-50 transition-all shadow-md"
+              className="px-5 py-2 rounded-xl bg-[var(--ag-surface)] text-green-700 text-sm font-bold hover:bg-green-50 transition-all shadow-md"
             >
               Unirse →
             </Link>
@@ -235,7 +235,7 @@ function ScheduledMeetingCard({ m, host, userId, isTeacher }: {
   const monthStr = date?.toLocaleDateString('es-AR', { month: 'short' }).toUpperCase()
 
   return (
-    <div className="bg-white rounded-2xl border border-amber-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all overflow-hidden">
+    <div className="bg-[var(--ag-surface)] rounded-2xl border border-amber-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all overflow-hidden">
       <div className="flex items-stretch">
         {/* Date badge */}
         <div className="flex flex-col items-center justify-center bg-amber-50 border-r border-amber-100 px-4 py-4 min-w-[64px]">
@@ -259,7 +259,7 @@ function ScheduledMeetingCard({ m, host, userId, isTeacher }: {
         <div className="flex items-center gap-2 px-4 flex-shrink-0">
           {isHost && isTeacher && (
             <form action={startMeeting.bind(null, m.id)}>
-              <button type="submit" className="text-xs px-3 py-2 rounded-xl bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all font-bold whitespace-nowrap">
+              <button type="submit" className="text-xs px-3 py-2 rounded-xl bg-green-100/60 text-green-700 border border-green-200 hover:bg-green-200/60 transition-all font-bold whitespace-nowrap">
                 Iniciar ▶
               </button>
             </form>
@@ -298,15 +298,15 @@ function PastMeetingRow({ m, host, userId, isTeacher }: {
   const dateStr = new Date(m.created_at).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })
 
   return (
-    <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-black/5 bg-white/50 hover:bg-white transition-all group opacity-60 hover:opacity-90">
-      <div className="w-7 h-7 rounded-lg bg-black/5 flex items-center justify-center text-sm flex-shrink-0">🎬</div>
+    <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-[var(--ag-border-light)] bg-[var(--ag-surface)]/50 hover:bg-[var(--ag-surface)] transition-all group opacity-60 hover:opacity-90">
+      <div className="w-7 h-7 rounded-lg bg-[var(--ag-surface-alt)] flex items-center justify-center text-sm flex-shrink-0">🎬</div>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-[var(--ag-text)] truncate">{m.display_name}</p>
         <p className="text-xs text-[var(--ag-text-muted)]">{host?.full_name ?? 'Desconocido'} · {dateStr}</p>
       </div>
       {(isHost || isTeacher) && (
         <form action={deleteMeeting.bind(null, m.id)}>
-          <button type="submit" className="opacity-0 group-hover:opacity-100 text-xs px-2 py-1 rounded-lg border border-black/10 text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
+          <button type="submit" className="opacity-0 group-hover:opacity-100 text-xs px-2 py-1 rounded-lg border border-[var(--ag-border)] text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
             ✕
           </button>
         </form>

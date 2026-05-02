@@ -191,7 +191,7 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
             style={{ color: "var(--ag-sidebar-text)" }}>
             {userName ?? "Usuario"}
           </p>
-          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${roleBadgeStyle[role] ?? "bg-white/10 text-white/50"}`}>
+          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${roleBadgeStyle[role] ?? "bg-[var(--ag-surface)]/10 text-white/50"}`}>
             {roleLabel[role] ?? role}
           </span>
         </div>
@@ -221,7 +221,7 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
                     onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "var(--ag-sidebar-hover)"; e.currentTarget.style.color = "var(--ag-sidebar-text)"; }}}
                     onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--ag-sidebar-muted)"; }}}>
                     {active && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-white opacity-60" />
+                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-[var(--ag-surface)] opacity-60" />
                     )}
                     <Icon size={16} className="flex-shrink-0" />
                     <span className={active ? "font-semibold" : ""}>{item.label}</span>
@@ -239,13 +239,4 @@ export default function Sidebar({ role, instituteName, logoUrl, primaryColor, us
           <button type="submit"
             className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
             style={{ color: "var(--ag-sidebar-muted)" }}
-            onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.12)"; e.currentTarget.style.color = "#FCA5A5"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--ag-sidebar-muted)"; }}>
-            <LogOut size={16} className="flex-shrink-0" />
-            <span>Cerrar sesión</span>
-          </button>
-        </form>
-      </div>
-    </aside>
-  );
-}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(239,68,68,0.12)"; e.currentTarget.style.color = "#FCA5A5"; }

@@ -49,7 +49,7 @@ export default function CertificatesTable({ requests }: Props) {
   return (
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="bg-[#F9FAFB] border-b border-black/5">
+        <tr className="bg-[#F9FAFB] border-b border-[var(--ag-border-light)]">
           <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Alumno</th>
           <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Curso</th>
           <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Fecha</th>
@@ -59,7 +59,7 @@ export default function CertificatesTable({ requests }: Props) {
       </thead>
       <tbody>
         {requests.map((req) => (
-          <tr key={req.id} className="border-b border-black/5 last:border-0 hover:bg-black/5 transition-colors">
+          <tr key={req.id} className="border-b border-[var(--ag-border-light)] last:border-0 hover:bg-[var(--ag-surface-alt)] transition-colors">
             <td className="px-6 py-4">
               <p className="font-semibold text-sm text-[var(--ag-text)]">{req.studentName}</p>
               <p className="text-xs text-[var(--ag-text-muted)]">{req.studentEmail}</p>
@@ -95,7 +95,7 @@ export default function CertificatesTable({ requests }: Props) {
                   <button
                     onClick={() => handleAction(req.id, "reject")}
                     disabled={isPending}
-                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-bold text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg border border-[var(--ag-border)] text-xs font-bold text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50"
                   >
                     Rechazar
                   </button>

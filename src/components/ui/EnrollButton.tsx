@@ -55,7 +55,7 @@ export default function EnrollButton({
   if (confirmUnenroll) {
     return (
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
+        <div className="bg-[var(--ag-surface)] rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
           <p className="text-4xl mb-3">📤</p>
           <h2 className="text-lg font-bold text-[var(--ag-text)] mb-2">
             ¿Desinscribirse?
@@ -74,7 +74,7 @@ export default function EnrollButton({
             </button>
             <button
               onClick={() => setConfirmUnenroll(false)}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-[var(--ag-surface-alt)] transition"
             >
               Cancelar
             </button>
@@ -90,7 +90,7 @@ export default function EnrollButton({
       {isEnrolled ? (
         <button
           onClick={() => setConfirmUnenroll(true)}
-          className="w-full py-2.5 rounded-xl border border-red-200 bg-red-50 text-red-600 font-semibold text-sm hover:bg-red-100 transition"
+          className="w-full py-2.5 rounded-xl border border-red-200 bg-red-100/60 text-red-600 font-semibold text-sm hover:bg-red-200/60 transition"
         >
           Desinscribirse
         </button>
@@ -103,6 +103,4 @@ export default function EnrollButton({
           {isPending ? "Inscribiendo..." : "Inscribirse al curso"}
         </button>
       )}
-    </div>
-  );
-}
+    </div

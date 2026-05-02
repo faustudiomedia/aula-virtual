@@ -145,4 +145,11 @@ export default async function AdminUsersPage({ searchParams }: PageProps) {
                   </td>
                 </tr>
               )}
-         
+            </tbody>
+          </table>
+        </div>
+        <Pagination totalPages={totalPages} />
+      </div>
+    </div>
+  );
+}

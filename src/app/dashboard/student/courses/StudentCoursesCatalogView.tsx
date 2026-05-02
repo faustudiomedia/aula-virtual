@@ -47,7 +47,7 @@ function SkeletonGrid() {
         {[...Array(6)].map((_, i) => (
           <div key={i} className="rounded-xl overflow-hidden" style={{ animationDelay: `${i * 0.1}s` }}>
             <div className="skeleton-shimmer h-20 w-full" />
-            <div className="bg-white p-4 space-y-3">
+            <div className="bg-[var(--ag-surface)] p-4 space-y-3">
               <div className="skeleton-shimmer h-4 rounded w-3/4" />
               <div className="skeleton-shimmer h-3 rounded w-full" />
               <div className="skeleton-shimmer h-9 rounded-lg w-full mt-2" />
@@ -100,7 +100,7 @@ function CatalogCard({ courseId, title, description, isEnrolled, defaultIdx }: C
 
   const inner = (
     <div
-      className="group bg-white rounded-xl overflow-visible relative transition-all duration-200"
+      className="group bg-[var(--ag-surface)] rounded-xl overflow-visible relative transition-all duration-200"
       style={{
         border: isEnrolled ? `1px solid ${accent.bg}40` : "1px solid var(--ag-border-light)",
         boxShadow: isEnrolled
@@ -175,7 +175,7 @@ function CatalogCard({ courseId, title, description, isEnrolled, defaultIdx }: C
           {isEnrolled ? (
             <><CheckCircle2 size={11} /> Inscripto</>
           ) : (
-            <><span className="w-1.5 h-1.5 rounded-full bg-white/50 inline-block" /> Disponible</>
+            <><span className="w-1.5 h-1.5 rounded-full bg-[var(--ag-surface)]/50 inline-block" /> Disponible</>
           )}
         </span>
       </div>
@@ -269,7 +269,7 @@ export default function StudentCoursesCatalogView({ instituteId, userId }: Props
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar cursos por titulo..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-white focus:outline-none transition-all"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm bg-[var(--ag-surface)] focus:outline-none transition-all"
           style={{
             border: "1px solid var(--ag-border)",
             color: "var(--ag-text)",
@@ -280,7 +280,7 @@ export default function StudentCoursesCatalogView({ instituteId, userId }: Props
       {/* -- Empty states -- */}
       {courses.length === 0 ? (
         <div
-          className="rounded-xl p-16 text-center bg-white"
+          className="rounded-xl p-16 text-center bg-[var(--ag-surface)]"
           style={{ border: "2px dashed var(--ag-border-light)" }}
         >
           <BookOpen size={36} className="mx-auto mb-3" style={{ color: "var(--ag-text-light)" }} />
@@ -290,7 +290,7 @@ export default function StudentCoursesCatalogView({ instituteId, userId }: Props
         </div>
       ) : filtered.length === 0 ? (
         <div
-          className="rounded-xl p-10 text-center bg-white"
+          className="rounded-xl p-10 text-center bg-[var(--ag-surface)]"
           style={{ border: "2px dashed var(--ag-border-light)" }}
         >
           <p className="text-sm" style={{ color: "var(--ag-text-muted)" }}>

@@ -55,9 +55,9 @@ export default async function CertificatePage({ params }: Props) {
     : "—";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-white to-[#F0FDF4] flex items-center justify-center p-6 print:p-0 print:bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-white to-[#F0FDF4] flex items-center justify-center p-6 print:p-0 print:bg-[var(--ag-surface)]">
       <div
-        className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl print:shadow-none print:rounded-none overflow-hidden border border-black/5"
+        className="bg-[var(--ag-surface)] rounded-3xl shadow-2xl w-full max-w-2xl print:shadow-none print:rounded-none overflow-hidden border border-[var(--ag-border-light)]"
         style={{ fontFamily: "'Georgia', serif" }}
       >
         {/* Top accent bar */}
@@ -174,7 +174,7 @@ export default async function CertificatePage({ params }: Props) {
         </div>
 
         {/* Bottom bar */}
-        <div className="px-12 py-4 bg-white border-t border-black/5 flex items-center justify-between print:hidden">
+        <div className="px-12 py-4 bg-[var(--ag-surface)] border-t border-[var(--ag-border-light)] flex items-center justify-between print:hidden">
           <p className="text-[10px] text-[var(--ag-text)]/30">
             Verificá la autenticidad en <span className="font-mono">/certificates/{code}</span>
           </p>

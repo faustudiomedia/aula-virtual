@@ -26,7 +26,7 @@ export function CreateEventForm() {
   )
 
   return (
-    <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
+    <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-[var(--ag-text)]">Crear evento</h3>
         <button onClick={() => setOpen(false)} className="text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] text-lg leading-none">✕</button>
@@ -36,24 +36,24 @@ export function CreateEventForm() {
           name="title"
           placeholder="Título del evento *"
           required
-          className="w-full text-sm border border-black/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+          className="w-full text-sm border border-[var(--ag-border)] rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
         />
         <input
           name="description"
           placeholder="Descripción (opcional)"
-          className="w-full text-sm border border-black/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+          className="w-full text-sm border border-[var(--ag-border)] rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
         />
         <div className="grid grid-cols-2 gap-3">
           <input
             type="date"
             name="event_date"
             required
-            className="w-full text-sm border border-black/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="w-full text-sm border border-[var(--ag-border)] rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
           <input
             type="time"
             name="event_time"
-            className="w-full text-sm border border-black/10 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="w-full text-sm border border-[var(--ag-border)] rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
         </div>
         <div>

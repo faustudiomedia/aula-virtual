@@ -149,7 +149,7 @@ export default function CertificatesView({ teacherId, role }: Props) {
             onClick={() => setActiveStatus(t.key)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeStatus === t.key
-                ? "bg-white text-[var(--ag-text)] shadow-sm"
+                ? "bg-[var(--ag-surface)] text-[var(--ag-text)] shadow-sm"
                 : "text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]"
             }`}
           >
@@ -169,7 +169,7 @@ export default function CertificatesView({ teacherId, role }: Props) {
       {isLoading ? (
         <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="bg-white rounded-xl border border-black/5 p-4 animate-pulse h-16" />
+            <div key={i} className="bg-[var(--ag-surface)] rounded-xl border border-[var(--ag-border-light)] p-4 animate-pulse h-16" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
@@ -182,9 +182,9 @@ export default function CertificatesView({ teacherId, role }: Props) {
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-white border-b border-black/5">
+            <thead className="bg-[var(--ag-surface)] border-b border-[var(--ag-border-light)]">
               <tr>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Alumno</th>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Curso</th>
@@ -193,12 +193,12 @@ export default function CertificatesView({ teacherId, role }: Props) {
                 <th className="px-5 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-black/5">
+            <tbody className="divide-y divide-[var(--ag-border-light)]">
               {filtered.map(req => {
                 const st = STATUS_LABEL[req.status] ?? STATUS_LABEL.pending;
                 const isActing = isPending && actionId === req.id;
                 return (
-                  <tr key={req.id} className="hover:bg-white/60 transition-colors">
+                  <tr key={req.id} className="hover:bg-[var(--ag-surface)]/60 transition-colors">
                     <td className="px-5 py-3.5">
                       <p className="font-medium text-[var(--ag-text)]">{req.profiles?.full_name ?? "—"}</p>
                       <p className="text-xs text-[var(--ag-text-muted)]">{req.profiles?.email}</p>

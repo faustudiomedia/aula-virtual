@@ -15,7 +15,7 @@ export function StudentCourseNavTabs({ courseId }: { courseId: string }) {
   const pathname = usePathname()
 
   return (
-    <div className="flex border-b border-black/5 mb-6 overflow-x-auto gap-0">
+    <div className="flex border-b border-[var(--ag-border-light)] mb-6 overflow-x-auto gap-0">
       {TABS(courseId).map(({ label, href, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href)
         return (
@@ -25,13 +25,9 @@ export function StudentCourseNavTabs({ courseId }: { courseId: string }) {
             className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
               active
                 ? 'text-[var(--ag-navy)] border-[var(--ag-navy)]'
-                : 'text-[var(--ag-text-muted)] border-transparent hover:text-[var(--ag-text)] hover:border-black/10'
+                : 'text-[var(--ag-text-muted)] border-transparent hover:text-[var(--ag-text)] hover:border-[var(--ag-border)]'
             }`}
           >
             {label}
           </Link>
         )
-      })}
-    </div>
-  )
-}

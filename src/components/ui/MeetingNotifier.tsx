@@ -48,7 +48,7 @@ export function MeetingNotifier() {
       {alerts.map(alert => (
         <div
           key={alert.id}
-          className="bg-white border border-[var(--ag-navy)]/20 rounded-2xl shadow-xl  p-4 flex items-start gap-3 animate-in slide-in-from-right-4"
+          className="bg-[var(--ag-surface)] border border-[var(--ag-navy)]/20 rounded-2xl shadow-xl  p-4 flex items-start gap-3 animate-in slide-in-from-right-4"
         >
           <div className="w-10 h-10 rounded-xl bg-[rgba(30,58,95,0.08)] flex items-center justify-center text-xl flex-shrink-0">
             🎥
@@ -71,8 +71,4 @@ export function MeetingNotifier() {
           >
             ×
           </button>
-        </div>
-      ))}
-    </div>
-  )
-}
+  

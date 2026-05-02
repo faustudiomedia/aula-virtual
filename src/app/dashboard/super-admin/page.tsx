@@ -160,8 +160,4 @@ export default async function SuperAdminDashboard() {
                     </span>
                     <span className="text-sm font-semibold text-[var(--ag-text)]">{count}</span>
                   </div>
-                  <div className="h-2 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{ width: `${pct}%`, background: color }}
-               
+                  <div className="h-2 bg-[var(--ag-surface-a

@@ -31,7 +31,7 @@ export default async function MeetingRoomPage({ params }: Props) {
         <span className="text-[var(--ag-text)]/20">/</span>
         <h1 className="text-base font-bold text-[var(--ag-text)] truncate">{meeting.display_name}</h1>
         {!meeting.active && (
-          <span className="text-xs px-2 py-0.5 rounded-full bg-black/5 text-[var(--ag-text-muted)] flex-shrink-0">Finalizada</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--ag-surface-alt)] text-[var(--ag-text-muted)] flex-shrink-0">Finalizada</span>
         )}
       </div>
 

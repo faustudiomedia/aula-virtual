@@ -50,7 +50,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
 
       <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         {error && (
-          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
+          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50 px-4 py-3 text-sm text-red-700">
             ⚠️ {error}
           </div>
         )}
@@ -64,7 +64,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
                 name="name"
                 required
                 placeholder="Ej: Instituto San Martín"
-                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
               />
             </div>
             <div>
@@ -76,7 +76,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
                 required
                 placeholder="san-martin"
                 pattern="[a-z0-9\-]+"
-                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+                className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
               />
             </div>
           </div>
@@ -88,7 +88,7 @@ export default async function NewInstitutePage({ searchParams }: Props) {
               name="domain"
               type="text"
               placeholder="Ej: sanmartin.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
             />
             <p className="text-xs text-[var(--ag-text-muted)] mt-1">
               Opcional. Se usará para branding multi-dominio.
@@ -138,4 +138,13 @@ export default async function NewInstitutePage({ searchParams }: Props) {
             <SubmitButton label="Crear instituto" loadingLabel="Creando..." />
             <a
               href="/dashboard/admin"
-              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-[var(--ag-surface-alt)] transition"
+            >
+              Cancelar
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

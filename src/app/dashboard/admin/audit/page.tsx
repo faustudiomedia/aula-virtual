@@ -59,7 +59,7 @@ export default async function AuditPage({
         <select
           name="entity_type"
           defaultValue={params.entity_type ?? ''}
-          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
+          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
         >
           <option value="">Todas las entidades</option>
           {['course', 'institute', 'user', 'material', 'quiz'].map((e) => (
@@ -70,7 +70,7 @@ export default async function AuditPage({
         <select
           name="action"
           defaultValue={params.action ?? ''}
-          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
+          className="px-3 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-[var(--ag-surface)]"
         >
           <option value="">Todas las acciones</option>
           {['CREATE', 'UPDATE', 'DELETE'].map((a) => (
@@ -179,4 +179,15 @@ export default async function AuditPage({
               {page < totalPages && (
                 <a
                   href={`/dashboard/admin/audit?page=${page + 1}${params.entity_type ? `&entity_type=${params.entity_type}` : ''}${params.action ? `&action=${params.action}` : ''}`}
-                  className="px-3 py-2 rounded-lg border 
+                  className="px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm hover:bg-[var(--ag-surface-alt)] transition"
+                >
+                  Siguiente →
+                </a>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  )
+}

@@ -23,7 +23,4 @@ export default function SubmitButton({
       disabled={pending || disabled}
       className={`flex-1 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
     >
-      {pending ? loadingLabel : label}
-    </button>
-  );
-}
+      {pending ? loadingLabe

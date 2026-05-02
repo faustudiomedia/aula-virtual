@@ -53,7 +53,7 @@ export function EditCourseForm({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl shadow-xl w-full max-w-lg p-6">
         <h2 className="text-lg font-bold text-[var(--ag-text)] mb-4">Editar curso</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormError message={error} />
@@ -65,7 +65,7 @@ export function EditCourseForm({
               name="title"
               defaultValue={course.title}
               required
-              className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition ${fieldErrors.title ? "border-red-400 bg-red-50" : "border-black/10"}`}
+              className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition ${fieldErrors.title ? "border-red-400 bg-red-50" : "border-[var(--ag-border)]"}`}
             />
             {fieldErrors.title && (
               <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>
@@ -79,7 +79,7 @@ export function EditCourseForm({
               name="description"
               rows={3}
               defaultValue={course.description ?? ""}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -108,7 +108,7 @@ export function EditCourseForm({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-[var(--ag-surface-alt)] transition"
             >
               Cancelar
             </button>
@@ -149,7 +149,7 @@ export function DeleteCourseButton({
   if (confirming) {
     return (
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
+        <div className="bg-[var(--ag-surface)] rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
           <p className="text-4xl mb-3">🗑️</p>
           <h2 className="text-lg font-bold text-[var(--ag-text)] mb-2">
             ¿Eliminar curso?
@@ -169,7 +169,7 @@ export function DeleteCourseButton({
             </button>
             <button
               onClick={() => setConfirming(false)}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-[var(--ag-surface-alt)] transition"
             >
               Cancelar
             </button>
@@ -182,7 +182,7 @@ export function DeleteCourseButton({
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium transition-colors border border-red-200"
+      className="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-200/60 text-red-600 text-xs font-medium transition-colors border border-red-200"
     >
       Eliminar
     </button>
@@ -196,13 +196,9 @@ export function EditCourseButton({ course }: { course: Course }) {
     <>
       <button
         onClick={() => setEditing(true)}
-        className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium transition-colors border border-amber-200"
+        className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-200/60 text-amber-700 text-xs font-medium transition-colors border border-amber-200"
       >
         Editar
       </button>
       {editing && (
-        <EditCourseForm course={course} onClose={() => setEditing(false)} />
-      )}
-    </>
-  );
-}
+        <Edit

@@ -49,7 +49,7 @@ export default function AcademicPeriodsView({ periods }: Props) {
               name="name"
               required
               placeholder="Ej: 1er Cuatrimestre 2026"
-              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
           </div>
           <div>
@@ -58,7 +58,7 @@ export default function AcademicPeriodsView({ periods }: Props) {
               name="start_date"
               type="date"
               required
-              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
           </div>
           <div>
@@ -67,7 +67,7 @@ export default function AcademicPeriodsView({ periods }: Props) {
               name="end_date"
               type="date"
               required
-              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+              className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
           </div>
           {state?.error && (
@@ -127,4 +127,14 @@ export default function AcademicPeriodsView({ periods }: Props) {
                       >
                         Eliminar
                       </button>
-                 
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  )
+}

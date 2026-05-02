@@ -73,7 +73,7 @@ export default async function StudentAssignmentsPage({ params }: Props) {
             <Link
               key={a.id}
               href={`/dashboard/student/courses/${courseId}/assignments/${a.id}`}
-              className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:shadow-md hover:border-[var(--ag-border-light)] transition-all"
+              className="block bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 hover:shadow-md hover:border-[var(--ag-border-light)] transition-all"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
