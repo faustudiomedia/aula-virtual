@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { Building2 } from "lucide-react";
 
 export default async function AdminInstitutesPage() {
   const supabase = await createClient();
@@ -47,8 +48,10 @@ export default async function AdminInstitutesPage() {
 
       {list.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
-          <p className="text-4xl mb-3">🏛️</p>
-          <p className="text-[var(--ag-text-muted)]">No hay institutos disponibles.</p>
+          <div className="w-12 h-12 rounded-2xl bg-[var(--ag-surface-alt)] flex items-center justify-center mx-auto mb-3">
+            <Building2 size={22} className="text-[var(--ag-text-muted)]" />
+          </div>
+          <p className="text-[var(--ag-text-muted)] text-sm">No hay institutos disponibles.</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -64,7 +67,7 @@ export default async function AdminInstitutesPage() {
             <Link
               key={inst.id}
               href={`/dashboard/admin/institutes/${inst.id}`}
-              className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 flex items-center gap-5 hover:shadow-md transition-shadow"
+              className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 flex items-center gap-5 hover:shadow-md transition-shadow"
             >
               {/* Color swatch */}
               <div
@@ -79,8 +82,8 @@ export default async function AdminInstitutesPage() {
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       inst.active
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-green-100/60 text-green-700"
+                        : "bg-red-100/60 text-red-600"
                     }`}
                   >
                     {inst.active ? "Activo" : "Inactivo"}

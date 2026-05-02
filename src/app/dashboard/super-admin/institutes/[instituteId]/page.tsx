@@ -63,17 +63,17 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
 
       {/* Stats rápidas */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-black/5 p-4 text-center">
+        <div className="bg-[var(--ag-surface-alt)] rounded-xl border border-[var(--ag-border-light)] p-4 text-center">
           <p className="text-2xl font-bold text-[var(--ag-text)]">{usersCount ?? 0}</p>
           <p className="text-xs text-[var(--ag-text-muted)] mt-1">Usuarios</p>
         </div>
-        <div className="bg-white rounded-xl border border-black/5 p-4 text-center">
+        <div className="bg-[var(--ag-surface-alt)] rounded-xl border border-[var(--ag-border-light)] p-4 text-center">
           <p className="text-2xl font-bold text-[var(--ag-text)]">{coursesCount ?? 0}</p>
           <p className="text-xs text-[var(--ag-text-muted)] mt-1">Cursos</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         <h1 className="text-lg font-bold text-[var(--ag-text)] mb-5">Editar instituto</h1>
 
         {error && (
@@ -87,21 +87,21 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
           <div>
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Nombre Institución <span className="text-red-500">*</span></label>
             <input name="name" required defaultValue={institute.name}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
           <div>
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Slug <span className="text-red-500">*</span></label>
             <input name="slug" required defaultValue={institute.slug}
               pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
-          <div className="pt-4 border-t border-black/5">
+          <div className="pt-4 border-t border-[var(--ag-border-light)]">
              <h2 className="text-sm font-bold text-[var(--ag-text)] mb-4">Autoridad y Certificaciones</h2>
              <div className="mb-4">
                 <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Nombre del Director / Institución</label>
                 <input name="director_name" defaultValue={institute.director_name ?? ''}
                   placeholder="Ej: Ing. Juan Pérez / Universidad"
-                  className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
              </div>
              <SignatureUpload currentUrl={institute.director_signature_url || null} />
           </div>
@@ -109,18 +109,18 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Dominio personalizado</label>
             <input name="domain" defaultValue={institute.domain ?? ''}
               placeholder="aula.instituto.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Color primario</label>
               <input type="color" name="primary_color" defaultValue={institute.primary_color}
-                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Color secundario</label>
               <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
-                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
             </div>
           </div>
           <div className="flex gap-3 pt-2">
@@ -130,7 +130,7 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
       </div>
 
       {/* Toggle estado */}
-      <div className="mt-4 bg-white rounded-2xl border border-black/5 shadow-sm p-6">
+      <div className="mt-4 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-[var(--ag-text)]">
