@@ -5,45 +5,117 @@ import { useTeacherCourses } from "@/lib/hooks/use-data";
 import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import type { Course, Material } from "@/lib/types";
-import { FileText, Video, Image, Link2, Plus, ArrowRight } from "lucide-react";
 
 interface Props {
   teacherId: string;
 }
 
-const ACCENT_COLORS = [
-  "var(--ag-navy)",
-  "#2D6A4F",
-  "#6B3FA0",
-  "#1D6F8E",
-  "#8B4513",
-  "#1A5F4A",
-];
+// ── Type badge config ────────────────────────────────────────────────────────
+const TYPE_CONFIG: Record<
+  string,
+  { label: string; icon: string; bg: string; text: string; border: string }
+> = {
+  pdf: {
+    label: "PDF",
+    icon: "📄",
+    bg: "rgba(239,68,68,0.08)",
+    text: "#DC2626",
+    border: "rgba(239,68,68,0.18)",
+  },
+  video: {
+    label: "Video",
+    icon: "🎬",
+    bg: "rgba(124,58,237,0.08)",
+    text: "#7C3AED",
+    border: "rgba(124,58,237,0.18)",
+  },
+  image: {
+    label: "Imagen",
+    icon: "🖼️",
+    bg: "rgba(16,185,129,0.08)",
+    text: "#059669",
+    border: "rgba(16,185,129,0.18)",
+  },
+  link: {
+    label: "Enlace",
+    icon: "🔗",
+    bg: "rgba(59,130,246,0.08)",
+    text: "#2563EB",
+    border: "rgba(59,130,246,0.18)",
+  },
+};
 
-function TypeBadge({ type }: { type: string }) {
-  const map: Record<string, { Icon: React.ElementType; label: string }> = {
-    pdf:   { Icon: FileText, label: "pdf" },
-    video: { Icon: Video,    label: "video" },
-    image: { Icon: Image,    label: "imagen" },
-    link:  { Icon: Link2,    label: "link" },
-  };
-  const entry = map[type] ?? { Icon: Link2, label: type };
-  const { Icon, label } = entry;
+const DEFAULT_TYPE = {
+  label: "Archivo",
+  icon: "📎",
+  bg: "rgba(107,114,128,0.08)",
+  text: "#6B7280",
+  border: "rgba(107,114,128,0.18)",
+};
+
+function TypeBadge({ type }: { type?: string | null }) {
+  const cfg = TYPE_CONFIG[type ?? ""] ?? DEFAULT_TYPE;
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium flex-shrink-0"
       style={{
-        background: "rgba(30,58,95,0.07)",
-        color: "var(--ag-navy)",
-        border: "1px solid rgba(30,58,95,0.12)",
+        background: cfg.bg,
+        color: cfg.text,
+        border: `1px solid ${cfg.border}`,
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "4px",
+        padding: "2px 10px",
+        borderRadius: "999px",
+        fontSize: "11px",
+        fontWeight: 600,
+        letterSpacing: "0.02em",
+        flexShrink: 0,
+        whiteSpace: "nowrap",
       }}
     >
-      <Icon size={10} />
-      {label}
+      <span style={{ fontSize: "10px" }}>{cfg.icon}</span>
+      {cfg.label}
     </span>
   );
 }
 
+// ── Skeleton ─────────────────────────────────────────────────────────────────
+function Skeleton() {
+  return (
+    <div style={{ marginTop: "2rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
+      {[0, 1].map((si) => (
+        <div key={si}>
+          <div
+            style={{
+              height: "20px",
+              width: "200px",
+              background: "var(--ag-surface-alt)",
+              borderRadius: "6px",
+              marginBottom: "12px",
+              animation: "pulse 1.5s ease-in-out infinite",
+            }}
+          />
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                style={{
+                  height: "64px",
+                  background: "var(--ag-surface)",
+                  border: "1px solid var(--ag-border-light)",
+                  borderRadius: "12px",
+                  animation: "pulse 1.5s ease-in-out infinite",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function AllMaterialsView({ teacherId }: Props) {
   const { data: courses = [], isLoading: loadingCourses } =
     useTeacherCourses(teacherId);
@@ -69,153 +141,68 @@ export default function AllMaterialsView({ teacherId }: Props) {
   const isLoading = loadingCourses || (courseIds.length > 0 && loadingMaterials);
   const totalMaterials = materials.length;
 
+  // Count by type for summary chips
+  const byType = materials.reduce<Record<string, number>>((acc, m) => {
+    const t = m.file_type ?? "otro";
+    acc[t] = (acc[t] ?? 0) + 1;
+    return acc;
+  }, {});
+
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold" style={{ color: "var(--ag-text)" }}>
+    <div style={{ padding: "clamp(1rem, 3vw, 2rem)", maxWidth: "860px", margin: "0 auto" }}>
+
+      {/* ── Page header ── */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h1
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: 700,
+            color: "var(--ag-text)",
+            margin: 0,
+          }}
+        >
           Materiales
         </h1>
-        <p className="text-sm mt-0.5" style={{ color: "var(--ag-text-muted)" }}>
-          {totalMaterials} material{totalMaterials !== 1 ? "es" : ""} en{" "}
-          {courses.length} curso{courses.length !== 1 ? "s" : ""}
+        <p
+          style={{
+            color: "var(--ag-text-muted)",
+            marginTop: "4px",
+            fontSize: "0.875rem",
+          }}
+        >
+          {isLoading
+            ? "Cargando…"
+            : `${totalMaterials} material${totalMaterials !== 1 ? "es" : ""} en ${courses.length} curso${courses.length !== 1 ? "s" : ""}`}
         </p>
-      </div>
 
-      <div className="space-y-8">
-        {isLoading ? (
-          [...Array(2)].map((_, si) => (
-            <div key={si}>
-              <div className="skeleton-shimmer h-5 w-48 rounded mb-3" />
-              <div className="space-y-2">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="skeleton-shimmer rounded-xl h-14" />
-                ))}
-              </div>
-            </div>
-          ))
-        ) : courses.length === 0 ? (
+        {/* Type summary chips — only when there are materials */}
+        {!isLoading && totalMaterials > 0 && (
           <div
-            className="rounded-xl p-10 text-center bg-white"
-            style={{ border: "2px dashed var(--ag-border-light)" }}
+            style={{
+              display: "flex",
+              gap: "8px",
+              flexWrap: "wrap",
+              marginTop: "12px",
+            }}
           >
-            <p className="text-sm mb-3" style={{ color: "var(--ag-text-muted)" }}>
-              Todavia no creaste ningun curso.
-            </p>
-            <Link
-              href="/dashboard/teacher/courses/new"
-              className="text-sm font-medium"
-              style={{ color: "var(--ag-navy)" }}
-            >
-              Crear curso &rarr;
-            </Link>
-          </div>
-        ) : (
-          courses.map((course: Course, ci: number) => {
-            const courseMaterials = materials.filter(
-              (m: Material) => m.course_id === course.id
-            );
-            const accent = ACCENT_COLORS[ci % ACCENT_COLORS.length];
-            return (
-              <div key={course.id}>
-                {/* Course header */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                      style={{ background: accent }}
-                    >
-                      {course.title.charAt(0).toUpperCase()}
-                    </div>
-                    <h2
-                      className="text-base font-semibold"
-                      style={{ color: "var(--ag-text)" }}
-                    >
-                      {course.title}
-                    </h2>
-                    <span
-                      className="text-xs"
-                      style={{ color: "var(--ag-text-muted)" }}
-                    >
-                      ({courseMaterials.length})
-                    </span>
-                  </div>
-                  <Link
-                    href={`/dashboard/teacher/courses/${course.id}/materials`}
-                    className="inline-flex items-center gap-1 text-xs font-medium flex-shrink-0"
-                    style={{ color: "var(--ag-navy)" }}
-                  >
-                    <Plus size={12} />
-                    Agregar material
-                  </Link>
-                </div>
-
-                {courseMaterials.length === 0 ? (
-                  <div
-                    className="rounded-xl px-5 py-4 text-sm"
-                    style={{
-                      border: "1px dashed var(--ag-border-light)",
-                      color: "var(--ag-text-muted)",
-                    }}
-                  >
-                    Este curso no tiene materiales aun.
-                  </div>
-                ) : (
-                  <div
-                    className="bg-white rounded-xl overflow-hidden"
-                    style={{
-                      border: "1px solid var(--ag-border-light)",
-                      boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-                    }}
-                  >
-                    {courseMaterials.map((m: Material, idx: number) => (
-                      <div
-                        key={m.id}
-                        className="flex items-center gap-4 px-4 py-3"
-                        style={{
-                          borderBottom:
-                            idx < courseMaterials.length - 1
-                              ? "1px solid var(--ag-border-light)"
-                              : "none",
-                        }}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <p
-                            className="font-medium text-sm"
-                            style={{ color: "var(--ag-text)" }}
-                          >
-                            {m.title}
-                          </p>
-                          {m.description && (
-                            <p
-                              className="text-xs mt-0.5 truncate"
-                              style={{ color: "var(--ag-text-muted)" }}
-                            >
-                              {m.description}
-                            </p>
-                          )}
-                        </div>
-                        {m.file_type && <TypeBadge type={m.file_type} />}
-                        {m.file_url && (
-                          <a
-                            href={m.file_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs font-medium flex-shrink-0 transition-opacity hover:opacity-70"
-                            style={{ color: "var(--ag-navy)" }}
-                          >
-                            Ver <ArrowRight size={12} />
-                          </a>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
-      </div>
-    </div>
-  );
-}
+            {Object.entries(byType).map(([type, count]) => {
+              const cfg = TYPE_CONFIG[type] ?? DEFAULT_TYPE;
+              return (
+                <span
+                  key={type}
+                  style={{
+                    background: cfg.bg,
+                    color: cfg.text,
+                    border: `1px solid ${cfg.border}`,
+                    padding: "3px 10px",
+                    borderRadius: "999px",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {cfg.icon} {count} {cfg.label.toLowerCase()}
+                  {count !== 1 ? "s" : ""}
+                </span>
+              );
+            })}
+          </d
