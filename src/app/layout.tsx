@@ -8,6 +8,17 @@ export const metadata: Metadata = {
   description: "Plataforma SaaS educativa multi-instituto",
 };
 
+// Inline script to apply saved theme before first paint (prevents FOUC)
+const themeScript = `
+  try {
+    var t = localStorage.getItem('ag-theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (t === 'dark' || (!t && prefersDark)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch(e) {}
+`;
+
 export default async function RootLayout({
   children,
 }: {
@@ -27,6 +38,8 @@ export default async function RootLayout({
   return (
     <html lang="es" className="h-full antialiased">
       <head>
+        {/* Theme init — must run before body renders */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <style dangerouslySetInnerHTML={{ __html: cssVars }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

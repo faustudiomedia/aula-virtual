@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Menu, Search } from "lucide-react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { NotificationBell } from "@/components/ui/NotificationBell";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import type { UserRole } from "@/lib/types";
 
 interface Props {
@@ -48,8 +49,13 @@ export default function DashboardShell({
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-white/80 backdrop-blur-md border-b shadow-sm"
-          style={{ borderColor: "var(--ag-border-light)" }}>
+        <header
+          className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 backdrop-blur-md border-b shadow-sm"
+          style={{
+            background: "var(--ag-topbar-bg, rgba(255,255,255,0.88))",
+            borderColor: "var(--ag-border-light)",
+          }}
+        >
           <button onClick={() => setSidebarOpen(true)}
             className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors"
             style={{ color: "var(--ag-text-muted)" }}
@@ -80,6 +86,7 @@ export default function DashboardShell({
             </div>
           </div>
 
+          <ThemeToggle />
           <NotificationBell userId={userId} />
         </header>
 
