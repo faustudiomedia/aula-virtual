@@ -10,7 +10,6 @@ interface Props {
   teacherId: string;
 }
 
-// ── Type badge config ────────────────────────────────────────────────────────
 const TYPE_CONFIG: Record<
   string,
   { label: string; icon: string; bg: string; text: string; border: string }
@@ -79,7 +78,6 @@ function TypeBadge({ type }: { type?: string | null }) {
   );
 }
 
-// ── Skeleton ─────────────────────────────────────────────────────────────────
 function Skeleton() {
   return (
     <div style={{ marginTop: "2rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
@@ -92,7 +90,6 @@ function Skeleton() {
               background: "var(--ag-surface-alt)",
               borderRadius: "6px",
               marginBottom: "12px",
-              animation: "pulse 1.5s ease-in-out infinite",
             }}
           />
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -104,7 +101,6 @@ function Skeleton() {
                   background: "var(--ag-surface)",
                   border: "1px solid var(--ag-border-light)",
                   borderRadius: "12px",
-                  animation: "pulse 1.5s ease-in-out infinite",
                 }}
               />
             ))}
@@ -115,7 +111,6 @@ function Skeleton() {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 export default function AllMaterialsView({ teacherId }: Props) {
   const { data: courses = [], isLoading: loadingCourses } =
     useTeacherCourses(teacherId);
@@ -141,7 +136,6 @@ export default function AllMaterialsView({ teacherId }: Props) {
   const isLoading = loadingCourses || (courseIds.length > 0 && loadingMaterials);
   const totalMaterials = materials.length;
 
-  // Count by type for summary chips
   const byType = materials.reduce<Record<string, number>>((acc, m) => {
     const t = m.file_type ?? "otro";
     acc[t] = (acc[t] ?? 0) + 1;
@@ -150,41 +144,17 @@ export default function AllMaterialsView({ teacherId }: Props) {
 
   return (
     <div style={{ padding: "clamp(1rem, 3vw, 2rem)", maxWidth: "860px", margin: "0 auto" }}>
-
-      {/* ── Page header ── */}
       <div style={{ marginBottom: "1.5rem" }}>
-        <h1
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: 700,
-            color: "var(--ag-text)",
-            margin: 0,
-          }}
-        >
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--ag-text)", margin: 0 }}>
           Materiales
         </h1>
-        <p
-          style={{
-            color: "var(--ag-text-muted)",
-            marginTop: "4px",
-            fontSize: "0.875rem",
-          }}
-        >
+        <p style={{ color: "var(--ag-text-muted)", marginTop: "4px", fontSize: "0.875rem" }}>
           {isLoading
             ? "Cargando…"
             : `${totalMaterials} material${totalMaterials !== 1 ? "es" : ""} en ${courses.length} curso${courses.length !== 1 ? "s" : ""}`}
         </p>
-
-        {/* Type summary chips — only when there are materials */}
         {!isLoading && totalMaterials > 0 && (
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              flexWrap: "wrap",
-              marginTop: "12px",
-            }}
-          >
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "12px" }}>
             {Object.entries(byType).map(([type, count]) => {
               const cfg = TYPE_CONFIG[type] ?? DEFAULT_TYPE;
               return (
@@ -200,9 +170,267 @@ export default function AllMaterialsView({ teacherId }: Props) {
                     fontWeight: 500,
                   }}
                 >
-                  {cfg.icon} {count} {cfg.label.toLowerCase()}
-                  {count !== 1 ? "s" : ""}
+                  {cfg.icon} {count} {cfg.label.toLowerCase()}{count !== 1 ? "s" : ""}
                 </span>
               );
             })}
-          </d
+          </div>
+        )}
+      </div>
+
+      {isLoading ? (
+        <Skeleton />
+      ) : courses.length === 0 ? (
+        <div
+          style={{
+            border: "2px dashed var(--ag-border)",
+            borderRadius: "16px",
+            padding: "3rem 2rem",
+            textAlign: "center",
+            marginTop: "2rem",
+          }}
+        >
+          <div style={{ fontSize: "3rem", marginBottom: "12px" }}>📚</div>
+          <p style={{ color: "var(--ag-text-secondary)", fontWeight: 600, fontSize: "1rem", margin: "0 0 6px" }}>
+            Todavía no tenés cursos
+          </p>
+          <p style={{ color: "var(--ag-text-muted)", fontSize: "0.875rem", margin: "0 0 20px" }}>
+            Creá tu primer curso para empezar a cargar materiales.
+          </p>
+          <Link
+            href="/dashboard/teacher/courses/new"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "var(--ag-navy)",
+              color: "#fff",
+              padding: "8px 20px",
+              borderRadius: "8px",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              textDecoration: "none",
+            }}
+          >
+            ＋ Crear primer curso
+          </Link>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          {courses.map((course: Course, courseIdx: number) => {
+            const courseMaterials = materials.filter((m: Material) => m.course_id === course.id);
+            const avatarGradients = [
+              "linear-gradient(135deg, var(--ag-navy) 0%, var(--ag-navy-light) 100%)",
+              "linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)",
+              "linear-gradient(135deg, #059669 0%, #34D399 100%)",
+              "linear-gradient(135deg, #DC2626 0%, #FCA5A5 100%)",
+              "linear-gradient(135deg, #D97706 0%, #FCD34D 100%)",
+            ];
+            const avatarGradient = avatarGradients[courseIdx % avatarGradients.length];
+
+            return (
+              <div key={course.id}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: "10px",
+                    gap: "12px",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+                    <div
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "10px",
+                        background: avatarGradient,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#fff",
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {course.title.charAt(0).toUpperCase()}
+                    </div>
+                    <h2
+                      style={{
+                        fontSize: "0.9375rem",
+                        fontWeight: 600,
+                        color: "var(--ag-text)",
+                        margin: 0,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {course.title}
+                    </h2>
+                    <span
+                      style={{
+                        background: "var(--ag-surface-alt)",
+                        color: "var(--ag-text-muted)",
+                        border: "1px solid var(--ag-border-light)",
+                        padding: "1px 8px",
+                        borderRadius: "999px",
+                        fontSize: "11px",
+                        fontWeight: 500,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {courseMaterials.length}
+                    </span>
+                  </div>
+                  <Link
+                    href={`/dashboard/teacher/courses/${course.id}/materials`}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      background: "var(--ag-navy)",
+                      color: "#fff",
+                      padding: "5px 14px",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span style={{ fontSize: "14px", lineHeight: 1 }}>＋</span>
+                    Agregar
+                  </Link>
+                </div>
+
+                {courseMaterials.length === 0 ? (
+                  <div
+                    style={{
+                      border: "1.5px dashed var(--ag-border)",
+                      borderRadius: "12px",
+                      padding: "1.25rem 1.5rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "12px",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ fontSize: "1.25rem" }}>📂</span>
+                      <span style={{ color: "var(--ag-text-muted)", fontSize: "0.875rem" }}>
+                        Este curso no tiene materiales aún.
+                      </span>
+                    </div>
+                    <Link
+                      href={`/dashboard/teacher/courses/${course.id}/materials`}
+                      style={{
+                        color: "var(--ag-navy)",
+                        fontSize: "0.8125rem",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Agregar ahora →
+                    </Link>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      background: "var(--ag-surface)",
+                      border: "1px solid var(--ag-border-light)",
+                      borderRadius: "14px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {courseMaterials.map((m: Material, idx: number) => (
+                      <div
+                        key={m.id}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "14px",
+                          padding: "12px 18px",
+                          borderBottom:
+                            idx < courseMaterials.length - 1
+                              ? "1px solid var(--ag-border-light)"
+                              : "none",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "9px",
+                            background: (TYPE_CONFIG[m.file_type ?? ""] ?? DEFAULT_TYPE).bg,
+                            border: `1px solid ${(TYPE_CONFIG[m.file_type ?? ""] ?? DEFAULT_TYPE).border}`,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "16px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {(TYPE_CONFIG[m.file_type ?? ""] ?? DEFAULT_TYPE).icon}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontSize: "0.875rem",
+                              fontWeight: 600,
+                              color: "var(--ag-text)",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {m.title}
+                          </p>
+                          {m.description && (
+                            <p
+                              style={{
+                                margin: "2px 0 0",
+                                fontSize: "0.75rem",
+                                color: "var(--ag-text-muted)",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                            >
+                              {m.description}
+                            </p>
+                          )}
+                        </div>
+                        {m.file_type && <TypeBadge type={m.file_type} />}
+                        {m.file_url && (
+                          <a
+                            href={m.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: "var(--ag-navy)",
+                              fontSize: "0.8125rem",
+                              fontWeight: 600,
+                              textDecoration: "none",
+                              flexShrink: 0,
+                            }}
+                          >
+                            Ver ↗
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
