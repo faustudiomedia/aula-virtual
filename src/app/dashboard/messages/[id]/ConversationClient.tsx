@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { sendMessage, markMessagesAsRead } from '@/app/actions/messages'
 
@@ -21,13 +22,16 @@ interface Props {
 export function ConversationClient({ currentUserId, otherUserId, initialMessages }: Props) {
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [, startTransition] = useTransition()
+  const router = useRouter()
   const formRef = useRef<HTMLFormElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   // Mark as read when conversation opens
   useEffect(() => {
-    markMessagesAsRead(otherUserId)
+    markMessagesAsRead(otherUserId).then(() => {
+      router.refresh()
+    })
   }, [otherUserId])
 
   // Scroll to bottom when messages change
@@ -49,7 +53,9 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
             if (prev.some(m => m.id === payload.new.id)) return prev
             return [...prev, payload.new as Message]
           })
-          markMessagesAsRead(otherUserId)
+          markMessagesAsRead(otherUserId).then(() => {
+            router.refresh()
+          })
         },
       )
       .subscribe()
