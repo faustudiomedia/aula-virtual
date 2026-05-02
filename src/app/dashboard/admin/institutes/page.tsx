@@ -64,7 +64,7 @@ export default async function AdminInstitutesPage() {
             <Link
               key={inst.id}
               href={`/dashboard/admin/institutes/${inst.id}`}
-              className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 flex items-center gap-5 hover:shadow-md transition-shadow"
+              className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 flex items-center gap-5 hover:shadow-md transition-shadow"
             >
               {/* Color swatch */}
               <div

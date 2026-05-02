@@ -17,4 +17,13 @@ export default async function TeacherCoursesPage() {
     .single();
 
   if (profile?.role !== "profesor" && profile?.role !== "super_admin")
-    redirect("/dashboa
+    redirect("/dashboard");
+
+  const { data: periods } = await supabase
+    .from("academic_periods")
+    .select("*")
+    .eq("institute_id", profile?.institute_id)
+    .order("start_date", { ascending: false });
+
+  return <TeacherCoursesView teacherId={user.id} periods={(periods ?? []) as AcademicPeriod[]} />;
+}

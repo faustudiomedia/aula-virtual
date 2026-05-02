@@ -59,7 +59,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
       <CourseNavTabs courseId={courseId} />
 
       {error && (
-        <div className="mb-4 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
           ⚠️ {error}
         </div>
       )}
@@ -68,13 +68,13 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
         {(assignments as Assignment[] ?? []).map((a) => {
           const overdue = a.due_date && new Date(a.due_date) < new Date()
           return (
-            <div key={a.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+            <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-semibold text-[var(--ag-text)]">{a.title}</h3>
                     {a.due_date && (
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-100/60 text-red-600' : 'bg-amber-100/60 text-amber-600'}`}>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
                         {overdue ? 'Vencida' : 'Activa'}
                       </span>
                     )}
@@ -94,7 +94,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <Link
                     href={`/dashboard/teacher/courses/${courseId}/assignments/${a.id}`}
-                    className="px-3 py-1.5 rounded-lg border border-[var(--ag-border)] text-xs font-medium text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition-all"
+                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-medium text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition-all"
                   >
                     Ver entregas
                   </Link>
@@ -111,4 +111,10 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
         })}
         {(assignments ?? []).length === 0 && (
           <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
-            No hay tareas creadas. Creá la primera con el botón d
+            No hay tareas creadas. Creá la primera con el botón de arriba.
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

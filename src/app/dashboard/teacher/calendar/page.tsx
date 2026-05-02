@@ -49,4 +49,32 @@ export default async function TeacherCalendarPage() {
     scheduledAt: m.scheduled_at,
   }))
 
-  const calendarEvent
+  const calendarEvents: CalendarEvent[] = (calEvents ?? []).map((e: {
+    id: string; title: string; description: string | null
+    event_date: string; event_time: string | null; color: string
+  }) => ({
+    id: e.id,
+    title: e.title,
+    description: e.description,
+    eventDate: e.event_date,
+    eventTime: e.event_time,
+    color: e.color,
+  }))
+
+  return (
+    <div className="p-8 max-w-6xl mx-auto">
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">Calendario</h1>
+          <p className="text-[var(--ag-text-muted)]">Fechas de entrega, reuniones y eventos del instituto.</p>
+        </div>
+        <CreateEventForm />
+      </div>
+      <CalendarClientWrapper
+        assignments={calendarAssignments}
+        meetings={calendarMeetings}
+        events={calendarEvents}
+      />
+    </div>
+  )
+}

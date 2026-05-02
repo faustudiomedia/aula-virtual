@@ -32,7 +32,7 @@ export default async function InvitationsPage() {
         </p>
       </div>
 
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         <InviteForm institutes={(institutes ?? []) as Institute[]} />
       </div>
 

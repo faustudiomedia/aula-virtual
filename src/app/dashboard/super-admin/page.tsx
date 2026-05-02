@@ -114,8 +114,8 @@ export default async function SuperAdminDashboard() {
                 </div>
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                   inst.active
-                    ? 'bg-green-100/60 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-red-100/60 text-red-600 dark:bg-red-900/30 dark:text-red-400'
+                    ? 'bg-green-100/60 text-green-700'
+                    : 'bg-red-100/60 text-red-600'
                 }`}>
                   {inst.active ? 'Activo' : 'Inactivo'}
                 </span>
@@ -160,4 +160,18 @@ export default async function SuperAdminDashboard() {
                     </span>
                     <span className="text-sm font-semibold text-[var(--ag-text)]">{count}</span>
                   </div>
-                  <div className="h-2 bg-[var(--ag-surface-a
+                  <div className="h-2 bg-[var(--ag-surface-alt)] rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all"
+                      style={{ width: `${pct}%`, background: color }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -25,7 +25,7 @@ export default async function SuperAdminCoursesPage() {
           <div className="h-8 bg-gray-200 rounded w-48" />
           <div className="h-4 bg-gray-200 rounded w-32" />
           <div className="h-12 bg-gray-200 rounded" />
-          <div className="h-64 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)]" />
+          <div className="h-64 bg-white rounded-2xl border border-black/5" />
         </div>
       }
     >

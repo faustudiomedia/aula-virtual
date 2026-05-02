@@ -31,7 +31,7 @@ export default function CourseStudentsView({ courseId }: Props) {
           <div className="h-4 bg-gray-200 rounded w-24 mb-4" />
           <div className="h-8 bg-gray-200 rounded w-64 mb-2" />
           <div className="h-4 bg-gray-200 rounded w-40 mb-8" />
-          <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm h-48" />
+          <div className="bg-white rounded-2xl border border-black/5 shadow-sm h-48" />
         </div>
       </div>
     );
@@ -75,9 +75,9 @@ export default function CourseStudentsView({ courseId }: Props) {
           <p className="text-[var(--ag-text-muted)]">Ningún alumno inscripto todavía.</p>
         </div>
       ) : (
-        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-[var(--ag-border-light)]">
+            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
               <tr>
                 <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Alumno
@@ -93,7 +93,7 @@ export default function CourseStudentsView({ courseId }: Props) {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--ag-border-light)]">
+            <tbody className="divide-y divide-black/5">
               {typedEnrollments.map((e) => (
                 <tr
                   key={e.id}
@@ -138,4 +138,12 @@ export default function CourseStudentsView({ courseId }: Props) {
                       dateStyle: "short",
                     })}
                   </td>
-       
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}

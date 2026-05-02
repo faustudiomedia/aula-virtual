@@ -84,7 +84,7 @@ export default function QuizEditor({ courseId }: Props) {
 
   if (success) {
     return (
-      <div className="bg-green-100/50 border border-green-300/50 rounded-2xl p-8 text-center">
+      <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
         <p className="text-4xl mb-3">🎉</p>
         <p className="text-green-700 font-semibold">¡Quiz creado exitosamente!</p>
         <p className="text-green-600 text-sm mt-1">Redirigiendo...</p>
@@ -102,14 +102,14 @@ export default function QuizEditor({ courseId }: Props) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Ej: Evaluación unidad 1"
-          className="w-full px-4 py-3 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition"
+          className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition"
         />
       </div>
 
       {/* Questions */}
       <div className="space-y-4">
         {questions.map((q, qIdx) => (
-          <div key={q.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+          <div key={q.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-bold text-[var(--ag-navy)] bg-[rgba(30,58,95,0.08)] px-2.5 py-1 rounded-full">
                 Pregunta {qIdx + 1}
@@ -131,7 +131,7 @@ export default function QuizEditor({ courseId }: Props) {
               onChange={(e) => updateQuestion(qIdx, 'question', e.target.value)}
               placeholder="Escribí la pregunta aquí..."
               rows={2}
-              className="w-full px-4 py-3 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition mb-4 resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition mb-4 resize-none"
             />
 
             {/* Options */}
@@ -150,7 +150,7 @@ export default function QuizEditor({ courseId }: Props) {
                     aria-label={`Marcar opción ${oIdx + 1} como correcta`}
                   >
                     {q.correct === oIdx && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--ag-surface)] block" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white block" />
                     )}
                   </button>
                   <input
@@ -158,7 +158,7 @@ export default function QuizEditor({ courseId }: Props) {
                     value={option}
                     onChange={(e) => updateOption(qIdx, oIdx, e.target.value)}
                     placeholder={`Opción ${oIdx + 1}`}
-                    className="flex-1 px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-border-light)] focus:border-[var(--ag-navy)] transition"
+                    className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-border-light)] focus:border-[var(--ag-navy)] transition"
                   />
                   {q.options.length > 2 && (
                     <button
@@ -200,11 +200,18 @@ export default function QuizEditor({ courseId }: Props) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 py-3 rounded-xl border border-[var(--ag-border)] text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-[var(--ag-surface-alt)] transition"
+          className="flex-1 py-3 rounded-xl border border-black/10 text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-black/5 transition"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="flex-1 py-3 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transi
+          className="flex-1 py-3 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-60"
+        >
+          {isPending ? 'Creando...' : 'Crear quiz'}
+        </button>
+      </div>
+    </form>
+  )
+}

@@ -34,10 +34,10 @@ const STATUS_LABELS: Record<AttendanceStatus, string> = {
 }
 
 const STATUS_COLORS: Record<AttendanceStatus, string> = {
-  present: 'bg-green-100 text-green-700 border-green-300/50',
-  absent: 'bg-red-100 text-red-700 border-red-300/50',
+  present: 'bg-green-100 text-green-700 border-green-200',
+  absent: 'bg-red-100 text-red-700 border-red-200',
   late: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-  justified: 'bg-blue-100 text-blue-700 border-blue-300/50',
+  justified: 'bg-blue-100 text-blue-700 border-blue-200',
 }
 
 function formatDate(d: string) {
@@ -102,7 +102,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
 
       {/* New session form */}
       {showNew && (
-        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
           <h3 className="text-sm font-semibold text-[var(--ag-text)] mb-4">Registrar nueva clase</h3>
           <form action={async (fd) => {
             fd.set('course_id', courseId)
@@ -118,7 +118,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
                 type="date"
                 required
                 defaultValue={new Date().toISOString().split('T')[0]}
-                className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
             </div>
             <div>
@@ -126,7 +126,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
               <input
                 name="topic"
                 placeholder="Ej: Introducción al álgebra"
-                className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
             </div>
             {createState.error && (
@@ -143,7 +143,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
               <button
                 type="button"
                 onClick={() => setShowNew(false)}
-                className="px-4 py-2 rounded-lg border border-[var(--ag-border)] text-sm font-medium hover:bg-[var(--ag-surface-alt)] transition-colors"
+                className="px-4 py-2 rounded-lg border border-black/10 text-sm font-medium hover:bg-black/5 transition-colors"
               >
                 Cancelar
               </button>
@@ -167,7 +167,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
                 className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
                   activeSessionId === s.id
                     ? 'bg-[var(--ag-navy)]/5 border-[var(--ag-navy)]/20 text-[var(--ag-navy)]'
-                    : 'bg-[var(--ag-surface)] border-[var(--ag-border-light)] hover:bg-[var(--ag-surface-alt)] text-[var(--ag-text)]'
+                    : 'bg-white border-black/5 hover:bg-black/[0.02] text-[var(--ag-text)]'
                 }`}
               >
                 <p className="text-sm font-medium capitalize">{formatDate(s.session_date)}</p>
@@ -180,16 +180,16 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
         {/* Attendance sheet */}
         <div className="md:col-span-2">
           {!activeSessionId ? (
-            <div className="flex items-center justify-center h-48 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] text-sm text-[var(--ag-text-muted)]">
+            <div className="flex items-center justify-center h-48 bg-white rounded-2xl border border-black/5 text-sm text-[var(--ag-text-muted)]">
               Seleccioná una clase para tomar asistencia
             </div>
           ) : loadingSession ? (
-            <div className="flex items-center justify-center h-48 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] text-sm text-[var(--ag-text-muted)]">
+            <div className="flex items-center justify-center h-48 bg-white rounded-2xl border border-black/5 text-sm text-[var(--ag-text-muted)]">
               Cargando...
             </div>
           ) : (
-            <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-[var(--ag-border-light)] flex items-center justify-between">
+            <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-black/5 flex items-center justify-between">
                 <p className="text-sm font-medium text-[var(--ag-text)]">
                   {students.length} {students.length === 1 ? 'alumno' : 'alumnos'}
                 </p>
@@ -204,7 +204,7 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
               {students.length === 0 ? (
                 <p className="p-6 text-sm text-[var(--ag-text-muted)]">No hay alumnos inscriptos.</p>
               ) : (
-                <div className="divide-y divide-[var(--ag-border-light)]">
+                <div className="divide-y divide-black/5">
                   {students.map(s => (
                     <div key={s.id} className="px-6 py-3 flex items-center gap-4">
                       <div className="flex-1 min-w-0">
@@ -219,9 +219,21 @@ export default function AttendanceView({ courseId, students, sessions: initialSe
                             className={`px-2.5 py-1 rounded-lg border text-xs font-medium transition-all ${
                               records[s.id] === st
                                 ? STATUS_COLORS[st]
-                                : 'bg-[var(--ag-surface)] border-[var(--ag-border)] text-[var(--ag-text-muted)] hover:border-black/20'
+                                : 'bg-white border-black/10 text-[var(--ag-text-muted)] hover:border-black/20'
                             }`}
                           >
                             {STATUS_LABELS[st]}
                           </button>
-                     
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

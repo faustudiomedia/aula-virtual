@@ -33,7 +33,7 @@ export default function InviteForm({ institutes }: Props) {
             name="full_name"
             placeholder="Ej: María González"
             required
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
           {state.fieldErrors?.full_name && (
             <p className="mt-1 text-xs text-red-500">{state.fieldErrors.full_name[0]}</p>
@@ -47,7 +47,7 @@ export default function InviteForm({ institutes }: Props) {
           <select
             name="role"
             required
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-[var(--ag-surface)]"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-white"
           >
             <option value="">Seleccioná un rol</option>
             <option value="profesor">Profesor</option>
@@ -68,7 +68,7 @@ export default function InviteForm({ institutes }: Props) {
           type="email"
           placeholder="usuario@instituto.edu"
           required
-          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
         />
         {state.fieldErrors?.email && (
           <p className="mt-1 text-xs text-red-500">{state.fieldErrors.email[0]}</p>
@@ -82,7 +82,7 @@ export default function InviteForm({ institutes }: Props) {
         <select
           name="institute_id"
           required
-          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-[var(--ag-surface)]"
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-white"
         >
           <option value="">Seleccioná un instituto</option>
           {institutes.map((inst) => (
@@ -96,4 +96,7 @@ export default function InviteForm({ institutes }: Props) {
         )}
       </div>
 
-      <SubmitButton label="✉️ Envi
+      <SubmitButton label="✉️ Enviar invitación" loadingLabel="Enviando..." />
+    </form>
+  )
+}

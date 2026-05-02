@@ -57,11 +57,41 @@ export default function DashboardShell({
           }}
         >
           <button onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 rounded-xl hover:bg-[var(--ag-surface-alt)] transition-colors"
+            className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors"
             style={{ color: "var(--ag-text-muted)" }}
             aria-label="Abrir menú">
             <Menu size={20} />
           </button>
 
           {/* Mobile institute name */}
-          <span className="font-semibold text-sm truncate fle
+          <span className="font-semibold text-sm truncate flex-1 md:hidden"
+            style={{ color: "var(--ag-text)" }}>
+            {instituteName}
+          </span>
+
+          {/* Desktop search */}
+          <div className="hidden md:flex flex-1 items-center gap-3">
+            <div className="relative max-w-sm w-full">
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2"
+                style={{ color: "var(--ag-text-light)" }} />
+              <input
+                placeholder="Buscar..."
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl focus:outline-none transition-colors"
+                style={{
+                  background: "var(--ag-surface-alt)",
+                  border: "1px solid var(--ag-border)",
+                  color: "var(--ag-text)",
+                }}
+              />
+            </div>
+          </div>
+
+          <ThemeToggle />
+          <NotificationBell userId={userId} />
+        </header>
+
+        <main className="flex-1 overflow-auto">{children}</main>
+      </div>
+    </div>
+  );
+}

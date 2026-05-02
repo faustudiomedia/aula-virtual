@@ -63,45 +63,45 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
 
       {/* Stats rápidas */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-[var(--ag-surface)] rounded-xl border border-[var(--ag-border-light)] p-4 text-center">
+        <div className="bg-white rounded-xl border border-black/5 p-4 text-center">
           <p className="text-2xl font-bold text-[var(--ag-text)]">{usersCount ?? 0}</p>
           <p className="text-xs text-[var(--ag-text-muted)] mt-1">Usuarios</p>
         </div>
-        <div className="bg-[var(--ag-surface)] rounded-xl border border-[var(--ag-border-light)] p-4 text-center">
+        <div className="bg-white rounded-xl border border-black/5 p-4 text-center">
           <p className="text-2xl font-bold text-[var(--ag-text)]">{coursesCount ?? 0}</p>
           <p className="text-xs text-[var(--ag-text-muted)] mt-1">Cursos</p>
         </div>
       </div>
 
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         <h1 className="text-lg font-bold text-[var(--ag-text)] mb-5">Editar instituto</h1>
 
         {error && (
-          <div className="mb-5 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">⚠️ {error}</div>
+          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">⚠️ {error}</div>
         )}
         {success && (
-          <div className="mb-5 rounded-lg bg-green-100/50 border border-green-300/50/70 px-4 py-3 text-sm text-green-700">✓ Cambios guardados correctamente</div>
+          <div className="mb-5 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">✓ Cambios guardados correctamente</div>
         )}
 
         <form action={handleUpdate} className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Nombre Institución <span className="text-red-500">*</span></label>
             <input name="name" required defaultValue={institute.name}
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
           <div>
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Slug <span className="text-red-500">*</span></label>
             <input name="slug" required defaultValue={institute.slug}
               pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
-          <div className="pt-4 border-t border-[var(--ag-border-light)]">
+          <div className="pt-4 border-t border-black/5">
              <h2 className="text-sm font-bold text-[var(--ag-text)] mb-4">Autoridad y Certificaciones</h2>
              <div className="mb-4">
                 <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Nombre del Director / Institución</label>
                 <input name="director_name" defaultValue={institute.director_name ?? ''}
                   placeholder="Ej: Ing. Juan Pérez / Universidad"
-                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+                  className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
              </div>
              <SignatureUpload currentUrl={institute.director_signature_url || null} />
           </div>
@@ -109,18 +109,18 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
             <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Dominio personalizado</label>
             <input name="domain" defaultValue={institute.domain ?? ''}
               placeholder="aula.instituto.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Color primario</label>
               <input type="color" name="primary_color" defaultValue={institute.primary_color}
-                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Color secundario</label>
               <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
-                className="w-full h-10 rounded-xl border border-[var(--ag-border)] cursor-pointer p-1" />
+                className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
             </div>
           </div>
           <div className="flex gap-3 pt-2">
@@ -130,8 +130,38 @@ export default async function EditInstitutePage({ params, searchParams }: Props)
       </div>
 
       {/* Toggle estado */}
-      <div className="mt-4 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+      <div className="mt-4 bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-[var(--ag-text)]">
-              Es
+              Estado: <span className={institute.active ? 'text-green-600' : 'text-red-500'}>
+                {institute.active ? 'Activo' : 'Inactivo'}
+              </span>
+            </p>
+            <p className="text-xs text-[var(--ag-text-muted)] mt-0.5">
+              {institute.active
+                ? 'Los usuarios de este instituto pueden acceder a la plataforma.'
+                : 'Los usuarios de este instituto no pueden iniciar sesión.'}
+            </p>
+          </div>
+          <form action={async () => {
+            'use server'
+            await toggleInstituteStatus(instituteId, !institute.active)
+            redirect(`/dashboard/super-admin/institutes/${instituteId}?success=1`)
+          }}>
+            <button
+              type="submit"
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                institute.active
+                  ? 'bg-red-50 text-red-600 hover:bg-red-100'
+                  : 'bg-green-50 text-green-600 hover:bg-green-100'
+              }`}
+            >
+              {institute.active ? 'Desactivar' : 'Activar'}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+}

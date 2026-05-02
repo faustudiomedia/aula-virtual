@@ -42,7 +42,7 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
+        <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
           ⚠️ {error}
         </div>
       )}
@@ -77,4 +77,6 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
       >
         {isPending ? 'Enviando...' : isResubmit ? 'Re-entregar tarea' : 'Entregar tarea'}
       </button>
-  
+    </form>
+  )
+}

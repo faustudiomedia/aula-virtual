@@ -55,11 +55,11 @@ export default async function TeacherForumPage({ params }: Props) {
           {threads.map((t) => {
             const author = t.profiles as unknown as { full_name: string } | null
             return (
-              <div key={t.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 flex items-start gap-4">
+              <div key={t.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 flex items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     {t.pinned && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100/60 text-amber-600 font-medium">📌 Fijado</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 font-medium">📌 Fijado</span>
                     )}
                     <Link
                       href={`/dashboard/teacher/courses/${courseId}/forum/${t.id}`}
@@ -81,4 +81,10 @@ export default async function TeacherForumPage({ params }: Props) {
                   />
                 )}
               </div>
-       
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}

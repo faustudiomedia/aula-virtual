@@ -28,7 +28,7 @@ export default function CourseForm() {
           Título del curso <span className="text-red-500">*</span>
         </label>
         <input name="title" placeholder="Ej: Inglés Nivel A2"
-          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
         {state.fieldErrors?.title && (
           <p className="mt-1 text-sm text-red-500">{state.fieldErrors.title[0]}</p>
         )}
@@ -37,7 +37,7 @@ export default function CourseForm() {
       <div>
         <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Descripción</label>
         <textarea name="description" rows={4} placeholder="Describí brevemente de qué trata el curso..."
-          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
         {state.fieldErrors?.description && (
           <p className="mt-1 text-sm text-red-500">{state.fieldErrors.description[0]}</p>
         )}
@@ -46,7 +46,7 @@ export default function CourseForm() {
       <div>
         <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Horario de cátedra</label>
         <input name="schedule" placeholder="Ej: Lunes y Miércoles 18:00 - 20:00"
-          className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all" />
         <p className="text-xs text-[var(--ag-text-muted)] mt-1">Opcional. Días y horarios de la materia.</p>
       </div>
 
@@ -58,4 +58,10 @@ export default function CourseForm() {
       <div className="flex gap-3 pt-2">
         <SubmitButton label="Crear curso" loadingLabel="Creando..." />
         <a href="/dashboard/teacher"
-          className="flex-1 py-2.5 flex items-center justify-center rounded-xl border border-[var(--ag-border)] text-[var(--ag-text)]/70 font-semibold text-sm text-center h
+          className="flex-1 py-2.5 flex items-center justify-center rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  )
+}

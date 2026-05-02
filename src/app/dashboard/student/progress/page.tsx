@@ -36,7 +36,7 @@ export default async function StudentProgressPage() {
           {items.map((e) => (
             <div
               key={e.id}
-              className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] p-5 shadow-sm"
+              className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm"
             >
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-semibold text-[var(--ag-text)]">
@@ -62,4 +62,13 @@ export default async function StudentProgressPage() {
               <p className="text-xs text-[var(--ag-text-muted)] mt-2">
                 Inscripto el{" "}
                 {new Date(e.enrolled_at).toLocaleDateString("es-AR", {
-                  dateStyle: "
+                  dateStyle: "medium",
+                })}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

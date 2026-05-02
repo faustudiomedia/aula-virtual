@@ -41,7 +41,7 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
   // ── INTRO ────────────────────────────────────────────────────────
   if (phase === 'intro') {
     return (
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-8 text-center">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-8 text-center">
         <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-3xl mx-auto mb-4">
           🧠
         </div>
@@ -72,9 +72,9 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
       <div className="space-y-6">
         {/* Score card */}
         <div className={`rounded-2xl p-8 text-center ${
-          score >= 80 ? 'bg-green-100/50 border border-green-300/50' :
-          score >= 60 ? 'bg-amber-100/50 border border-amber-300/50' :
-          'bg-red-100/50 border border-red-300/50'
+          score >= 80 ? 'bg-green-50 border border-green-200' :
+          score >= 60 ? 'bg-amber-50 border border-amber-200' :
+          'bg-red-50 border border-red-200'
         }`}>
           <p className="text-6xl font-black mb-2" style={{ color: score >= 80 ? '#059669' : score >= 60 ? '#D97706' : '#DC2626' }}>
             {score}%
@@ -96,7 +96,7 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
             return (
               <div
                 key={q.id}
-                className={`bg-[var(--ag-surface)] rounded-xl border p-4 ${isCorrect ? 'border-green-200' : 'border-red-200'}`}
+                className={`bg-white rounded-xl border p-4 ${isCorrect ? 'border-green-200' : 'border-red-200'}`}
               >
                 <div className="flex items-start gap-2 mb-3">
                   <span className="text-sm">{isCorrect ? '✅' : '❌'}</span>
@@ -127,7 +127,7 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
         <div className="flex gap-3">
           <button
             onClick={() => { setAnswers(Array(questions.length).fill(null)); setPhase('playing') }}
-            className="flex-1 py-3 rounded-xl border border-[var(--ag-border)] text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-[var(--ag-surface-alt)] transition"
+            className="flex-1 py-3 rounded-xl border border-black/10 text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-black/5 transition"
           >
             Volver a intentar
           </button>
@@ -146,7 +146,7 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
   return (
     <div className="space-y-4">
       {questions.map((q, qIdx) => (
-        <div key={q.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+        <div key={q.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
           <div className="flex items-start gap-3 mb-4">
             <span className="w-7 h-7 rounded-lg bg-[rgba(30,58,95,0.08)] text-[var(--ag-navy)] text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
               {qIdx + 1}
@@ -164,14 +164,14 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
                   className={`w-full text-left px-4 py-3 rounded-xl text-sm border-2 transition-all font-medium ${
                     selected
                       ? 'border-[var(--ag-navy)] bg-[rgba(30,58,95,0.08)] text-[var(--ag-navy)]'
-                      : 'border-[var(--ag-border-light)] hover:border-[var(--ag-border-light)] text-[var(--ag-text)]/70 hover:text-[var(--ag-text)]'
+                      : 'border-black/5 hover:border-[var(--ag-border-light)] text-[var(--ag-text)]/70 hover:text-[var(--ag-text)]'
                   }`}
                 >
                   <span className="inline-flex items-center gap-2">
                     <span className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
                       selected ? 'border-[var(--ag-navy)] bg-[var(--ag-navy)]' : 'border-black/20'
                     }`}>
-                      {selected && <span className="w-1.5 h-1.5 rounded-full bg-[var(--ag-surface)] block" />}
+                      {selected && <span className="w-1.5 h-1.5 rounded-full bg-white block" />}
                     </span>
                     {opt}
                   </span>
@@ -188,7 +188,7 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
       </div>
 
       {error && (
-        <div className="bg-red-100/50 border border-red-300/50 rounded-xl px-4 py-3 text-sm text-red-600">
+        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-600">
           {error}
         </div>
       )}
@@ -196,11 +196,18 @@ export default function QuizPlayer({ quiz, courseId, previousAttempt }: Props) {
       <div className="flex gap-3">
         <button
           onClick={() => setPhase('intro')}
-          className="px-4 py-3 rounded-xl border border-[var(--ag-border)] text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-[var(--ag-surface-alt)] transition"
+          className="px-4 py-3 rounded-xl border border-black/10 text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-black/5 transition"
         >
           ← Volver
         </button>
         <button
           onClick={handleSubmit}
           disabled={isPending || !allAnswered}
-          className="flex-1 py-3 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transitio
+          className="flex-1 py-3 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-50 shadow-lg "
+        >
+          {isPending ? 'Enviando...' : 'Enviar respuestas'}
+        </button>
+      </div>
+    </div>
+  )
+}

@@ -72,7 +72,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
       <CourseNavTabs courseId={courseId} />
 
       {/* Assignment header */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-1">{a.title}</h2>
@@ -104,12 +104,12 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
       </div>
 
       {success && (
-        <div className="mb-4 rounded-lg bg-green-100/50 border border-green-300/50/70 px-4 py-3 text-sm text-green-700">
+        <div className="mb-4 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
           ✓ Calificación guardada correctamente.
         </div>
       )}
       {error && (
-        <div className="mb-4 rounded-lg bg-red-100/50 border border-red-300/50/70 px-4 py-3 text-sm text-red-700">
+        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
           ⚠️ {error}
         </div>
       )}
@@ -117,7 +117,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
       {/* Student list */}
       <div className="space-y-4">
         {studentList.map((student) => (
-          <div key={student.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+          <div key={student.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-9 h-9 rounded-full bg-[var(--ag-navy)] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                 {(student.full_name || student.email || '?').charAt(0).toUpperCase()}
@@ -131,20 +131,20 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                   Entregado
                 </span>
               ) : (
-                <span className="text-xs px-2.5 py-1 rounded-full bg-gray-50 text-[var(--ag-text-muted)] font-medium flex-shrink-0">
+                <span className="text-xs px-2.5 py-1 rounded-full bg-gray-50 text-gray-500 font-medium flex-shrink-0">
                   Sin entrega
                 </span>
               )}
             </div>
 
             {student.submission && (
-              <div className="border-t border-[var(--ag-border-light)] pt-4">
+              <div className="border-t border-black/5 pt-4">
                 {/* Submission content */}
                 {student.submission.content && (
                   <div className="mb-3">
                     <p className="text-xs font-medium text-[var(--ag-text-muted)] uppercase tracking-wide mb-1">Respuesta</p>
                     <div
-                      className="text-sm text-[var(--ag-text)]/80 bg-[var(--ag-surface)] rounded-xl p-4 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_h3]:text-base [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ag-text-muted)] [&_code]:bg-[var(--ag-surface-alt)] [&_code]:rounded [&_code]:px-1 [&_pre]:bg-[var(--ag-surface-alt)] [&_pre]:rounded-lg [&_pre]:p-3 [&_mark]:bg-yellow-200"
+                      className="text-sm text-[var(--ag-text)]/80 bg-white rounded-xl p-4 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_h3]:text-base [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ag-text-muted)] [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_pre]:bg-black/5 [&_pre]:rounded-lg [&_pre]:p-3 [&_mark]:bg-yellow-200"
                       dangerouslySetInnerHTML={{ __html: student.submission.content }}
                     />
                   </div>
@@ -182,7 +182,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                       max={a.max_score}
                       defaultValue={student.submission.score ?? ''}
                       placeholder="—"
-                      className="w-24 px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+                      className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
                     />
                   </div>
                   <div className="flex-1 min-w-[160px]">
@@ -192,7 +192,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                       type="text"
                       defaultValue={student.submission.feedback ?? ''}
                       placeholder="Comentario al alumno..."
-                      className="w-full px-3 py-2 rounded-lg border border-[var(--ag-border)] text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
+                      className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
                     />
                   </div>
                   <button
@@ -207,4 +207,12 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
           </div>
         ))}
 
-        {studentList.le
+        {studentList.length === 0 && (
+          <div className="text-center py-12 text-[var(--ag-text-muted)] text-sm">
+            No hay alumnos inscriptos en este curso.
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

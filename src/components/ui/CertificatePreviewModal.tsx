@@ -33,18 +33,18 @@ export function CertificatePreviewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--ag-surface-alt)]0 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-[var(--ag-surface)] rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-[var(--ag-border-light)] relative"
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden border border-black/5 relative"
         style={{ fontFamily: "'Georgia', serif" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-[var(--ag-surface-alt)] hover:bg-black/10 flex items-center justify-center text-[var(--ag-text-muted)] transition-all text-sm font-bold"
+          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center text-[var(--ag-text-muted)] transition-all text-sm font-bold"
         >
           ✕
         </button>
@@ -132,7 +132,7 @@ export function CertificatePreviewModal({
         </div>
 
         {/* Footer */}
-        <div className="px-10 py-3 bg-[var(--ag-surface)] border-t border-[var(--ag-border-light)] flex items-center justify-between">
+        <div className="px-10 py-3 bg-white border-t border-black/5 flex items-center justify-between">
           <p className="text-[10px] text-[var(--ag-text)]/30 font-sans">Vista previa del certificado</p>
           {code && (
             <a

@@ -58,4 +58,7 @@ export default async function AttendancePage({ params }: Props) {
         courseId={courseId}
         students={students}
         sessions={sessions ?? []}
-      
+      />
+    </div>
+  )
+}

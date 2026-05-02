@@ -18,7 +18,7 @@ function SubmitButton() {
       disabled={pending}
       className={`w-full py-2.5 px-4 rounded-lg text-white font-semibold text-sm shadow-lg transition-all mt-2 ${
         pending
-          ? "bg-[var(--ag-surface)]/20 cursor-not-allowed shadow-none"
+          ? "bg-white/20 cursor-not-allowed shadow-none"
           : "bg-gradient-to-r bg-[var(--ag-navy)]  hover:opacity-90 active:scale-[0.98]"
       }`}
     >
@@ -28,7 +28,7 @@ function SubmitButton() {
 }
 
 const inputClass =
-  "w-full px-4 py-2.5 rounded-lg bg-[var(--ag-surface)]/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm";
+  "w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm";
 
 export default function RegisterForm({ institutes }: { institutes: Institute[] }) {
   const [state, formAction] = useActionState(registerStudent, null);
@@ -64,7 +64,7 @@ export default function RegisterForm({ institutes }: { institutes: Institute[] }
           name="institute_id"
           required
           defaultValue=""
-          className="w-full px-4 py-2.5 rounded-lg bg-[var(--ag-surface)]/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm"
+          className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm"
         >
           <option value="" disabled className="text-gray-400 bg-[var(--ag-text)]">Seleccioná tu instituto</option>
           {institutes.map((inst) => (

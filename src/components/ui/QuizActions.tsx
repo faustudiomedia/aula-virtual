@@ -25,7 +25,7 @@ export function DeleteQuizButton({ quizId, quizTitle }: DeleteQuizButtonProps) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="text-xs px-3 py-1.5 rounded-lg border border-red-200 bg-red-100/60 text-red-600 hover:bg-red-200/60 transition font-medium disabled:opacity-60"
+      className="text-xs px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition font-medium disabled:opacity-60"
     >
       {isPending ? '...' : 'Eliminar'}
     </button>
@@ -52,8 +52,9 @@ export function ToggleQuizButton({ quizId, isPublished }: ToggleQuizButtonProps)
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className="text-xs px-3 py-1.5 rounded-lg border border-[var(--ag-border)] hover:bg-[var(--ag-surface-alt)] transition text-[var(--ag-text)]/70 font-medium disabled:opacity-60"
+      className="text-xs px-3 py-1.5 rounded-lg border border-black/10 hover:bg-black/5 transition text-[var(--ag-text)]/70 font-medium disabled:opacity-60"
     >
       {isPending ? '...' : isPublished ? 'Despublicar' : 'Publicar'}
     </button>
- 
+  )
+}

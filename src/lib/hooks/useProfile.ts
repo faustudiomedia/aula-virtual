@@ -39,3 +39,9 @@ export function useProfile(): UseProfileResult {
 
       setResult({ status: 'loaded', profile: profile as Profile })
     }
+
+    load()
+  }, [])
+
+  return result
+}

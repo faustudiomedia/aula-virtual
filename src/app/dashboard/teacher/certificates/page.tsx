@@ -50,7 +50,7 @@ export default async function TeacherCertificatesPage() {
         </p>
       </div>
 
-      <div className="bg-[var(--ag-surface)] border border-[var(--ag-border-light)] rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-black/5 rounded-2xl shadow-sm overflow-hidden">
         <CertificatesTable requests={mappedRequests} />
       </div>
     </div>

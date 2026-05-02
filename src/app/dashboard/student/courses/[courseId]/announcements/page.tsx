@@ -46,7 +46,7 @@ export default async function StudentAnnouncementsPage({ params }: Props) {
 
       <div className="space-y-4">
         {(announcements as Announcement[] ?? []).map((a) => (
-          <div key={a.id} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+          <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <h3 className="font-semibold text-[var(--ag-text)] mb-1">{a.title}</h3>
             {a.content && (
               <p className="text-sm text-[var(--ag-text)]/70 whitespace-pre-wrap">{a.content}</p>
@@ -59,4 +59,9 @@ export default async function StudentAnnouncementsPage({ params }: Props) {
         {(announcements ?? []).length === 0 && (
           <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
             No hay anuncios todavía.
-         
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

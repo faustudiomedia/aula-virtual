@@ -26,9 +26,9 @@ const ROLES = [
 
 const ROLE_COLORS: Record<string, string> = {
   alumno:      "border-sky-300 bg-sky-50 text-sky-700",
-  profesor:    "border-blue-300 bg-blue-100/60 text-blue-700",
+  profesor:    "border-blue-300 bg-blue-50 text-blue-700",
   admin:       "border-violet-300 bg-violet-50 text-violet-700",
-  super_admin: "border-amber-300 bg-amber-100/60 text-amber-700",
+  super_admin: "border-amber-300 bg-amber-50 text-amber-700",
 };
 
 export default function EditUserForm({
@@ -77,7 +77,7 @@ export default function EditUserForm({
           <input
             value={profile.email}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text-muted)] bg-[var(--ag-surface-alt)] cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/[0.02] cursor-not-allowed"
           />
           <p className="text-xs text-[var(--ag-text)]/30 mt-1">El email no se puede cambiar desde aquí.</p>
         </div>
@@ -91,7 +91,7 @@ export default function EditUserForm({
             required
             defaultValue={profile.full_name ?? ""}
             placeholder="Ej: María García"
-            className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function EditUserForm({
               className={`text-left p-3 rounded-xl border-2 transition-all ${
                 selectedRole === r.value
                   ? ROLE_COLORS[r.value]
-                  : "border-[var(--ag-border)] hover:border-black/20 text-[var(--ag-text)]/70"
+                  : "border-black/10 hover:border-black/20 text-[var(--ag-text)]/70"
               }`}
             >
               <p className="text-sm font-semibold">{r.label}</p>
@@ -128,7 +128,7 @@ export default function EditUserForm({
             Instituto <span className="text-red-500">*</span>
           </label>
           {institutes.length === 0 ? (
-            <p className="text-sm text-[var(--ag-text-muted)] bg-amber-100/50 border border-amber-300/50/70 rounded-xl p-3">
+            <p className="text-sm text-[var(--ag-text-muted)] bg-amber-50 border border-amber-200 rounded-xl p-3">
               No hay institutos activos.
             </p>
           ) : (
@@ -136,7 +136,7 @@ export default function EditUserForm({
               name="institute_id"
               required={needsInstitute}
               defaultValue={profile.institute_id ?? ""}
-              className="w-full px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-[var(--ag-surface)]"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-white"
             >
               <option value="">Seleccionar instituto...</option>
               {institutes.map((inst) => (
@@ -151,7 +151,7 @@ export default function EditUserForm({
 
       {/* Error */}
       {error && (
-        <div className="bg-red-100/50 border border-red-300/50/70 rounded-xl p-3 text-sm text-red-600">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600">
           {error}
         </div>
       )}
@@ -167,4 +167,11 @@ export default function EditUserForm({
         </button>
         <a
           href="/dashboard/super-admin/users"
-          className="px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm font-medium text-[var(--ag-text-muted)] hover:bg-
+          className="px-4 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[var(--ag-text-muted)] hover:bg-black/5 transition text-center"
+        >
+          Cancelar
+        </a>
+      </div>
+    </form>
+  );
+}

@@ -103,7 +103,7 @@ export function NotificationBell({ userId }: { userId: string }) {
     <div className="relative" ref={panelRef}>
       <button
         onClick={() => setOpen(o => !o)}
-        className="relative p-2 rounded-xl hover:bg-[var(--ag-surface-alt)] transition-colors text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]"
+        className="relative p-2 rounded-xl hover:bg-black/5 transition-colors text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]"
         aria-label="Notificaciones"
       >
         <Bell size={20} />
@@ -115,9 +115,9 @@ export function NotificationBell({ userId }: { userId: string }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-[var(--ag-surface)] rounded-2xl shadow-xl border border-[var(--ag-border-light)] z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-black/5 z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--ag-border-light)]">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-black/5">
             <p className="text-sm font-bold text-[var(--ag-text)]">Notificaciones</p>
             {unread > 0 && (
               <button
@@ -130,7 +130,7 @@ export function NotificationBell({ userId }: { userId: string }) {
           </div>
 
           {/* List */}
-          <div className="max-h-[420px] overflow-y-auto divide-y divide-[var(--ag-border-light)]">
+          <div className="max-h-[420px] overflow-y-auto divide-y divide-black/5">
             {notifs.length === 0 ? (
               <div className="py-10 text-center text-[var(--ag-text)]/30 text-sm">
                 <p className="text-2xl mb-2">🔔</p>
@@ -141,7 +141,7 @@ export function NotificationBell({ userId }: { userId: string }) {
                 <button
                   key={n.id}
                   onClick={() => handleClick(n)}
-                  className={`w-full text-left px-4 py-3 hover:bg-[var(--ag-surface)] transition-colors flex items-start gap-3 ${
+                  className={`w-full text-left px-4 py-3 hover:bg-white transition-colors flex items-start gap-3 ${
                     !n.is_read ? "bg-[rgba(30,58,95,0.08)]/60" : ""
                   }`}
                 >

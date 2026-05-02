@@ -64,7 +64,7 @@ export default function NotificationsClient({ notifications }: Props) {
             key={notif.id}
             className={`rounded-xl border p-4 flex items-start gap-4 transition-all ${
               notif.is_read
-                ? 'bg-[var(--ag-surface)] border-[var(--ag-border-light)]'
+                ? 'bg-white border-black/5'
                 : 'bg-[rgba(30,58,95,0.08)] border-[var(--ag-border-light)]'
             }`}
           >
@@ -104,4 +104,12 @@ export default function NotificationsClient({ notifications }: Props) {
                 className="flex-shrink-0 text-xs text-[var(--ag-text-muted)] hover:text-[var(--ag-navy)] transition-colors mt-0.5"
                 aria-label="Marcar como leída"
               >
-             
+                ✓ Leída
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

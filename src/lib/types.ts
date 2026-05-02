@@ -142,4 +142,34 @@ export interface Notification {
   id: string;
   user_id: string;
   title: string;
-  
+  message: string;
+  link_url: string | null;
+  is_read: boolean;
+  created_at: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string | null;
+  start_at: string;
+  end_at: string | null;
+  created_at: string;
+  courses?: { title: string } | null;
+}
+
+export type CertificateStatus = "pending" | "approved" | "rejected";
+
+export interface CertificateRequest {
+  id: string;
+  student_id: string;
+  course_id: string;
+  status: CertificateStatus;
+  approved_by: string | null;
+  approved_at: string | null;
+  certificate_code: string | null;
+  created_at: string;
+  profiles?: { full_name: string; email: string } | null;
+  courses?: { title: string; teacher_id: string } | null;
+}

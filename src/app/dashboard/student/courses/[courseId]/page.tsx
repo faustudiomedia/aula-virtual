@@ -35,4 +35,25 @@ export default async function StudentCourseDetailPage({ params }: Props) {
     .eq("course_id", courseId)
     .maybeSingle();
 
-  if (!enrollment && !isSuperAdmin) redirect("/dashboa
+  if (!enrollment && !isSuperAdmin) redirect("/dashboard/student/courses");
+
+  const effectiveEnrollment = enrollment ?? { id: "preview", progress: 0, completed: false };
+
+  // certificate_requests not in generated types yet — use any cast
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: certificateReq } = await (supabase as any)
+    .from("certificate_requests")
+    .select("status, certificate_code")
+    .eq("student_id", user.id)
+    .eq("course_id", courseId)
+    .maybeSingle();
+
+  return (
+    <StudentCourseDetailView
+      course={course}
+      enrollment={effectiveEnrollment}
+      userId={user.id}
+      initialCertificateRequest={certificateReq ?? null}
+    />
+  );
+}

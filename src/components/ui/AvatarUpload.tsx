@@ -44,7 +44,7 @@ export function AvatarUpload({ currentUrl, name }: Props) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="text-xs px-3 py-1.5 rounded-lg border border-[var(--ag-border)] text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] transition-all"
+          className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
         >
           Subir foto
         </button>

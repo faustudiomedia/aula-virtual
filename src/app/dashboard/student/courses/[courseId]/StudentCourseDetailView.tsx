@@ -154,7 +154,7 @@ export default function StudentCourseDetailView({ course, enrollment, userId, in
 
       {/* ── Certificate banner ── */}
       {localProgress > 0 && (
-        <div className="bg-[var(--ag-surface)] border-b" style={{ borderColor: "var(--ag-border-light)" }}>
+        <div className="bg-white border-b" style={{ borderColor: "var(--ag-border-light)" }}>
           <div className="max-w-[1400px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center gap-4">
 
             {/* Lock / Award icon */}
@@ -233,7 +233,7 @@ export default function StudentCourseDetailView({ course, enrollment, userId, in
       )}
 
       {/* ── Tabs + progress row ── */}
-      <div className="bg-[var(--ag-surface)] border-b" style={{ borderColor: "var(--ag-border-light)" }}>
+      <div className="bg-white border-b" style={{ borderColor: "var(--ag-border-light)" }}>
         <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between gap-4 text-sm">
           <StudentCourseNavTabs courseId={course.id} />
           <div className="flex items-center gap-3 py-3 flex-shrink-0">
@@ -342,4 +342,129 @@ export default function StudentCourseDetailView({ course, enrollment, userId, in
                                   fontWeight: isActive ? 600 : 400,
                                   color: isActive ? "var(--ag-navy)" : "var(--ag-text)",
                                 }}>
-                     
+                                  {idx + 1}. {mat.title}
+                                </div>
+                                <div className="text-[9px] font-bold uppercase tracking-wider"
+                                  style={{ color: "var(--ag-text-light)" }}>
+                                  {FILE_LABELS[mat.file_type || "link"] || mat.file_type}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </aside>
+
+        {/* ── MAIN VIEWER ── */}
+        <main className="flex-1 bg-white flex flex-col min-h-[500px]">
+          {activeMaterial ? (
+            <div className="h-full flex flex-col">
+
+              {/* Media viewer */}
+              <div className="w-full flex-shrink-0 relative overflow-hidden"
+                style={{ minHeight: 380, height: "52vh", background: "#0F172A" }}>
+                {activeMaterial.file_url ? (
+                  activeMaterial.file_type === "image" ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={activeMaterial.file_url} alt={activeMaterial.title}
+                      className="w-full h-full object-contain absolute inset-0" />
+                  ) : activeMaterial.file_type === "video" ? (
+                    <iframe src={getEmbedUrl(activeMaterial.file_url) || ""}
+                      className="w-full h-full absolute inset-0 border-0"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" />
+                  ) : activeMaterial.file_type === "pdf" ? (
+                    <iframe src={activeMaterial.file_url}
+                      className="w-full h-full absolute inset-0 border-0" />
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white/50">
+                      <LinkIcon size={40} />
+                      <p className="text-sm text-center px-8">Material como enlace externo</p>
+                      <a href={activeMaterial.file_url} target="_blank" rel="noopener noreferrer"
+                        className="px-5 py-2 rounded-lg text-sm font-semibold text-white transition-colors"
+                        style={{ background: "var(--ag-navy)" }}>
+                        Abrir en nueva pestaña
+                      </a>
+                    </div>
+                  )
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-white/30 text-sm">
+                    Este tema no tiene archivo adjunto.
+                  </div>
+                )}
+              </div>
+
+              {/* Material info + actions */}
+              <div className="p-6 md:p-8 flex flex-col flex-1" style={{ borderTop: "1px solid var(--ag-border-light)" }}>
+                <h2 className="text-xl font-bold mb-2" style={{ color: "var(--ag-text)" }}>
+                  {activeMaterial.title}
+                </h2>
+                {activeMaterial.description && (
+                  <p className="text-sm whitespace-pre-wrap mb-6" style={{ color: "var(--ag-text-muted)" }}>
+                    {activeMaterial.description}
+                  </p>
+                )}
+
+                {/* Nav + complete button */}
+                <div className="mt-auto pt-5 flex flex-col sm:flex-row items-center justify-between gap-4"
+                  style={{ borderTop: "1px solid var(--ag-border-light)" }}>
+
+                  <button onClick={navigatePrev}
+                    className="text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                    style={{ color: "var(--ag-text-muted)" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "var(--ag-text)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "var(--ag-text-muted)")}>
+                    ← Anterior
+                  </button>
+
+                  {(() => {
+                    const isDone = completed.has(activeMaterial.id);
+                    const thisPending = isPending && pendingMaterialId === activeMaterial.id;
+                    return (
+                      <button onClick={() => handleToggle(activeMaterial.id)}
+                        disabled={thisPending}
+                        className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
+                          isDone ? "" : "ag-btn-primary"
+                        }`}
+                        style={isDone ? {
+                          background: "rgba(22,101,52,0.08)",
+                          color: "#166534",
+                          border: "1px solid rgba(22,101,52,0.2)",
+                        } : {}}>
+                        {thisPending ? "Guardando..."
+                          : isDone ? <><CheckCircle2 size={16} /> Tema completado</>
+                          : "Marcar como terminado"}
+                      </button>
+                    );
+                  })()}
+
+                  <button onClick={navigateNext}
+                    className="text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                    style={{ color: "var(--ag-navy)" }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = "0.75")}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = "1")}>
+                    Siguiente →
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-8 text-center min-h-[400px]"
+              style={{ color: "var(--ag-text-light)" }}>
+              <div>
+                <FileText size={36} className="mx-auto mb-3 opacity-30" />
+                <p className="text-sm">Seleccioná un tema del temario para comenzar.</p>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}

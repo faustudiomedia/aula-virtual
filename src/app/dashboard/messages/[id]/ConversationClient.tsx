@@ -104,7 +104,7 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-[var(--ag-surface)]">
+      <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-white">
         {messages.length === 0 && (
           <p className="text-center text-sm text-[var(--ag-text-muted)] py-8">
             No hay mensajes todavía. ¡Iniciá la conversación!
@@ -119,7 +119,7 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
                 className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm shadow-sm transition-opacity duration-300 ${
                   isMine
                     ? 'bg-[var(--ag-navy)] text-white rounded-br-sm'
-                    : 'bg-[var(--ag-surface)] text-[var(--ag-text)] border border-[var(--ag-border-light)] rounded-bl-sm'
+                    : 'bg-white text-[var(--ag-text)] border border-black/5 rounded-bl-sm'
                 } ${isTemp ? 'opacity-60' : 'opacity-100'}`}
               >
                 <p className="whitespace-pre-wrap break-words">{m.content}</p>
@@ -138,7 +138,7 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
       <form
         ref={formRef}
         onSubmit={e => { e.preventDefault(); submit() }}
-        className="flex gap-3 p-4 bg-[var(--ag-surface)] border-t border-[var(--ag-border-light)] items-end flex-shrink-0"
+        className="flex gap-3 p-4 bg-white border-t border-black/5 items-end flex-shrink-0"
       >
         <textarea
           ref={inputRef}
@@ -147,7 +147,7 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
           rows={1}
           autoComplete="off"
           onKeyDown={handleKeyDown}
-          className="flex-1 px-4 py-2.5 rounded-xl border border-[var(--ag-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
           placeholder="Escribe un mensaje… (Enter para enviar)"
         />
         <button

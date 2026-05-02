@@ -36,4 +36,7 @@ export default async function NewQuizPage({ params }: Props) {
       <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">Nuevo quiz</h1>
       <p className="text-[var(--ag-text-muted)] mb-8">Construí las preguntas y marcá las respuestas correctas.</p>
 
-      <QuizEditor courseId={
+      <QuizEditor courseId={courseId} />
+    </div>
+  )
+}

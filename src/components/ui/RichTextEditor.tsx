@@ -34,7 +34,7 @@ function ToolbarButton({
       className={`w-7 h-7 rounded flex items-center justify-center text-xs transition-all ${
         active
           ? 'bg-[var(--ag-navy)] text-white'
-          : 'text-[var(--ag-text-muted)] hover:bg-[var(--ag-surface-alt)] hover:text-[var(--ag-text)]'
+          : 'text-[var(--ag-text-muted)] hover:bg-black/5 hover:text-[var(--ag-text)]'
       }`}
     >
       {children}
@@ -77,9 +77,9 @@ export default function RichTextEditor({
   }
 
   return (
-    <div className="rounded-xl border border-[var(--ag-border)] overflow-hidden focus-within:ring-2 focus-within:ring-[var(--ag-navy)]/30 transition-all">
+    <div className="rounded-xl border border-black/10 overflow-hidden focus-within:ring-2 focus-within:ring-[var(--ag-navy)]/30 transition-all">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-[var(--ag-border-light)] bg-[var(--ag-surface)]">
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-black/5 bg-white">
         {/* Text style */}
         <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive('bold')} title="Negrita">
           <strong>B</strong>
@@ -150,5 +150,9 @@ export default function RichTextEditor({
       {/* Editor area */}
       <EditorContent
         editor={editor}
-        className="px-4 py-3 text-sm text-[var(--ag-text)] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[var(--min-h)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-[var(--ag-text)]/30 [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_h1]:text-2xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:text-xl [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h3]:text-lg [&_.ProseMirror_h3]:font-semibold [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-5 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-5 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-[var(--ag-navy)]/30 [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:text-[var(--ag-text-muted)] [&_.ProseMirror_code]:bg-[var(--ag-surface-alt)] [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:px-1 [&_.ProseMirror_pre]:bg-[var(--ag-surface-alt)] [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:p-3"
-        style={{ '--min-h': `${min
+        className="px-4 py-3 text-sm text-[var(--ag-text)] focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[var(--min-h)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-[var(--ag-text)]/30 [&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left [&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none [&_.ProseMirror_h1]:text-2xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:text-xl [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h3]:text-lg [&_.ProseMirror_h3]:font-semibold [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ul]:pl-5 [&_.ProseMirror_ol]:list-decimal [&_.ProseMirror_ol]:pl-5 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-[var(--ag-navy)]/30 [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:text-[var(--ag-text-muted)] [&_.ProseMirror_code]:bg-black/5 [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:px-1 [&_.ProseMirror_pre]:bg-black/5 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:p-3"
+        style={{ '--min-h': `${minHeight}px` } as React.CSSProperties}
+      />
+    </div>
+  )
+}

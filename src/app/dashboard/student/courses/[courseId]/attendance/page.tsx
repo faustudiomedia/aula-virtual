@@ -14,10 +14,10 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  present: 'bg-green-100/60 text-green-700',
-  absent: 'bg-red-100/60 text-red-700',
-  late: 'bg-yellow-100/60 text-yellow-700',
-  justified: 'bg-blue-100/60 text-blue-700',
+  present: 'bg-green-50 text-green-700',
+  absent: 'bg-red-50 text-red-700',
+  late: 'bg-yellow-50 text-yellow-700',
+  justified: 'bg-blue-50 text-blue-700',
 }
 
 function formatDate(d: string) {
@@ -83,7 +83,7 @@ export default async function StudentAttendancePage({ params }: Props) {
             { label: 'Ausentes', value: absent, color: 'text-red-700' },
             { label: 'Justificados', value: justified, color: 'text-blue-700' },
           ].map(card => (
-            <div key={card.label} className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-4 text-center">
+            <div key={card.label} className="bg-white rounded-2xl border border-black/5 shadow-sm p-4 text-center">
               <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
               <p className="text-xs text-[var(--ag-text-muted)] mt-1">{card.label}</p>
             </div>
@@ -92,19 +92,19 @@ export default async function StudentAttendancePage({ params }: Props) {
       )}
 
       {/* Sessions table */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
         {sessionList.length === 0 ? (
           <p className="p-6 text-sm text-[var(--ag-text-muted)] text-center">El docente aún no registró clases.</p>
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[var(--ag-border-light)]">
+              <tr className="border-b border-black/5">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-[var(--ag-text-muted)] uppercase tracking-wider">Fecha</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-[var(--ag-text-muted)] uppercase tracking-wider">Tema</th>
                 <th className="text-center px-6 py-3 text-xs font-semibold text-[var(--ag-text-muted)] uppercase tracking-wider">Estado</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[var(--ag-border-light)]">
+            <tbody className="divide-y divide-black/5">
               {sessionList.map(s => {
                 const record = recordMap.get(s.id)
                 const status = record?.status ?? 'absent'
@@ -119,4 +119,11 @@ export default async function StudentAttendancePage({ params }: Props) {
                     </td>
                   </tr>
                 )
-         
+              })}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </div>
+  )
+}

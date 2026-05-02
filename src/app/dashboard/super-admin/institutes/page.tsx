@@ -67,18 +67,18 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
       </div>
 
       {/* ── Filtros ── */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm mb-6 p-4">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm mb-6 p-4">
         <form className="flex gap-3 flex-wrap">
           <input
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre..."
-            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
           <select
             name="status"
             defaultValue={status}
-            className="px-4 py-2 rounded-xl border border-[var(--ag-border)] text-sm text-[var(--ag-text)] bg-[var(--ag-bg)] text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
+            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           >
             <option value="all">Todos</option>
             <option value="active">Activos</option>
@@ -93,7 +93,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
           {(q || status !== 'all') && (
             <Link
               href="/dashboard/super-admin/institutes"
-              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-[var(--ag-border)] hover:bg-[var(--ag-surface-alt)] transition-all"
+              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-black/10 hover:bg-black/5 transition-all"
             >
               Limpiar
             </Link>
@@ -102,7 +102,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
       </div>
 
       {/* ── Tabla ── */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
         {(institutes ?? []).length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-4xl mb-3">🏫</p>
@@ -118,7 +118,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
           <div className="overflow-x-auto">
           <table className="w-full min-w-[600px] text-sm">
             <thead>
-              <tr className="border-b border-[var(--ag-border-light)] bg-[var(--ag-surface-alt)]">
+              <tr className="border-b border-black/5 bg-black/[0.02]">
                 <th className="text-left px-6 py-3.5 font-semibold text-[var(--ag-text-muted)]">Instituto</th>
                 <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Slug</th>
                 <th className="text-center px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Usuarios</th>
@@ -129,7 +129,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
             </thead>
             <tbody>
               {(institutes ?? []).map((inst: { id: string; name: string; slug: string; domain: string | null; primary_color: string | null; secondary_color: string | null; active: boolean }) => (
-                <tr key={inst.id} className="border-b border-[var(--ag-border-light)] last:border-0 hover:bg-[var(--ag-surface-alt)] transition-colors">
+                <tr key={inst.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.01] transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div
@@ -156,8 +156,8 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
                   <td className="px-4 py-4 text-center">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       inst.active
-                        ? 'bg-green-100/60 text-green-700'
-                        : 'bg-red-100/60 text-red-600'
+                        ? 'bg-green-50 text-green-700'
+                        : 'bg-red-50 text-red-600'
                     }`}>
                       {inst.active ? '● Activo' : '● Inactivo'}
                     </span>
@@ -187,4 +187,15 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
               href={`?q=${q}&status=${status}&page=${p}`}
               className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
                 p === currentPage
-                  ? 'text-
+                  ? 'text-white bg-[var(--ag-text)]'
+                  : 'text-[var(--ag-text-muted)] hover:bg-black/5'
+              }`}
+            >
+              {p}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

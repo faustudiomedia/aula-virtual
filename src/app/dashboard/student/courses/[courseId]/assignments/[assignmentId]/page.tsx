@@ -55,11 +55,11 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
       <StudentCourseNavTabs courseId={courseId} />
 
       {/* Assignment details */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6 mb-6">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 mb-6">
         <div className="flex items-start justify-between gap-4 mb-3">
           <h2 className="text-lg font-semibold text-[var(--ag-text)]">{a.title}</h2>
           {a.due_date && (
-            <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0 ${overdue ? 'bg-red-100/60 text-red-600' : 'bg-amber-100/60 text-amber-600'}`}>
+            <span className={`text-xs px-2.5 py-1 rounded-full font-medium flex-shrink-0 ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
               Vence: {new Date(a.due_date).toLocaleDateString('es-AR', { dateStyle: 'short' })}
             </span>
           )}
@@ -72,7 +72,7 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
 
       {/* Grade & feedback (if graded) */}
       {s?.graded_at && (
-        <div className="bg-green-100/50 border border-green-300/50/70 rounded-2xl p-5 mb-6">
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-2xl font-bold text-green-700">{s.score ?? '—'}</span>
             <span className="text-green-600 font-medium">/ {a.max_score} pts</span>
@@ -88,7 +88,7 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
 
       {/* Existing submission */}
       {s && (
-        <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5 mb-6">
+        <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-semibold text-[var(--ag-text)]">Tu entrega</p>
             <span className="text-xs text-[var(--ag-text-muted)]">
@@ -97,7 +97,7 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
           </div>
           {s.content && (
             <div
-              className="text-sm text-[var(--ag-text)]/80 bg-[var(--ag-surface)] rounded-xl p-4 mb-3 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_code]:bg-[var(--ag-surface-alt)] [&_code]:rounded [&_code]:px-1 [&_mark]:bg-yellow-200"
+              className="text-sm text-[var(--ag-text)]/80 bg-white rounded-xl p-4 mb-3 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_mark]:bg-yellow-200"
               dangerouslySetInnerHTML={{ __html: s.content }}
             />
           )}
@@ -115,10 +115,16 @@ export default async function StudentAssignmentDetailPage({ params }: Props) {
       )}
 
       {/* Submit / re-submit form */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         <h3 className="text-base font-semibold text-[var(--ag-text)] mb-4">
           {s ? 'Re-entregar tarea' : 'Entregar tarea'}
         </h3>
         <SubmitAssignmentForm
           assignmentId={assignmentId}
-          defaultContent={s?.c
+          defaultContent={s?.content ?? ''}
+          isResubmit={!!s}
+        />
+      </div>
+    </div>
+  )
+}

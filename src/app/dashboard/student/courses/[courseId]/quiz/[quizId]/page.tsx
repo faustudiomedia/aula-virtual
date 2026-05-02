@@ -71,4 +71,8 @@ export default async function StudentQuizPage({ params }: Props) {
       <QuizPlayer
         quiz={quizData}
         courseId={courseId}
-        previousAttempt={previousAttemp
+        previousAttempt={previousAttempt}
+      />
+    </div>
+  )
+}

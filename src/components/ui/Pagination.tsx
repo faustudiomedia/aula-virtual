@@ -17,13 +17,13 @@ export function Pagination({ totalPages }: { totalPages: number }) {
   };
 
   return (
-    <div className="flex gap-2 items-center justify-center p-4 border-t border-[var(--ag-border-light)]">
+    <div className="flex gap-2 items-center justify-center p-4 border-t border-black/5">
       <Link
         href={createPageURL(Math.max(1, currentPage - 1))}
-        className={`px-3 py-1.5 border border-[var(--ag-border)] rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
+        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
           currentPage <= 1
             ? "pointer-events-none opacity-50"
-            : "hover:bg-[var(--ag-surface-alt)] hover:text-[var(--ag-text)]"
+            : "hover:bg-black/5 hover:text-[var(--ag-text)]"
         }`}
       >
         Anterior
@@ -36,12 +36,16 @@ export function Pagination({ totalPages }: { totalPages: number }) {
 
       <Link
         href={createPageURL(Math.min(totalPages, currentPage + 1))}
-        className={`px-3 py-1.5 border border-[var(--ag-border)] rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
+        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
           currentPage >= totalPages
             ? "pointer-events-none opacity-50"
-            : "hover:bg-[var(--ag-surface-alt)] hover:text-[var(--ag-text)]"
+            : "hover:bg-black/5 hover:text-[var(--ag-text)]"
         }`}
       >
         Siguiente
       </Link>
-    <
+    </div>
+  );
+}
+
+export default Pagination

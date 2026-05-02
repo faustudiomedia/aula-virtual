@@ -84,8 +84,8 @@ export default async function AdminDashboard() {
             value: instituteList.length,
             Icon: Building2,
             color: "var(--ag-navy)",
-            bg: "#EFF6FF",
-            border: "#BFDBFE",
+            bg: "rgba(30,58,95,0.08)",
+            border: "rgba(30,58,95,0.16)",
           },
           {
             label: "Alumnos totales",
@@ -95,8 +95,8 @@ export default async function AdminDashboard() {
             ),
             Icon: GraduationCap,
             color: "#059669",
-            bg: "#ECFDF5",
-            border: "#A7F3D0",
+            bg: "rgba(5,150,105,0.08)",
+            border: "rgba(5,150,105,0.16)",
           },
           {
             label: "Profesores",
@@ -106,16 +106,16 @@ export default async function AdminDashboard() {
             ),
             Icon: UserCog,
             color: "#7C3AED",
-            bg: "#F5F3FF",
-            border: "#DDD6FE",
+            bg: "rgba(124,58,237,0.08)",
+            border: "rgba(124,58,237,0.16)",
           },
           {
             label: "Cursos",
             value: Object.values(coursesByInstitute).reduce((s, n) => s + n, 0),
             Icon: BookOpen,
             color: "#D97706",
-            bg: "#FFFBEB",
-            border: "#FDE68A",
+            bg: "rgba(217,119,6,0.08)",
+            border: "rgba(217,119,6,0.16)",
           },
         ].map((stat) => (
           <div
@@ -127,7 +127,7 @@ export default async function AdminDashboard() {
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm font-medium mt-1" style={{ color: stat.color + "99" }}>
+            <p className="text-sm font-medium mt-1 opacity-70" style={{ color: stat.color }}>
               {stat.label}
             </p>
           </div>
@@ -185,8 +185,8 @@ export default async function AdminDashboard() {
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       inst.active
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-600"
+                        ? "bg-green-100/60 text-green-700"
+                        : "bg-red-100/60 text-red-600"
                     }`}
                   >
                     {inst.active ? "Activo" : "Inactivo"}
@@ -214,12 +214,12 @@ export default async function AdminDashboard() {
                 {/* Color swatches */}
                 <div className="flex items-center gap-2 mb-4">
                   <div
-                    className="w-5 h-5 rounded-full border border-[var(--ag-border)]"
+                    className="w-5 h-5 rounded-full border border-black/10"
                     style={{ background: inst.primary_color }}
                     title={inst.primary_color}
                   />
                   <div
-                    className="w-5 h-5 rounded-full border border-[var(--ag-border)]"
+                    className="w-5 h-5 rounded-full border border-black/10"
                     style={{ background: inst.secondary_color }}
                     title={inst.secondary_color}
                   />

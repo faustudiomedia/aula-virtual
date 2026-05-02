@@ -58,7 +58,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
   return (
     <div className="space-y-4">
       {/* Progress summary */}
-      <div className="bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm p-5">
+      <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm font-semibold text-[var(--ag-text)]">
             {seen.size} de {total} materiales completados
@@ -86,10 +86,10 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
           return (
             <div
               key={material.id}
-              className={`bg-[var(--ag-surface)] rounded-xl border transition-all duration-200 overflow-hidden ${
+              className={`bg-white rounded-xl border transition-all duration-200 overflow-hidden ${
                 isDone
                   ? 'border-green-200 bg-green-50/30'
-                  : 'border-[var(--ag-border-light)] hover:border-[var(--ag-border-light)] hover:shadow-sm'
+                  : 'border-black/5 hover:border-[var(--ag-border-light)] hover:shadow-sm'
               }`}
             >
               {/* Main row — clickeable */}
@@ -155,7 +155,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
 
               {/* Expanded content */}
               {isOpen && (
-                <div className="px-4 pb-4 pt-0 border-t border-[var(--ag-border-light)]">
+                <div className="px-4 pb-4 pt-0 border-t border-black/5">
                   {material.description && (
                     <p className="text-sm text-[var(--ag-text)]/70 mt-3 mb-3 leading-relaxed">
                       {material.description}
@@ -178,4 +178,13 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                     <p className="text-xs text-[var(--ag-text-muted)] italic">
                       Este material no tiene archivo adjunto todavía.
                     </p>
-           
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}

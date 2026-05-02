@@ -138,7 +138,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
               href={t.key === 'inbox' ? '/dashboard/messages' : `/dashboard/messages?tab=${t.key}`}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-[var(--ag-surface)] text-[var(--ag-text)] shadow-sm'
+                  ? 'bg-white text-[var(--ag-text)] shadow-sm'
                   : 'text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]'
               }`}
             >
@@ -186,8 +186,8 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
               <Link
                 key={conv.userId}
                 href={`/dashboard/messages/${conv.userId}`}
-                className={`flex items-center gap-4 p-4 bg-[var(--ag-surface)] rounded-2xl border shadow-sm hover:shadow-md transition-all ${
-                  conv.unread > 0 ? 'border-[var(--ag-navy)]/20' : 'border-[var(--ag-border-light)] hover:border-[var(--ag-navy)]/20'
+                className={`flex items-center gap-4 p-4 bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all ${
+                  conv.unread > 0 ? 'border-[var(--ag-navy)]/20' : 'border-black/5 hover:border-[var(--ag-navy)]/20'
                 }`}
               >
                 {/* Avatar */}
@@ -243,7 +243,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
               <Link
                 key={c.id}
                 href={`/dashboard/messages/${c.id}`}
-                className="flex items-center gap-4 p-4 bg-[var(--ag-surface)] rounded-2xl border border-[var(--ag-border-light)] shadow-sm hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
+                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-black/5 shadow-sm hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
               >
                 <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
                   c.role === 'profesor' ? 'bg-violet-100 text-violet-600' : 'bg-[#F0FDF4] text-green-600'

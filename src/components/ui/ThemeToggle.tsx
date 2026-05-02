@@ -20,7 +20,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="p-2 rounded-xl transition-all hover:bg-[var(--ag-surface-alt)] active:scale-95"
+      className="p-2 rounded-xl transition-all hover:bg-black/5 active:scale-95"
       style={{ color: 'var(--ag-text-muted)' }}
       aria-label={dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       title={dark ? 'Modo claro' : 'Modo oscuro'}

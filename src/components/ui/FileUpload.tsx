@@ -43,7 +43,7 @@ export default function FileUpload({ folder, accept, onUpload, onError }: Props)
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="px-3 py-2 rounded-lg border border-[var(--ag-border)] bg-[var(--ag-surface)] text-sm text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition disabled:opacity-50 flex items-center gap-1.5"
+        className="px-3 py-2 rounded-lg border border-black/10 bg-white text-sm text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition disabled:opacity-50 flex items-center gap-1.5"
       >
         <span>{uploading ? "⏳" : "📎"}</span>
         {uploading ? "Subiendo..." : "Seleccionar archivo"}
@@ -58,4 +58,6 @@ export default function FileUpload({ folder, accept, onUpload, onError }: Props)
         className="hidden"
         onChange={handleChange}
       />
-    </
+    </div>
+  );
+}
