@@ -21,8 +21,8 @@ export default async function AcademicPeriodsPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Periodos Académicos</h1>
-        <p className="text-[#050F1F]/50 mt-1">Administrá los periodos lectivos del instituto.</p>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Periodos Académicos</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">Administrá los periodos lectivos del instituto.</p>
       </div>
       <AcademicPeriodsView periods={periods ?? []} />
     </div>

@@ -14,7 +14,7 @@ const FILE_TYPE_META: Record<string, { icon: string; label: string; color: strin
   pdf:   { icon: '📄', label: 'PDF',    color: '#DC2626', bg: '#FEF2F2' },
   video: { icon: '🎥', label: 'Video',  color: '#7C3AED', bg: '#F5F3FF' },
   image: { icon: '🖼️', label: 'Imagen', color: '#059669', bg: '#ECFDF5' },
-  link:  { icon: '🔗', label: 'Enlace', color: '#1A56DB', bg: '#EFF6FF' },
+  link:  { icon: '🔗', label: 'Enlace', color: var(--ag-navy), bg: rgba(30,58,95,0.06) },
 }
 
 export default function MaterialProgress({ materials, enrollmentId }: Props) {
@@ -60,7 +60,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
       {/* Progress summary */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-semibold text-[#050F1F]">
+          <p className="text-sm font-semibold text-[var(--ag-text)]">
             {seen.size} de {total} materiales completados
           </p>
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -89,7 +89,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
               className={`bg-white rounded-xl border transition-all duration-200 overflow-hidden ${
                 isDone
                   ? 'border-green-200 bg-green-50/30'
-                  : 'border-black/5 hover:border-[#BAE6FD] hover:shadow-sm'
+                  : 'border-black/5 hover:border-[var(--ag-border-light)] hover:shadow-sm'
               }`}
             >
               {/* Main row — clickeable */}
@@ -102,7 +102,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                 <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                   isDone
                     ? 'bg-green-100 text-green-700'
-                    : 'bg-[#F0F9FF] border border-[#BAE6FD] text-[#1A56DB]'
+                    : 'bg-[rgba(30,58,95,0.06)] border border-[var(--ag-border-light)] text-[var(--ag-navy)]'
                 }`}>
                   {isDone ? '✓' : idx + 1}
                 </span>
@@ -110,7 +110,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                 {/* Title + type badge */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className={`font-medium text-sm ${isDone ? 'text-[#050F1F]/60 line-through' : 'text-[#050F1F]'}`}>
+                    <p className={`font-medium text-sm ${isDone ? 'text-[var(--ag-text-muted)] line-through' : 'text-[var(--ag-text)]'}`}>
                       {material.title}
                     </p>
                     {material.file_type && (
@@ -123,12 +123,12 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                     )}
                   </div>
                   {!isOpen && material.description && (
-                    <p className="text-xs text-[#050F1F]/40 mt-0.5 truncate">{material.description}</p>
+                    <p className="text-xs text-[var(--ag-text-muted)] mt-0.5 truncate">{material.description}</p>
                   )}
                 </div>
 
                 {/* Expand indicator */}
-                <span className={`text-[#050F1F]/30 text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+                <span className={`text-[var(--ag-text)]/30 text-xs transition-transform ${isOpen ? 'rotate-180' : ''}`}>
                   ▼
                 </span>
 
@@ -142,7 +142,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                   className={`flex-shrink-0 w-5 h-5 rounded border-2 transition-all flex items-center justify-center cursor-pointer ${
                     isDone
                       ? 'bg-green-500 border-green-500'
-                      : 'border-black/20 hover:border-[#1A56DB]'
+                      : 'border-black/20 hover:border-[var(--ag-navy)]'
                   }`}
                 >
                   {isDone && (
@@ -157,7 +157,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
               {isOpen && (
                 <div className="px-4 pb-4 pt-0 border-t border-black/5">
                   {material.description && (
-                    <p className="text-sm text-[#050F1F]/70 mt-3 mb-3 leading-relaxed">
+                    <p className="text-sm text-[var(--ag-text)]/70 mt-3 mb-3 leading-relaxed">
                       {material.description}
                     </p>
                   )}
@@ -175,7 +175,7 @@ export default function MaterialProgress({ materials, enrollmentId }: Props) {
                       <span className="text-xs opacity-80">↗</span>
                     </a>
                   ) : (
-                    <p className="text-xs text-[#050F1F]/40 italic">
+                    <p className="text-xs text-[var(--ag-text-muted)] italic">
                       Este material no tiene archivo adjunto todavía.
                     </p>
                   )}

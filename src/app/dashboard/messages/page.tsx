@@ -117,9 +117,9 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Mensajes</h1>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Mensajes</h1>
           {totalUnread > 0 && (
-            <p className="text-xs text-[#050F1F]/50 mt-0.5">
+            <p className="text-xs text-[var(--ag-text-muted)] mt-0.5">
               {totalUnread} mensaje{totalUnread !== 1 ? 's' : ''} sin leer
             </p>
           )}
@@ -138,13 +138,13 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
               href={t.key === 'inbox' ? '/dashboard/messages' : `/dashboard/messages?tab=${t.key}`}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-white text-[#050F1F] shadow-sm'
-                  : 'text-[#050F1F]/50 hover:text-[#050F1F]'
+                  ? 'bg-white text-[var(--ag-text)] shadow-sm'
+                  : 'text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]'
               }`}
             >
               {t.label}
               {badge && (
-                <span className="w-4 h-4 rounded-full bg-[#1A56DB] text-white text-[10px] flex items-center justify-center font-bold">
+                <span className="w-4 h-4 rounded-full bg-[var(--ag-navy)] text-white text-[10px] flex items-center justify-center font-bold">
                   {badge > 9 ? '9+' : badge}
                 </span>
               )}
@@ -155,7 +155,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
 
       {/* Empty state */}
       {conversations.length === 0 && (activeTab !== 'inbox' || newContacts.length === 0) && (
-        <div className="text-center py-16 text-[#050F1F]/40">
+        <div className="text-center py-16 text-[var(--ag-text-muted)]">
           <p className="text-3xl mb-3">
             {activeTab === 'unread' ? '📭' : activeTab === 'starred' ? '⭐' : '✉️'}
           </p>
@@ -187,14 +187,14 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
                 key={conv.userId}
                 href={`/dashboard/messages/${conv.userId}`}
                 className={`flex items-center gap-4 p-4 bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all ${
-                  conv.unread > 0 ? 'border-[#1A56DB]/20' : 'border-black/5 hover:border-[#1A56DB]/20'
+                  conv.unread > 0 ? 'border-[var(--ag-navy)]/20' : 'border-black/5 hover:border-[var(--ag-navy)]/20'
                 }`}
               >
                 {/* Avatar */}
                 <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
                   other.role === 'profesor'
                     ? 'bg-violet-100 text-violet-600'
-                    : 'bg-[#EFF6FF] text-[#1A56DB]'
+                    : 'bg-[rgba(30,58,95,0.08)] text-[var(--ag-navy)]'
                 }`}>
                   {initial}
                 </div>
@@ -202,16 +202,16 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-0.5">
-                    <p className={`text-sm truncate ${conv.unread > 0 ? 'font-bold text-[#050F1F]' : 'font-semibold text-[#050F1F]'}`}>
+                    <p className={`text-sm truncate ${conv.unread > 0 ? 'font-bold text-[var(--ag-text)]' : 'font-semibold text-[var(--ag-text)]'}`}>
                       {other.full_name}
                     </p>
-                    <span className="text-[10px] text-[#050F1F]/30 flex-shrink-0">{timeStr}</span>
+                    <span className="text-[10px] text-[var(--ag-text)]/30 flex-shrink-0">{timeStr}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-[#050F1F]/30 flex-shrink-0 bg-black/[0.04] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[10px] text-[var(--ag-text)]/30 flex-shrink-0 bg-black/[0.04] px-1.5 py-0.5 rounded-full">
                       {roleLabel}
                     </span>
-                    <p className={`text-xs truncate ${conv.unread > 0 ? 'text-[#050F1F]/80 font-medium' : 'text-[#050F1F]/50'}`}>
+                    <p className={`text-xs truncate ${conv.unread > 0 ? 'text-[var(--ag-text)]/80 font-medium' : 'text-[var(--ag-text-muted)]'}`}>
                       {conv.lastMessage}
                     </p>
                   </div>
@@ -219,12 +219,12 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
 
                 {/* Unread badge */}
                 {conv.unread > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-[#1A56DB] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
+                  <span className="w-5 h-5 rounded-full bg-[var(--ag-navy)] text-white text-xs flex items-center justify-center font-bold flex-shrink-0">
                     {conv.unread > 9 ? '9+' : conv.unread}
                   </span>
                 )}
                 {conv.unread === 0 && (
-                  <span className="text-[#050F1F]/20 flex-shrink-0">→</span>
+                  <span className="text-[var(--ag-text)]/20 flex-shrink-0">→</span>
                 )}
               </Link>
             )
@@ -235,7 +235,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
       {/* Suggested contacts — only on inbox tab */}
       {activeTab === 'inbox' && newContacts.length > 0 && (
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#050F1F]/30 mb-3">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--ag-text)]/30 mb-3">
             Contactos disponibles
           </p>
           <div className="space-y-2">
@@ -243,7 +243,7 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
               <Link
                 key={c.id}
                 href={`/dashboard/messages/${c.id}`}
-                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-black/5 shadow-sm hover:border-[#1A56DB]/20 hover:shadow-md transition-all"
+                className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-black/5 shadow-sm hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
               >
                 <div className={`w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
                   c.role === 'profesor' ? 'bg-violet-100 text-violet-600' : 'bg-[#F0FDF4] text-green-600'
@@ -251,12 +251,12 @@ export default async function MessagesInboxPage({ searchParams }: Props) {
                   {c.full_name?.charAt(0) ?? '?'}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#050F1F]">{c.full_name}</p>
-                  <p className="text-xs text-[#050F1F]/40">
+                  <p className="text-sm font-semibold text-[var(--ag-text)]">{c.full_name}</p>
+                  <p className="text-xs text-[var(--ag-text-muted)]">
                     {c.role === 'profesor' ? 'Profesor' : 'Alumno'}
                   </p>
                 </div>
-                <span className="text-xs text-[#1A56DB] font-medium">Iniciar chat →</span>
+                <span className="text-xs text-[var(--ag-navy)] font-medium">Iniciar chat →</span>
               </Link>
             ))}
           </div>

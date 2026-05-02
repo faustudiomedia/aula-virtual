@@ -96,8 +96,8 @@ export default async function StudentCalendarPage() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Calendario</h1>
-      <p className="text-[#050F1F]/50 mb-8">Tus entregas, fechas límite y reuniones.</p>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">Calendario</h1>
+      <p className="text-[var(--ag-text-muted)] mb-8">Tus entregas, fechas límite y reuniones.</p>
       <CalendarView assignments={calendarAssignments} role="student" meetings={calendarMeetings} events={calendarEvents} />
     </div>
   )

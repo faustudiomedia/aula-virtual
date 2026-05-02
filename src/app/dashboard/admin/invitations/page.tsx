@@ -26,8 +26,8 @@ export default async function InvitationsPage() {
     <div className="p-8 max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Invitar usuarios</h1>
-        <p className="text-[#050F1F]/50 mt-1">
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Invitar usuarios</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">
           Enviá un correo de invitación para que la persona cree su cuenta con el rol asignado.
         </p>
       </div>
@@ -37,13 +37,13 @@ export default async function InvitationsPage() {
       </div>
 
       {/* Info box */}
-      <div className="mt-6 rounded-xl bg-[#EFF6FF] border border-[#BAE6FD] px-5 py-4">
-        <p className="text-sm font-semibold text-[#1A56DB] mb-1">¿Cómo funciona?</p>
-        <ul className="text-sm text-[#1A56DB]/70 space-y-1 list-disc list-inside">
+      <div className="mt-6 rounded-xl bg-[rgba(30,58,95,0.08)] border border-[var(--ag-border-light)] px-5 py-4">
+        <p className="text-sm font-semibold text-[var(--ag-navy)] mb-1">¿Cómo funciona?</p>
+        <ul className="text-sm text-[var(--ag-navy)]/70 space-y-1 list-disc list-inside">
           <li>El usuario recibirá un correo con un link seguro de activación.</li>
           <li>Al hacer clic, podrá crear su contraseña y accederá con el rol asignado.</li>
           <li>El link expira en 24 horas por seguridad.</li>
-          <li>Requiere que <code className="bg-[#BAE6FD]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurada en tu servidor.</li>
+          <li>Requiere que <code className="bg-[var(--ag-border-light)]/50 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code> esté configurada en tu servidor.</li>
         </ul>
       </div>
     </div>

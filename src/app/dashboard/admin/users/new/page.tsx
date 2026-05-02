@@ -48,18 +48,18 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
       <div className="flex items-center gap-3 mb-8">
         <Link
           href="/dashboard/admin/users"
-          className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors"
+          className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors"
         >
           ← Usuarios
         </Link>
-        <span className="text-[#050F1F]/20">/</span>
-        <span className="text-sm font-medium text-[#050F1F]">Nuevo usuario</span>
+        <span className="text-[var(--ag-text)]/20">/</span>
+        <span className="text-sm font-medium text-[var(--ag-text)]">Nuevo usuario</span>
       </div>
 
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Crear usuario</h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">Crear usuario</h1>
+      <p className="text-[var(--ag-text-muted)] mb-8">
         El usuario será creado dentro de{" "}
-        <span className="font-medium text-[#050F1F]">
+        <span className="font-medium text-[var(--ag-text)]">
           {institute?.name ?? "tu instituto"}
         </span>
         .
@@ -75,20 +75,20 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
         <form action={handleCreate} className="space-y-5">
           {/* Nombre completo */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Nombre completo <span className="text-red-500">*</span>
             </label>
             <input
               name="full_name"
               required
               placeholder="Ej: María García"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -96,13 +96,13 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               type="email"
               required
               placeholder="Ej: maria@instituto.edu.ar"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
           {/* Contraseña */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Contraseña <span className="text-red-500">*</span>
             </label>
             <input
@@ -111,23 +111,23 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
               required
               minLength={8}
               placeholder="Mínimo 8 caracteres"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
-            <p className="text-xs text-[#050F1F]/40 mt-1">
+            <p className="text-xs text-[var(--ag-text-muted)] mt-1">
               El usuario podrá cambiarla después de iniciar sesión.
             </p>
           </div>
 
           {/* Rol */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Rol <span className="text-red-500">*</span>
             </label>
             <select
               name="role"
               required
               defaultValue="alumno"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             >
               <option value="alumno">🎓 Alumno</option>
               <option value="profesor">👨‍🏫 Profesor</option>
@@ -139,7 +139,7 @@ export default async function AdminNewUserPage({ searchParams }: Props) {
             <SubmitButton label="Crear usuario" loadingLabel="Creando..." />
             <Link
               href="/dashboard/admin/users"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
             >
               Cancelar
             </Link>

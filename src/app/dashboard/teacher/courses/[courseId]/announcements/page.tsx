@@ -51,17 +51,17 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/teacher" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
 
       <CourseNavTabs courseId={courseId} />
 
       {/* Form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 mb-6">
-        <h2 className="text-base font-semibold text-[#050F1F] mb-4">Nuevo anuncio</h2>
+        <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Nuevo anuncio</h2>
 
         {error && (
           <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
@@ -76,28 +76,28 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
 
         <form action={handleCreate} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Título <span className="text-red-500">*</span>
             </label>
             <input
               name="title"
               required
               placeholder="Ej: Recordatorio de entrega"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Contenido</label>
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Contenido</label>
             <textarea
               name="content"
               rows={4}
               placeholder="Escribí el contenido del anuncio..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] resize-none focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
           <button
             type="submit"
-            className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition-all"
           >
             Publicar anuncio
           </button>
@@ -110,11 +110,11 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
           <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h3 className="font-semibold text-[#050F1F] mb-1">{a.title}</h3>
+                <h3 className="font-semibold text-[var(--ag-text)] mb-1">{a.title}</h3>
                 {a.content && (
-                  <p className="text-sm text-[#050F1F]/60 whitespace-pre-wrap">{a.content}</p>
+                  <p className="text-sm text-[var(--ag-text-muted)] whitespace-pre-wrap">{a.content}</p>
                 )}
-                <p className="text-xs text-[#050F1F]/30 mt-2">
+                <p className="text-xs text-[var(--ag-text)]/30 mt-2">
                   {new Date(a.created_at).toLocaleDateString('es-AR', { dateStyle: 'long' })}
                 </p>
               </div>
@@ -131,7 +131,7 @@ export default async function TeacherAnnouncementsPage({ params, searchParams }:
           </div>
         ))}
         {(announcements ?? []).length === 0 && (
-          <div className="text-center py-12 text-[#050F1F]/40 text-sm">
+          <div className="text-center py-12 text-[var(--ag-text-muted)] text-sm">
             No hay anuncios todavía. Publicá el primero arriba.
           </div>
         )}

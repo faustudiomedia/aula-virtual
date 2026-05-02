@@ -30,11 +30,11 @@ export default async function CourseStudentsPage({ params }: Props) {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/teacher" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course?.title ?? "Curso"}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course?.title ?? "Curso"}</h1>
       <CourseNavTabs courseId={courseId} />
       <CourseStudentsView courseId={courseId} />
     </div>

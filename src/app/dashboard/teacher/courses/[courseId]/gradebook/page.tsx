@@ -82,34 +82,34 @@ export default async function GradebookPage({ params }: Props) {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/teacher" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
       <CourseNavTabs courseId={courseId} />
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-x-auto">
         {students.length === 0 ? (
-          <p className="p-6 text-sm text-[#050F1F]/40">No hay alumnos inscriptos.</p>
+          <p className="p-6 text-sm text-[var(--ag-text-muted)]">No hay alumnos inscriptos.</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-black/5">
-                <th className="text-left px-4 py-3 font-semibold text-[#050F1F]/50 text-xs uppercase tracking-wider whitespace-nowrap">Alumno</th>
+                <th className="text-left px-4 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider whitespace-nowrap">Alumno</th>
                 {assignmentList.map(a => (
-                  <th key={a.id} className="px-3 py-3 font-semibold text-[#050F1F]/50 text-xs uppercase tracking-wider text-center whitespace-nowrap max-w-[100px]">
+                  <th key={a.id} className="px-3 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider text-center whitespace-nowrap max-w-[100px]">
                     <span className="block truncate" title={a.title}>{a.title}</span>
                     <span className="font-normal normal-case text-[10px]">/{a.max_score}</span>
                   </th>
                 ))}
                 {quizList.map(q => (
-                  <th key={q.id} className="px-3 py-3 font-semibold text-[#050F1F]/50 text-xs uppercase tracking-wider text-center whitespace-nowrap max-w-[100px]">
+                  <th key={q.id} className="px-3 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider text-center whitespace-nowrap max-w-[100px]">
                     <span className="block truncate" title={q.title}>{q.title}</span>
                     <span className="font-normal normal-case text-[10px]">Quiz</span>
                   </th>
                 ))}
-                <th className="px-4 py-3 font-semibold text-[#050F1F]/50 text-xs uppercase tracking-wider text-center">Promedio</th>
+                <th className="px-4 py-3 font-semibold text-[var(--ag-text-muted)] text-xs uppercase tracking-wider text-center">Promedio</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
@@ -132,14 +132,14 @@ export default async function GradebookPage({ params }: Props) {
                 return (
                   <tr key={student.id} className="hover:bg-black/[0.015] transition-colors">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#050F1F]">{student.fullName}</p>
-                      {student.legajo && <p className="text-xs text-[#050F1F]/40">Leg. {student.legajo}</p>}
+                      <p className="font-medium text-[var(--ag-text)]">{student.fullName}</p>
+                      {student.legajo && <p className="text-xs text-[var(--ag-text-muted)]">Leg. {student.legajo}</p>}
                     </td>
                     {assignmentList.map(a => {
                       const sub = subMap[student.id]?.[a.id]
                       if (!sub) return (
                         <td key={a.id} className="px-3 py-3 text-center">
-                          <span className="text-xs text-[#050F1F]/30">—</span>
+                          <span className="text-xs text-[var(--ag-text)]/30">—</span>
                         </td>
                       )
                       if (!sub.graded) return (
@@ -159,7 +159,7 @@ export default async function GradebookPage({ params }: Props) {
                       const score = quizMap[student.id]?.[q.id]
                       if (score === undefined) return (
                         <td key={q.id} className="px-3 py-3 text-center">
-                          <span className="text-xs text-[#050F1F]/30">—</span>
+                          <span className="text-xs text-[var(--ag-text)]/30">—</span>
                         </td>
                       )
                       const color = score >= 7 ? 'text-green-700' : score >= 5 ? 'text-yellow-700' : 'text-red-700'
@@ -175,7 +175,7 @@ export default async function GradebookPage({ params }: Props) {
                           {avg}
                         </span>
                       ) : (
-                        <span className="text-xs text-[#050F1F]/30">—</span>
+                        <span className="text-xs text-[var(--ag-text)]/30">—</span>
                       )}
                     </td>
                   </tr>

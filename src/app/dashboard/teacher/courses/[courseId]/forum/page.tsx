@@ -32,21 +32,21 @@ export default async function TeacherForumPage({ params }: Props) {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">{course.title}</h1>
       <CourseNavTabs courseId={courseId} />
 
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-[#050F1F]">Foro del curso</h2>
+        <h2 className="text-lg font-semibold text-[var(--ag-text)]">Foro del curso</h2>
         <Link
           href={`/dashboard/teacher/courses/${courseId}/forum/new`}
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 transition-all"
+          className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 transition-all"
         >
           + Nuevo tema
         </Link>
       </div>
 
       {(!threads || threads.length === 0) ? (
-        <div className="text-center py-16 text-[#050F1F]/40">
+        <div className="text-center py-16 text-[var(--ag-text-muted)]">
           <p className="text-4xl mb-3">💬</p>
           <p className="text-sm">No hay temas en el foro todavía.</p>
         </div>
@@ -63,13 +63,13 @@ export default async function TeacherForumPage({ params }: Props) {
                     )}
                     <Link
                       href={`/dashboard/teacher/courses/${courseId}/forum/${t.id}`}
-                      className="text-base font-semibold text-[#050F1F] hover:text-[#1A56DB] transition-colors truncate"
+                      className="text-base font-semibold text-[var(--ag-text)] hover:text-[var(--ag-navy)] transition-colors truncate"
                     >
                       {t.title}
                     </Link>
                   </div>
-                  <p className="text-sm text-[#050F1F]/50 line-clamp-2">{t.content}</p>
-                  <p className="text-xs text-[#050F1F]/30 mt-2">
+                  <p className="text-sm text-[var(--ag-text-muted)] line-clamp-2">{t.content}</p>
+                  <p className="text-xs text-[var(--ag-text)]/30 mt-2">
                     {author?.full_name ?? 'Desconocido'} · {new Date(t.created_at).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>

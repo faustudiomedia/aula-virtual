@@ -51,16 +51,16 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
       <div className="flex items-center gap-3 mb-8">
         <Link
           href="/dashboard/admin/users"
-          className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors"
+          className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors"
         >
           ← Usuarios
         </Link>
-        <span className="text-[#050F1F]/20">/</span>
-        <span className="text-sm font-medium text-[#050F1F]">Editar usuario</span>
+        <span className="text-[var(--ag-text)]/20">/</span>
+        <span className="text-sm font-medium text-[var(--ag-text)]">Editar usuario</span>
       </div>
 
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Editar usuario</h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">Editar usuario</h1>
+      <p className="text-[var(--ag-text-muted)] mb-8">
         Modificá los datos del usuario.
       </p>
 
@@ -74,7 +74,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
         <form action={handleUpdate} className="space-y-5">
           {/* Nombre completo */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Nombre completo <span className="text-red-500">*</span>
             </label>
             <input
@@ -82,32 +82,32 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
               required
               defaultValue={target.full_name ?? ''}
               placeholder="Ej: María García"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
           {/* Email (solo lectura) */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Email
             </label>
             <input
               value={target.email ?? ''}
               readOnly
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F]/50 bg-black/[0.02] cursor-not-allowed"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/[0.02] cursor-not-allowed"
             />
           </div>
 
           {/* Rol */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Rol <span className="text-red-500">*</span>
             </label>
             <select
               name="role"
               required
               defaultValue={target.role}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] bg-white focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             >
               <option value="alumno">🎓 Alumno</option>
               <option value="profesor">👨‍🏫 Profesor</option>
@@ -116,16 +116,16 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
 
           {/* Legajo */}
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Legajo
             </label>
             <input
               name="legajo"
               defaultValue={target.legajo ?? ''}
               placeholder="Ej: 12345"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
-            <p className="text-xs text-[#050F1F]/40 mt-1">Número de legajo único del usuario en el instituto.</p>
+            <p className="text-xs text-[var(--ag-text-muted)] mt-1">Número de legajo único del usuario en el instituto.</p>
           </div>
 
           {/* Botones */}
@@ -133,7 +133,7 @@ export default async function AdminEditUserPage({ params, searchParams }: Props)
             <SubmitButton label="Guardar cambios" loadingLabel="Guardando..." />
             <Link
               href="/dashboard/admin/users"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
             >
               Cancelar
             </Link>

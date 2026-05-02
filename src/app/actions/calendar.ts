@@ -18,7 +18,7 @@ export async function createCalendarEvent(_prev: unknown, formData: FormData) {
   const event_date = formData.get("event_date") as string;
   const event_time = (formData.get("event_time") as string) || null;
   const description = (formData.get("description") as string) || null;
-  const color      = (formData.get("color") as string) || "#1A56DB";
+  const color      = (formData.get("color") as string) || "var(--ag-navy)";
 
   if (!title || !event_date) return { error: "Título y fecha son obligatorios" };
 

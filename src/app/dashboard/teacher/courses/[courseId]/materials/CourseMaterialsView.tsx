@@ -67,7 +67,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
   if (!course) {
     return (
       <div className="p-8 max-w-4xl mx-auto">
-        <p className="text-[#050F1F]/50">Curso no encontrado.</p>
+        <p className="text-[var(--ag-text-muted)]">Curso no encontrado.</p>
       </div>
     );
   }
@@ -75,16 +75,16 @@ export default function CourseMaterialsView({ courseId }: Props) {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="flex items-center gap-3 mb-2">
-        <a href="/dashboard/teacher" className="text-[#1A56DB] hover:underline text-sm">
+        <a href="/dashboard/teacher" className="text-[var(--ag-navy)] hover:underline text-sm">
           ← Mis cursos
         </a>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">{course.title}</h1>
-      <p className="text-[#050F1F]/50 mb-8">Materiales del curso</p>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">{course.title}</h1>
+      <p className="text-[var(--ag-text-muted)] mb-8">Materiales del curso</p>
 
       {/* Add material form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
-        <h2 className="text-sm font-semibold text-[#050F1F] mb-4">Agregar material</h2>
+        <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-4">Agregar material</h2>
         <FormError message={formError} />
         <form ref={formRef} action={handleAddMaterial} className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -92,11 +92,11 @@ export default function CourseMaterialsView({ courseId }: Props) {
               name="title"
               required
               placeholder="Título *"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
             <select
               name="file_type"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] bg-white"
+              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 bg-white"
             >
               <option value="">Tipo de archivo</option>
               <option value="pdf">PDF</option>
@@ -113,19 +113,19 @@ export default function CourseMaterialsView({ courseId }: Props) {
               type="number"
               min="1"
               placeholder="Módulo # (ej: 1)"
-              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+              className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
             <input
               name="module_title"
               placeholder="Título del módulo (opcional)"
-              className="col-span-2 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+              className="col-span-2 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
           </div>
 
           <input
             name="description"
             placeholder="Descripción del material (opcional)"
-            className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
 
           {/* URL vs Upload toggle */}
@@ -138,8 +138,8 @@ export default function CourseMaterialsView({ courseId }: Props) {
                   onClick={() => { setUrlMode(mode); setFileUrl(""); setUploadError(null); }}
                   className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
                     urlMode === mode
-                      ? "bg-[#1A56DB] text-white"
-                      : "bg-black/5 text-[#050F1F]/60 hover:bg-black/10"
+                      ? "bg-[var(--ag-navy)] text-white"
+                      : "bg-black/5 text-[var(--ag-text-muted)] hover:bg-black/10"
                   }`}
                 >
                   {mode === "url" ? "🔗 URL / Enlace" : "📎 Subir archivo"}
@@ -152,7 +152,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
                 value={fileUrl}
                 onChange={(e) => setFileUrl(e.target.value)}
                 placeholder="https://... (Google Drive, YouTube, etc.)"
-                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
             ) : (
               <div>
@@ -179,7 +179,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
               min="0"
               defaultValue={materials.length}
               placeholder="Orden"
-              className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+              className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             />
             <SubmitButton label="Agregar" loadingLabel="Agregando..." className="px-5 py-2 rounded-lg" />
           </div>
@@ -188,8 +188,8 @@ export default function CourseMaterialsView({ courseId }: Props) {
 
       {/* Materials list */}
       {materials.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-          <p className="text-[#050F1F]/50">Este curso aún no tiene materiales.</p>
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
+          <p className="text-[var(--ag-text-muted)]">Este curso aún no tiene materiales.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -198,12 +198,12 @@ export default function CourseMaterialsView({ courseId }: Props) {
               key={m.id}
               className="bg-white rounded-xl border border-black/5 p-4 flex items-center gap-4 shadow-sm"
             >
-              <span className="w-8 h-8 rounded-lg bg-[#F0F9FF] border border-[#BAE6FD] flex items-center justify-center text-xs font-bold text-[#1A56DB] flex-shrink-0">
+              <span className="w-8 h-8 rounded-lg bg-[rgba(30,58,95,0.06)] border border-[var(--ag-border-light)] flex items-center justify-center text-xs font-bold text-[var(--ag-navy)] flex-shrink-0">
                 {idx + 1}
               </span>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="font-medium text-[#050F1F] text-sm">{m.title}</p>
+                  <p className="font-medium text-[var(--ag-text)] text-sm">{m.title}</p>
                   {m.module_number && (
                     <span className="px-1.5 py-0.5 rounded-md bg-violet-50 text-violet-600 text-[10px] font-semibold">
                       M{m.module_number}
@@ -211,11 +211,11 @@ export default function CourseMaterialsView({ courseId }: Props) {
                   )}
                 </div>
                 {m.description && (
-                  <p className="text-xs text-[#050F1F]/50 mt-0.5">{m.description}</p>
+                  <p className="text-xs text-[var(--ag-text-muted)] mt-0.5">{m.description}</p>
                 )}
               </div>
               {m.file_type && (
-                <span className="px-2 py-0.5 rounded-full bg-[#F0F9FF] border border-[#BAE6FD] text-[#1A56DB] text-xs font-medium flex-shrink-0">
+                <span className="px-2 py-0.5 rounded-full bg-[rgba(30,58,95,0.06)] border border-[var(--ag-border-light)] text-[var(--ag-navy)] text-xs font-medium flex-shrink-0">
                   {m.file_type}
                 </span>
               )}
@@ -224,7 +224,7 @@ export default function CourseMaterialsView({ courseId }: Props) {
                   href={m.file_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#1A56DB] hover:underline text-xs flex-shrink-0"
+                  className="text-[var(--ag-navy)] hover:underline text-xs flex-shrink-0"
                 >
                   Ver →
                 </a>

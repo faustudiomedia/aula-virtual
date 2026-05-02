@@ -41,7 +41,7 @@ export function NewMessageModal() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 transition-all"
+        className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 transition-all"
       >
         + Nuevo mensaje
       </button>
@@ -53,7 +53,7 @@ export function NewMessageModal() {
         >
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 overflow-hidden">
             <div className="p-4 border-b border-black/5">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[#050F1F]/40 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--ag-text-muted)] mb-2">
                 Nuevo mensaje
               </p>
               <input
@@ -62,13 +62,13 @@ export function NewMessageModal() {
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Buscar por nombre..."
-                className="w-full px-3 py-2 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+                className="w-full px-3 py-2 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
             </div>
 
             <div className="max-h-60 overflow-y-auto">
               {query.trim() && results.length === 0 && (
-                <p className="text-center text-sm text-[#050F1F]/40 py-8">
+                <p className="text-center text-sm text-[var(--ag-text-muted)] py-8">
                   No se encontraron usuarios
                 </p>
               )}
@@ -76,14 +76,14 @@ export function NewMessageModal() {
                 <button
                   key={u.id}
                   onClick={() => handleSelect(u.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F8FAFC] transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white transition-colors text-left"
                 >
-                  <div className="w-9 h-9 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#1A56DB] font-semibold text-sm flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-[rgba(30,58,95,0.08)] flex items-center justify-center text-[var(--ag-navy)] font-semibold text-sm flex-shrink-0">
                     {u.full_name?.charAt(0) ?? '?'}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[#050F1F]">{u.full_name}</p>
-                    <p className="text-xs text-[#050F1F]/40">
+                    <p className="text-sm font-medium text-[var(--ag-text)]">{u.full_name}</p>
+                    <p className="text-xs text-[var(--ag-text-muted)]">
                       {u.role === 'profesor' ? 'Profesor' : u.role === 'admin' ? 'Admin' : 'Alumno'}
                     </p>
                   </div>
@@ -92,7 +92,7 @@ export function NewMessageModal() {
             </div>
 
             {!query.trim() && (
-              <p className="text-center text-xs text-[#050F1F]/30 py-5">
+              <p className="text-center text-xs text-[var(--ag-text)]/30 py-5">
                 Escribí un nombre para buscar
               </p>
             )}

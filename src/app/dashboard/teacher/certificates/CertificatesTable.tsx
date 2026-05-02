@@ -40,7 +40,7 @@ export default function CertificatesTable({ requests }: Props) {
 
   if (requests.length === 0) {
     return (
-      <div className="p-8 text-center text-[#050F1F]/40 text-sm">
+      <div className="p-8 text-center text-[var(--ag-text-muted)] text-sm">
         No hay solicitudes de certificados por el momento.
       </div>
     );
@@ -50,25 +50,25 @@ export default function CertificatesTable({ requests }: Props) {
     <table className="w-full text-left border-collapse">
       <thead>
         <tr className="bg-[#F9FAFB] border-b border-black/5">
-          <th className="px-6 py-4 text-xs font-bold text-[#050F1F]/50 uppercase">Alumno</th>
-          <th className="px-6 py-4 text-xs font-bold text-[#050F1F]/50 uppercase">Curso</th>
-          <th className="px-6 py-4 text-xs font-bold text-[#050F1F]/50 uppercase">Fecha</th>
-          <th className="px-6 py-4 text-xs font-bold text-[#050F1F]/50 uppercase">Estado</th>
-          <th className="px-6 py-4 text-xs font-bold text-[#050F1F]/50 uppercase text-right">Acciones</th>
+          <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Alumno</th>
+          <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Curso</th>
+          <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Fecha</th>
+          <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase">Estado</th>
+          <th className="px-6 py-4 text-xs font-bold text-[var(--ag-text-muted)] uppercase text-right">Acciones</th>
         </tr>
       </thead>
       <tbody>
         {requests.map((req) => (
           <tr key={req.id} className="border-b border-black/5 last:border-0 hover:bg-black/5 transition-colors">
             <td className="px-6 py-4">
-              <p className="font-semibold text-sm text-[#050F1F]">{req.studentName}</p>
-              <p className="text-xs text-[#050F1F]/50">{req.studentEmail}</p>
+              <p className="font-semibold text-sm text-[var(--ag-text)]">{req.studentName}</p>
+              <p className="text-xs text-[var(--ag-text-muted)]">{req.studentEmail}</p>
             </td>
             <td className="px-6 py-4">
-              <span className="text-sm text-[#050F1F] font-medium">{req.courseTitle}</span>
+              <span className="text-sm text-[var(--ag-text)] font-medium">{req.courseTitle}</span>
             </td>
             <td className="px-6 py-4">
-              <span className="text-xs text-[#050F1F]/60">
+              <span className="text-xs text-[var(--ag-text-muted)]">
                 {new Date(req.createdAt).toLocaleDateString("es-AR", { day: '2-digit', month: 'short', year: 'numeric' })}
               </span>
             </td>
@@ -95,14 +95,14 @@ export default function CertificatesTable({ requests }: Props) {
                   <button
                     onClick={() => handleAction(req.id, "reject")}
                     disabled={isPending}
-                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-bold text-[#050F1F]/60 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-bold text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50"
                   >
                     Rechazar
                   </button>
                   <button
                     onClick={() => handleAction(req.id, "approve")}
                     disabled={isPending}
-                    className="px-3 py-1.5 rounded-lg bg-[#1A56DB] text-white text-xs font-bold hover:bg-[#1A56DB]/90 shadow-sm transition-colors disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg bg-[var(--ag-navy)] text-white text-xs font-bold hover:bg-[var(--ag-navy)]/90 shadow-sm transition-colors disabled:opacity-50"
                   >
                     Aprobar y Emitir
                   </button>

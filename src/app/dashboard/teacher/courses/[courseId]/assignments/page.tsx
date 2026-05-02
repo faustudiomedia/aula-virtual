@@ -42,15 +42,15 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/teacher" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#050F1F]">{course.title}</h1>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">{course.title}</h1>
         <Link
           href={`/dashboard/teacher/courses/${courseId}/assignments/new`}
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all shadow-lg shadow-[#1A56DB]/20"
+          className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition-all shadow-lg "
         >
           + Nueva tarea
         </Link>
@@ -72,7 +72,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-[#050F1F]">{a.title}</h3>
+                    <h3 className="font-semibold text-[var(--ag-text)]">{a.title}</h3>
                     {a.due_date && (
                       <span className={`text-xs px-2 py-0.5 rounded-full ${overdue ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-600'}`}>
                         {overdue ? 'Vencida' : 'Activa'}
@@ -80,9 +80,9 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
                     )}
                   </div>
                   {a.description && (
-                    <p className="text-sm text-[#050F1F]/50 line-clamp-2 mb-2">{a.description}</p>
+                    <p className="text-sm text-[var(--ag-text-muted)] line-clamp-2 mb-2">{a.description}</p>
                   )}
-                  <div className="flex items-center gap-4 text-xs text-[#050F1F]/40">
+                  <div className="flex items-center gap-4 text-xs text-[var(--ag-text-muted)]">
                     <span>Puntaje máx: {a.max_score} pts</span>
                     {a.due_date && (
                       <span>
@@ -94,7 +94,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <Link
                     href={`/dashboard/teacher/courses/${courseId}/assignments/${a.id}`}
-                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-medium text-[#050F1F]/70 hover:bg-[#F0F9FF] transition-all"
+                    className="px-3 py-1.5 rounded-lg border border-black/10 text-xs font-medium text-[var(--ag-text)]/70 hover:bg-[rgba(30,58,95,0.06)] transition-all"
                   >
                     Ver entregas
                   </Link>
@@ -110,7 +110,7 @@ export default async function TeacherAssignmentsPage({ params, searchParams }: P
           )
         })}
         {(assignments ?? []).length === 0 && (
-          <div className="text-center py-16 text-[#050F1F]/40 text-sm">
+          <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
             No hay tareas creadas. Creá la primera con el botón de arriba.
           </div>
         )}

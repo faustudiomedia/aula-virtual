@@ -30,15 +30,15 @@ export default async function AdminInstitutesPage() {
     <div className="p-8 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Institutos</h1>
-          <p className="text-[#050F1F]/50 mt-1">
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Institutos</h1>
+          <p className="text-[var(--ag-text-muted)] mt-1">
             Gestioná los datos y branding de tu instituto.
           </p>
         </div>
         {profile.role === "super_admin" && (
           <Link
             href="/dashboard/admin/institutes/new"
-            className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20"
+            className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition shadow-lg "
           >
             + Nuevo instituto
           </Link>
@@ -46,9 +46,9 @@ export default async function AdminInstitutesPage() {
       </div>
 
       {list.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
           <p className="text-4xl mb-3">🏛️</p>
-          <p className="text-[#050F1F]/50">No hay institutos disponibles.</p>
+          <p className="text-[var(--ag-text-muted)]">No hay institutos disponibles.</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -75,7 +75,7 @@ export default async function AdminInstitutesPage() {
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-[#050F1F]">{inst.name}</h3>
+                  <h3 className="font-semibold text-[var(--ag-text)]">{inst.name}</h3>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                       inst.active
@@ -86,12 +86,12 @@ export default async function AdminInstitutesPage() {
                     {inst.active ? "Activo" : "Inactivo"}
                   </span>
                 </div>
-                <p className="text-sm text-[#050F1F]/40 mt-0.5 font-mono">
+                <p className="text-sm text-[var(--ag-text-muted)] mt-0.5 font-mono">
                   {inst.slug}
                   {inst.domain ? ` · ${inst.domain}` : ""}
                 </p>
               </div>
-              <span className="text-[#1A56DB] text-sm font-medium flex-shrink-0">
+              <span className="text-[var(--ag-navy)] text-sm font-medium flex-shrink-0">
                 Editar →
               </span>
             </Link>

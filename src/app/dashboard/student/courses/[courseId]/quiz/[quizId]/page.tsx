@@ -50,15 +50,15 @@ export default async function StudentQuizPage({ params }: Props) {
 
   return (
     <div className="p-8 max-w-3xl mx-auto">
-      <div className="flex items-center gap-2 text-sm text-[#050F1F]/50 mb-6">
-        <Link href={`/dashboard/student/courses/${courseId}`} className="hover:text-[#1A56DB] transition-colors">
+      <div className="flex items-center gap-2 text-sm text-[var(--ag-text-muted)] mb-6">
+        <Link href={`/dashboard/student/courses/${courseId}`} className="hover:text-[var(--ag-navy)] transition-colors">
           ← Volver al curso
         </Link>
       </div>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">{quizData.title}</h1>
-        <p className="text-[#050F1F]/50 mt-1">
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">{quizData.title}</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">
           {quizData.content.length} pregunta{quizData.content.length !== 1 ? 's' : ''}
           {previousAttempt && (
             <span className="ml-2 text-violet-600 font-medium">

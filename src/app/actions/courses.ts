@@ -414,8 +414,8 @@ export async function createInstitute(
       name,
       slug,
       domain: (formData.get("domain") as string)?.trim() || null,
-      primary_color: (formData.get("primary_color") as string) || "#1A56DB",
-      secondary_color: (formData.get("secondary_color") as string) || "#38BDF8",
+      primary_color: (formData.get("primary_color") as string) || "var(--ag-navy)",
+      secondary_color: (formData.get("secondary_color") as string) || "var(--ag-navy)",
       active: true,
     });
     if (error) {

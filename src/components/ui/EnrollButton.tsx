@@ -57,10 +57,10 @@ export default function EnrollButton({
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
           <p className="text-4xl mb-3">📤</p>
-          <h2 className="text-lg font-bold text-[#050F1F] mb-2">
+          <h2 className="text-lg font-bold text-[var(--ag-text)] mb-2">
             ¿Desinscribirse?
           </h2>
-          <p className="text-sm text-[#050F1F]/60 mb-4">
+          <p className="text-sm text-[var(--ag-text-muted)] mb-4">
             Se perderá tu progreso en <strong>{courseTitle}</strong>.
           </p>
           <FormError message={error} />
@@ -74,7 +74,7 @@ export default function EnrollButton({
             </button>
             <button
               onClick={() => setConfirmUnenroll(false)}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
             >
               Cancelar
             </button>
@@ -98,7 +98,7 @@ export default function EnrollButton({
         <button
           onClick={handleEnroll}
           disabled={isPending}
-          className="w-full py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60 shadow-lg shadow-[#1A56DB]/20"
+          className="w-full py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60 shadow-lg "
         >
           {isPending ? "Inscribiendo..." : "Inscribirse al curso"}
         </button>

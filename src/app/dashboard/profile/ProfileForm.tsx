@@ -52,25 +52,25 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Correo</label>
+          <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Correo</label>
           <input
             value={email}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F]/50 bg-black/5 cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/5 cursor-not-allowed"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Rol</label>
+          <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Rol</label>
           <input
             value={roleLabel[role] ?? role}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F]/50 bg-black/5 cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/5 cursor-not-allowed"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="full_name" className="block text-sm font-medium text-[#050F1F] mb-1.5">
+        <label htmlFor="full_name" className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
           Nombre completo <span className="text-red-500">*</span>
         </label>
         <input
@@ -79,7 +79,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
           required
           defaultValue={fullName}
           placeholder="Tu nombre completo"
-          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 transition-all"
+          className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
         />
       </div>
 
@@ -92,7 +92,7 @@ export default function ProfileForm({ fullName, email, avatarUrl, signatureUrl, 
       <button
         type="submit"
         disabled={isPending}
-        className="px-6 py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:bg-[#1A56DB]/90 transition-all disabled:opacity-60 shadow-lg shadow-[#1A56DB]/20"
+        className="px-6 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:bg-[var(--ag-navy)]/90 transition-all disabled:opacity-60 shadow-lg "
       >
         {isPending ? "Guardando..." : "Guardar cambios"}
       </button>

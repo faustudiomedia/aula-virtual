@@ -43,11 +43,11 @@ export default async function StudentAssignmentsPage({ params }: Props) {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/student" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/student" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
 
       <StudentCourseNavTabs courseId={courseId} />
 
@@ -73,15 +73,15 @@ export default async function StudentAssignmentsPage({ params }: Props) {
             <Link
               key={a.id}
               href={`/dashboard/student/courses/${courseId}/assignments/${a.id}`}
-              className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:shadow-md hover:border-[#38BDF8]/30 transition-all"
+              className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:shadow-md hover:border-[var(--ag-border-light)] transition-all"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-[#050F1F] mb-1">{a.title}</h3>
+                  <h3 className="font-semibold text-[var(--ag-text)] mb-1">{a.title}</h3>
                   {a.description && (
-                    <p className="text-sm text-[#050F1F]/50 line-clamp-2 mb-2">{a.description}</p>
+                    <p className="text-sm text-[var(--ag-text-muted)] line-clamp-2 mb-2">{a.description}</p>
                   )}
-                  <div className="flex items-center gap-3 text-xs text-[#050F1F]/40">
+                  <div className="flex items-center gap-3 text-xs text-[var(--ag-text-muted)]">
                     <span>Puntaje: {a.max_score} pts</span>
                     {a.due_date && (
                       <span>Vence: {new Date(a.due_date).toLocaleDateString('es-AR', { dateStyle: 'short' })}</span>
@@ -96,7 +96,7 @@ export default async function StudentAssignmentsPage({ params }: Props) {
           )
         })}
         {(assignments ?? []).length === 0 && (
-          <div className="text-center py-16 text-[#050F1F]/40 text-sm">
+          <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
             No hay tareas asignadas todavía.
           </div>
         )}

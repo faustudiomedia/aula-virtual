@@ -51,8 +51,8 @@ export default async function AdminCertificatesPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F] mb-2">Administración de Certificados</h1>
-        <p className="text-[#050F1F]/50 text-sm">
+        <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">Administración de Certificados</h1>
+        <p className="text-[var(--ag-text-muted)] text-sm">
           Aprobá o rechazá los certificados solicitados por los alumnos en la institución.
         </p>
       </div>

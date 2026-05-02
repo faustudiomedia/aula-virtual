@@ -30,7 +30,7 @@ export function AvatarUpload({ currentUrl, name }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="" className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-2xl font-bold">
+          <div className="w-full h-full bg-[var(--ag-navy)] flex items-center justify-center text-white text-2xl font-bold">
             {initial}
           </div>
         )}
@@ -39,12 +39,12 @@ export function AvatarUpload({ currentUrl, name }: Props) {
         </div>
       </button>
       <div>
-        <p className="text-sm font-medium text-[#050F1F] mb-1">Foto de perfil</p>
-        <p className="text-xs text-[#050F1F]/40 mb-2">JPG, PNG o WebP · máx. 2 MB</p>
+        <p className="text-sm font-medium text-[var(--ag-text)] mb-1">Foto de perfil</p>
+        <p className="text-xs text-[var(--ag-text-muted)] mb-2">JPG, PNG o WebP · máx. 2 MB</p>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/60 hover:bg-black/5 transition-all"
+          className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
         >
           Subir foto
         </button>

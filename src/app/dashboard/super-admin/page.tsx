@@ -47,7 +47,7 @@ export default async function SuperAdminDashboard() {
   }, {})
 
   const stats = [
-    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: '#1A56DB' },
+    { label: 'Institutos',    value: totalInstitutes ?? 0,    Icon: Building2,      href: '/dashboard/super-admin/institutes', color: var(--ag-navy) },
     { label: 'Usuarios',      value: totalUsers ?? 0,          Icon: Users,          href: '/dashboard/super-admin/users',      color: '#0EA5E9' },
     { label: 'Cursos',        value: totalCourses ?? 0,        Icon: BookOpen,       href: '#',                                 color: '#6366F1' },
     { label: 'Inscripciones', value: totalEnrollments ?? 0,    Icon: ClipboardList,  href: '#',                                 color: '#10B981' },
@@ -58,8 +58,8 @@ export default async function SuperAdminDashboard() {
 
       {/* ── Encabezado ── */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Panel Global</h1>
-        <p className="text-[#050F1F]/50 mt-1">
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Panel Global</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">
           Bienvenido, {profile?.full_name ?? 'Super Admin'} — Vista completa de la plataforma Agorify
         </p>
       </div>
@@ -78,8 +78,8 @@ export default async function SuperAdminDashboard() {
             >
               <s.Icon size={20} style={{ color: s.color }} />
             </div>
-            <p className="text-3xl font-bold text-[#050F1F]">{s.value.toLocaleString()}</p>
-            <p className="text-sm text-[#050F1F]/50 mt-1">{s.label}</p>
+            <p className="text-3xl font-bold text-[var(--ag-text)]">{s.value.toLocaleString()}</p>
+            <p className="text-sm text-[var(--ag-text-muted)] mt-1">{s.label}</p>
           </Link>
         ))}
       </div>
@@ -89,27 +89,27 @@ export default async function SuperAdminDashboard() {
         {/* ── Últimos institutos ── */}
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-[#050F1F]">Institutos recientes</h2>
+            <h2 className="text-base font-semibold text-[var(--ag-text)]">Institutos recientes</h2>
             <Link
               href="/dashboard/super-admin/institutes"
-              className="text-xs text-[#1A56DB] hover:underline font-medium"
+              className="text-xs text-[var(--ag-navy)] hover:underline font-medium"
             >
               Ver todos →
             </Link>
           </div>
           <div className="space-y-3">
             {(recentInstitutes ?? []).length === 0 && (
-              <p className="text-sm text-[#050F1F]/40 text-center py-4">No hay institutos todavía</p>
+              <p className="text-sm text-[var(--ag-text-muted)] text-center py-4">No hay institutos todavía</p>
             )}
             {(recentInstitutes ?? []).map((inst) => (
               <div key={inst.id} className="flex items-center justify-between py-2 border-b border-black/5 last:border-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1A56DB]/10 flex items-center justify-center text-sm font-bold text-[#1A56DB]">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--ag-navy)]/10 flex items-center justify-center text-sm font-bold text-[var(--ag-navy)]">
                     {inst.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[#050F1F]">{inst.name}</p>
-                    <p className="text-xs text-[#050F1F]/40">{inst.slug}</p>
+                    <p className="text-sm font-medium text-[var(--ag-text)]">{inst.name}</p>
+                    <p className="text-xs text-[var(--ag-text-muted)]">{inst.slug}</p>
                   </div>
                 </div>
                 <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
@@ -124,7 +124,7 @@ export default async function SuperAdminDashboard() {
           </div>
           <Link
             href="/dashboard/super-admin/institutes/new"
-            className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-[#1A56DB]/20 text-sm font-medium text-[#1A56DB] hover:border-[#1A56DB]/50 hover:bg-[#1A56DB]/5 transition-all"
+            className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-[var(--ag-navy)]/20 text-sm font-medium text-[var(--ag-navy)] hover:border-[var(--ag-navy)]/50 hover:bg-[var(--ag-navy)]/5 transition-all"
           >
             <span>＋</span> Nuevo instituto
           </Link>
@@ -133,10 +133,10 @@ export default async function SuperAdminDashboard() {
         {/* ── Distribución de usuarios ── */}
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-semibold text-[#050F1F]">Usuarios por rol</h2>
+            <h2 className="text-base font-semibold text-[var(--ag-text)]">Usuarios por rol</h2>
             <Link
               href="/dashboard/super-admin/users"
-              className="text-xs text-[#1A56DB] hover:underline font-medium"
+              className="text-xs text-[var(--ag-navy)] hover:underline font-medium"
             >
               Ver todos →
             </Link>
@@ -144,7 +144,7 @@ export default async function SuperAdminDashboard() {
           <div className="space-y-4">
             {[
               { role: 'alumno',      label: 'Alumnos',    Icon: GraduationCap, color: '#10B981' },
-              { role: 'profesor',    label: 'Profesores', Icon: UserCog,       color: '#1A56DB' },
+              { role: 'profesor',    label: 'Profesores', Icon: UserCog,       color: var(--ag-navy) },
               { role: 'admin',       label: 'Admins',     Icon: ShieldCheck,   color: '#6366F1' },
               { role: 'super_admin', label: 'Super Admin',Icon: ShieldCheck,   color: '#F59E0B' },
             ].map(({ role, label, Icon, color }) => {
@@ -155,10 +155,10 @@ export default async function SuperAdminDashboard() {
               return (
                 <div key={role}>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm text-[#050F1F] flex items-center gap-1.5">
+                    <span className="text-sm text-[var(--ag-text)] flex items-center gap-1.5">
                       <Icon size={14} style={{ color }} /> {label}
                     </span>
-                    <span className="text-sm font-semibold text-[#050F1F]">{count}</span>
+                    <span className="text-sm font-semibold text-[var(--ag-text)]">{count}</span>
                   </div>
                   <div className="h-2 bg-black/5 rounded-full overflow-hidden">
                     <div

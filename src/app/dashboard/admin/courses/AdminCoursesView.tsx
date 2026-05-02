@@ -42,34 +42,34 @@ export default function AdminCoursesView() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">
         Todos los cursos
       </h1>
-      <p className="text-[#050F1F]/50 mb-6">{count} cursos en la plataforma.</p>
+      <p className="text-[var(--ag-text-muted)] mb-6">{count} cursos en la plataforma.</p>
 
       {/* Search */}
       <form onSubmit={handleSearch} className="flex gap-3 mb-6">
         <div className="relative flex-1">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#050F1F]/30 text-sm">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ag-text)]/30 text-sm">
             🔍
           </span>
           <input
             name="q"
             defaultValue={q}
             placeholder="Buscar cursos por título..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
         <button
           type="submit"
-          className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:opacity-90 transition"
+          className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition"
         >
           Buscar
         </button>
         {q && (
           <a
             href="/dashboard/admin/courses"
-            className="px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F]/60 hover:bg-black/5 transition"
+            className="px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] hover:bg-black/5 transition"
           >
             Limpiar
           </a>
@@ -81,8 +81,8 @@ export default function AdminCoursesView() {
           <div className="h-64" />
         </div>
       ) : courses.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-          <p className="text-[#050F1F]/50">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
+          <p className="text-[var(--ag-text-muted)]">
             No se encontraron cursos con esos filtros.
           </p>
         </div>
@@ -90,21 +90,21 @@ export default function AdminCoursesView() {
         <>
           <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4">
             <table className="w-full text-sm">
-              <thead className="bg-[#F0F9FF] border-b border-black/5">
+              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
                 <tr>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Curso
                   </th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Instituto
                   </th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Profesor
                   </th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Alumnos
                   </th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                     Estado
                   </th>
                 </tr>
@@ -113,31 +113,31 @@ export default function AdminCoursesView() {
                 {courses.map((c) => (
                   <tr
                     key={c.id}
-                    className="hover:bg-[#F0F9FF]/50 transition-colors"
+                    className="hover:bg-[rgba(30,58,95,0.06)]/50 transition-colors"
                   >
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--ag-navy)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                           {c.title.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-medium text-[#050F1F]">
+                          <p className="font-medium text-[var(--ag-text)]">
                             {c.title}
                           </p>
-                          <p className="text-xs text-[#050F1F]/40 truncate max-w-[200px]">
+                          <p className="text-xs text-[var(--ag-text-muted)] truncate max-w-[200px]">
                             {c.description ?? "—"}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/60">
+                    <td className="px-5 py-3.5 text-[var(--ag-text-muted)]">
                       {c.institutes?.name ?? "—"}
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/60">
+                    <td className="px-5 py-3.5 text-[var(--ag-text-muted)]">
                       {c.profiles?.full_name || c.profiles?.email || "—"}
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="font-semibold text-[#1A56DB]">
+                      <span className="font-semibold text-[var(--ag-navy)]">
                         {countMap[c.id] ?? 0}
                       </span>
                     </td>
@@ -160,14 +160,14 @@ export default function AdminCoursesView() {
 
           {totalPages > 1 && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-[#050F1F]/50">
+              <p className="text-sm text-[var(--ag-text-muted)]">
                 Página {currentPage} de {totalPages} · {count} resultados
               </p>
               <div className="flex gap-2">
                 {currentPage > 1 && (
                   <a
                     href={buildUrl({ page: String(currentPage - 1) })}
-                    className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F]/70 font-medium hover:bg-black/5 transition"
+                    className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)]/70 font-medium hover:bg-black/5 transition"
                   >
                     ← Anterior
                   </a>
@@ -175,7 +175,7 @@ export default function AdminCoursesView() {
                 {currentPage < totalPages && (
                   <a
                     href={buildUrl({ page: String(currentPage + 1) })}
-                    className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:opacity-90 transition"
+                    className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:opacity-90 transition"
                   >
                     Siguiente →
                   </a>

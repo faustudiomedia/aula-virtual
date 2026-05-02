@@ -38,9 +38,9 @@ export default function NotificationsClient({ notifications }: Props) {
 
   if (optimisticNotifs.length === 0) {
     return (
-      <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+      <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
         <p className="text-4xl mb-3">🔔</p>
-        <p className="text-[#050F1F]/50">No tenés notificaciones todavía.</p>
+        <p className="text-[var(--ag-text-muted)]">No tenés notificaciones todavía.</p>
       </div>
     )
   }
@@ -51,7 +51,7 @@ export default function NotificationsClient({ notifications }: Props) {
         <div className="flex justify-end mb-4">
           <button
             onClick={handleReadAll}
-            className="text-sm text-[#1A56DB] hover:underline font-medium"
+            className="text-sm text-[var(--ag-navy)] hover:underline font-medium"
           >
             Marcar todas como leídas
           </button>
@@ -65,32 +65,32 @@ export default function NotificationsClient({ notifications }: Props) {
             className={`rounded-xl border p-4 flex items-start gap-4 transition-all ${
               notif.is_read
                 ? 'bg-white border-black/5'
-                : 'bg-[#EFF6FF] border-[#BAE6FD]'
+                : 'bg-[rgba(30,58,95,0.08)] border-[var(--ag-border-light)]'
             }`}
           >
             {/* unread dot */}
             <div className="mt-1 flex-shrink-0">
               {!notif.is_read ? (
-                <span className="w-2.5 h-2.5 rounded-full bg-[#1A56DB] block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--ag-navy)] block" />
               ) : (
                 <span className="w-2.5 h-2.5 rounded-full bg-transparent block" />
               )}
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className={`font-semibold text-sm ${notif.is_read ? 'text-[#050F1F]/70' : 'text-[#050F1F]'}`}>
+              <p className={`font-semibold text-sm ${notif.is_read ? 'text-[var(--ag-text)]/70' : 'text-[var(--ag-text)]'}`}>
                 {notif.title}
               </p>
-              <p className="text-sm text-[#050F1F]/50 mt-0.5">{notif.message}</p>
+              <p className="text-sm text-[var(--ag-text-muted)] mt-0.5">{notif.message}</p>
               <div className="flex items-center gap-3 mt-2">
-                <span className="text-xs text-[#050F1F]/30">
+                <span className="text-xs text-[var(--ag-text)]/30">
                   {new Date(notif.created_at).toLocaleDateString('es-AR', { dateStyle: 'medium' })}{' '}
                   {new Date(notif.created_at).toLocaleTimeString('es-AR', { timeStyle: 'short' })}
                 </span>
                 {notif.link_url && (
                   <Link
                     href={notif.link_url}
-                    className="text-xs text-[#1A56DB] hover:underline font-medium"
+                    className="text-xs text-[var(--ag-navy)] hover:underline font-medium"
                   >
                     Ver →
                   </Link>
@@ -101,7 +101,7 @@ export default function NotificationsClient({ notifications }: Props) {
             {!notif.is_read && (
               <button
                 onClick={() => handleRead(notif.id)}
-                className="flex-shrink-0 text-xs text-[#050F1F]/40 hover:text-[#1A56DB] transition-colors mt-0.5"
+                className="flex-shrink-0 text-xs text-[var(--ag-text-muted)] hover:text-[var(--ag-navy)] transition-colors mt-0.5"
                 aria-label="Marcar como leída"
               >
                 ✓ Leída

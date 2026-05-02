@@ -22,8 +22,8 @@ export default async function NotificationsPage() {
     <div className="p-8 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Notificaciones</h1>
-          <p className="text-[#050F1F]/50 mt-1">
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Notificaciones</h1>
+          <p className="text-[var(--ag-text-muted)] mt-1">
             {unreadCount > 0
               ? `${unreadCount} notificación${unreadCount !== 1 ? 'es' : ''} sin leer`
               : 'Todo al día ✓'}

@@ -54,13 +54,13 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Institutos</h1>
-          <p className="text-[#050F1F]/50 mt-1">{count ?? 0} institutos en la plataforma</p>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Institutos</h1>
+          <p className="text-[var(--ag-text-muted)] mt-1">{count ?? 0} institutos en la plataforma</p>
         </div>
         <Link
           href="/dashboard/super-admin/institutes/new"
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-          style={{ background: '#050F1F' }}
+          style={{ background: var(--ag-text) }}
         >
           <span>＋</span> Nuevo instituto
         </Link>
@@ -73,12 +73,12 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre..."
-            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
           <select
             name="status"
             defaultValue={status}
-            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           >
             <option value="all">Todos</option>
             <option value="active">Activos</option>
@@ -86,14 +86,14 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
           </select>
           <button
             type="submit"
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1A56DB] hover:bg-[#1A56DB]/90 transition-all"
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[var(--ag-navy)] hover:bg-[var(--ag-navy)]/90 transition-all"
           >
             Buscar
           </button>
           {(q || status !== 'all') && (
             <Link
               href="/dashboard/super-admin/institutes"
-              className="px-4 py-2 rounded-xl text-sm font-medium text-[#050F1F]/60 border border-black/10 hover:bg-black/5 transition-all"
+              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-black/10 hover:bg-black/5 transition-all"
             >
               Limpiar
             </Link>
@@ -106,10 +106,10 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
         {(institutes ?? []).length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-4xl mb-3">🏫</p>
-            <p className="text-[#050F1F]/50">No se encontraron institutos</p>
+            <p className="text-[var(--ag-text-muted)]">No se encontraron institutos</p>
             <Link
               href="/dashboard/super-admin/institutes/new"
-              className="inline-block mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1A56DB]"
+              className="inline-block mt-4 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[var(--ag-navy)]"
             >
               Crear el primero
             </Link>
@@ -119,12 +119,12 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
           <table className="w-full min-w-[600px] text-sm">
             <thead>
               <tr className="border-b border-black/5 bg-black/[0.02]">
-                <th className="text-left px-6 py-3.5 font-semibold text-[#050F1F]/60">Instituto</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Slug</th>
-                <th className="text-center px-4 py-3.5 font-semibold text-[#050F1F]/60">Usuarios</th>
-                <th className="text-center px-4 py-3.5 font-semibold text-[#050F1F]/60">Cursos</th>
-                <th className="text-center px-4 py-3.5 font-semibold text-[#050F1F]/60">Estado</th>
-                <th className="text-right px-6 py-3.5 font-semibold text-[#050F1F]/60">Acciones</th>
+                <th className="text-left px-6 py-3.5 font-semibold text-[var(--ag-text-muted)]">Instituto</th>
+                <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Slug</th>
+                <th className="text-center px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Usuarios</th>
+                <th className="text-center px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Cursos</th>
+                <th className="text-center px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Estado</th>
+                <th className="text-right px-6 py-3.5 font-semibold text-[var(--ag-text-muted)]">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -134,23 +134,23 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
                     <div className="flex items-center gap-3">
                       <div
                         className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                        style={{ background: inst.primary_color ?? '#1A56DB' }}
+                        style={{ background: inst.primary_color ?? var(--ag-navy) }}
                       >
                         {inst.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-[#050F1F]">{inst.name}</p>
+                        <p className="font-medium text-[var(--ag-text)]">{inst.name}</p>
                         {inst.domain && (
-                          <p className="text-xs text-[#050F1F]/40">{inst.domain}</p>
+                          <p className="text-xs text-[var(--ag-text-muted)]">{inst.domain}</p>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-[#050F1F]/60">{inst.slug}</td>
-                  <td className="px-4 py-4 text-center font-medium text-[#050F1F]">
+                  <td className="px-4 py-4 text-[var(--ag-text-muted)]">{inst.slug}</td>
+                  <td className="px-4 py-4 text-center font-medium text-[var(--ag-text)]">
                     {usersByInstitute[inst.id] ?? 0}
                   </td>
-                  <td className="px-4 py-4 text-center font-medium text-[#050F1F]">
+                  <td className="px-4 py-4 text-center font-medium text-[var(--ag-text)]">
                     {coursesByInstitute[inst.id] ?? 0}
                   </td>
                   <td className="px-4 py-4 text-center">
@@ -165,7 +165,7 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
                   <td className="px-6 py-4 text-right">
                     <Link
                       href={`/dashboard/super-admin/institutes/${inst.id}`}
-                      className="text-xs font-medium text-[#1A56DB] hover:underline"
+                      className="text-xs font-medium text-[var(--ag-navy)] hover:underline"
                     >
                       Editar
                     </Link>
@@ -187,8 +187,8 @@ export default async function SuperAdminInstitutesPage({ searchParams }: Props) 
               href={`?q=${q}&status=${status}&page=${p}`}
               className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
                 p === currentPage
-                  ? 'text-white bg-[#050F1F]'
-                  : 'text-[#050F1F]/60 hover:bg-black/5'
+                  ? 'text-white bg-[var(--ag-text)]'
+                  : 'text-[var(--ag-text-muted)] hover:bg-black/5'
               }`}
             >
               {p}

@@ -27,15 +27,15 @@ export default async function ConversationPage({ params }: Props) {
     <div className="flex flex-col h-screen max-w-2xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 p-5 bg-white border-b border-black/5 flex-shrink-0">
-        <Link href="/dashboard/messages" className="text-[#050F1F]/40 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/messages" className="text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ←
         </Link>
-        <div className="w-9 h-9 rounded-full bg-[#EFF6FF] flex items-center justify-center text-[#1A56DB] font-semibold text-sm">
+        <div className="w-9 h-9 rounded-full bg-[rgba(30,58,95,0.08)] flex items-center justify-center text-[var(--ag-navy)] font-semibold text-sm">
           {otherProfile.full_name?.charAt(0) ?? '?'}
         </div>
         <div>
-          <p className="text-sm font-semibold text-[#050F1F]">{otherProfile.full_name}</p>
-          <p className="text-xs text-[#050F1F]/40 capitalize">{otherProfile.role === 'profesor' ? 'Profesor' : 'Alumno'}</p>
+          <p className="text-sm font-semibold text-[var(--ag-text)]">{otherProfile.full_name}</p>
+          <p className="text-xs text-[var(--ag-text-muted)] capitalize">{otherProfile.role === 'profesor' ? 'Profesor' : 'Alumno'}</p>
         </div>
       </div>
 

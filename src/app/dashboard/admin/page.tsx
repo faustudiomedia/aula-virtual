@@ -60,17 +60,17 @@ export default async function AdminDashboard() {
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">
             Panel de Administración
           </h1>
-          <p className="text-[#050F1F]/50 mt-1">
+          <p className="text-[var(--ag-text-muted)] mt-1">
             Gestión global de institutos y usuarios.
           </p>
         </div>
         <Link
           href="/dashboard/admin/institutes/new"
-          className="px-4 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold
-                     hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20 text-center"
+          className="px-4 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold
+                     hover:opacity-90 transition shadow-lg  text-center"
         >
           + Nuevo instituto
         </Link>
@@ -83,7 +83,7 @@ export default async function AdminDashboard() {
             label: "Institutos",
             value: instituteList.length,
             Icon: Building2,
-            color: "#1A56DB",
+            color: "var(--ag-navy)",
             bg: "#EFF6FF",
             border: "#BFDBFE",
           },
@@ -135,17 +135,17 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Institutes grid */}
-      <h2 className="text-lg font-semibold text-[#050F1F] mb-4">Institutos</h2>
+      <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-4">Institutos</h2>
 
       {instituteList.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
-          <Building2 size={40} className="mx-auto mb-3 text-[#BAE6FD]" />
-          <p className="text-[#050F1F]/50 mb-4">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
+          <Building2 size={40} className="mx-auto mb-3 text-white/80" />
+          <p className="text-[var(--ag-text-muted)] mb-4">
             No hay institutos creados todavía.
           </p>
           <Link
             href="/dashboard/admin/institutes/new"
-            className="inline-flex px-5 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:opacity-90 transition"
+            className="inline-flex px-5 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition"
           >
             Crear primer instituto
           </Link>
@@ -176,10 +176,10 @@ export default async function AdminDashboard() {
                       {inst.name.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#050F1F]">
+                      <h3 className="font-semibold text-[var(--ag-text)]">
                         {inst.name}
                       </h3>
-                      <p className="text-xs text-[#050F1F]/40">/{inst.slug}</p>
+                      <p className="text-xs text-[var(--ag-text-muted)]">/{inst.slug}</p>
                     </div>
                   </div>
                   <span
@@ -194,12 +194,12 @@ export default async function AdminDashboard() {
                 </div>
 
                 {inst.domain && (
-                  <p className="text-xs text-[#050F1F]/40 mb-3 flex items-center gap-1">
+                  <p className="text-xs text-[var(--ag-text-muted)] mb-3 flex items-center gap-1">
                     <Globe size={11} /> {inst.domain}
                   </p>
                 )}
 
-                <div className="flex gap-4 text-sm text-[#050F1F]/60 mb-4">
+                <div className="flex gap-4 text-sm text-[var(--ag-text-muted)] mb-4">
                   <span className="flex items-center gap-1">
                     <Users size={12} /> {profilesByInstitute[inst.id]?.students ?? 0} alumnos
                   </span>
@@ -223,14 +223,14 @@ export default async function AdminDashboard() {
                     style={{ background: inst.secondary_color }}
                     title={inst.secondary_color}
                   />
-                  <span className="text-xs text-[#050F1F]/30">
+                  <span className="text-xs text-[var(--ag-text)]/30">
                     {inst.primary_color} · {inst.secondary_color}
                   </span>
                 </div>
 
                 <Link
                   href={`/dashboard/admin/institutes/${inst.id}`}
-                  className="flex items-center justify-center w-full py-1.5 rounded-lg border border-[#BAE6FD] text-[#1A56DB] text-xs font-medium hover:bg-[#F0F9FF] transition-colors"
+                  className="flex items-center justify-center w-full py-1.5 rounded-lg border border-[var(--ag-border-light)] text-[var(--ag-navy)] text-xs font-medium hover:bg-[rgba(30,58,95,0.06)] transition-colors"
                 >
                   Gestionar →
                 </Link>

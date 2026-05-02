@@ -13,8 +13,8 @@ const instituteSchema = z.object({
                      .min(2)
                      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Solo minúsculas, números y guiones'),
   domain:          z.string().optional().nullable(),
-  primary_color:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#1A56DB'),
-  secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#38BDF8'),
+  primary_color:   z.string().regex(/^#[0-9A-Fa-f]{6}$/).default(var(--ag-navy)),
+  secondary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('var(--ag-navy)'),
   director_name:   z.string().optional().nullable(),
   active:          z.boolean().default(true),
 })
@@ -48,8 +48,8 @@ export async function createInstitute(formData: FormData): Promise<ActionResult>
     name:            formData.get('name') as string,
     slug:            formData.get('slug') as string,
     domain:          (formData.get('domain') as string) || null,
-    primary_color:   (formData.get('primary_color') as string) || '#1A56DB',
-    secondary_color: (formData.get('secondary_color') as string) || '#38BDF8',
+    primary_color:   (formData.get('primary_color') as string) || var(--ag-navy),
+    secondary_color: (formData.get('secondary_color') as string) || 'var(--ag-navy)',
     active:          formData.get('active') === 'on',
   }
 
@@ -88,8 +88,8 @@ export async function updateInstitute(formData: FormData): Promise<ActionResult>
     name:            formData.get('name') as string,
     slug:            formData.get('slug') as string,
     domain:          (formData.get('domain') as string) || null,
-    primary_color:   (formData.get('primary_color') as string) || '#1A56DB',
-    secondary_color: (formData.get('secondary_color') as string) || '#38BDF8',
+    primary_color:   (formData.get('primary_color') as string) || var(--ag-navy),
+    secondary_color: (formData.get('secondary_color') as string) || 'var(--ag-navy)',
     director_name:   (formData.get('director_name') as string) || null,
     active:          formData.get('active') === 'on',
   }

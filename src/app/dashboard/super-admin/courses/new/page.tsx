@@ -52,15 +52,15 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
       <div className="flex items-center gap-3 mb-2">
         <a
           href="/dashboard/super-admin/courses"
-          className="text-[#1A56DB] hover:underline text-sm"
+          className="text-[var(--ag-navy)] hover:underline text-sm"
         >
           ← Todos los cursos
         </a>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">
         Crear nuevo curso
       </h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <p className="text-[var(--ag-text-muted)] mb-8">
         Completá los datos para publicar el curso.
       </p>
 
@@ -72,36 +72,36 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
         )}
         <form action={handleCreate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Título del curso <span className="text-red-500">*</span>
             </label>
             <input
               name="title"
               required
               placeholder="Ej: Inglés Nivel A2"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[#050F1F] text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Descripción
             </label>
             <textarea
               name="description"
               rows={4}
               placeholder="Describí brevemente de qué trata el curso..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[#050F1F] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Instituto
             </label>
             <select
               name="institute_id"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[#050F1F] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             >
               <option value="">Sin instituto asignado</option>
               {(institutes ?? []).map((inst) => (
@@ -113,12 +113,12 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Profesor responsable
             </label>
             <select
               name="teacher_id"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[#050F1F] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)] text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all"
             >
               <option value="">Sin profesor asignado</option>
               {(teachers ?? []).map((t) => (
@@ -134,11 +134,11 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
               type="checkbox"
               id="published"
               name="published"
-              className="w-4 h-4 rounded accent-[#1A56DB]"
+              className="w-4 h-4 rounded accent-[var(--ag-navy)]"
             />
             <label
               htmlFor="published"
-              className="text-sm font-medium text-[#050F1F]"
+              className="text-sm font-medium text-[var(--ag-text)]"
             >
               Publicar inmediatamente
             </label>
@@ -148,7 +148,7 @@ export default async function SuperAdminNewCoursePage({ searchParams }: Props) {
             <SubmitButton label="Crear curso" loadingLabel="Creando..." />
             <a
               href="/dashboard/super-admin/courses"
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
             >
               Cancelar
             </a>

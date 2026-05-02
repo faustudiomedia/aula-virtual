@@ -104,8 +104,8 @@ export default async function CalendarPage() {
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">📅 Calendario</h1>
-        <p className="text-[#050F1F]/50 mt-1">Tareas, reuniones y fechas de entrega.</p>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">📅 Calendario</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">Tareas, reuniones y fechas de entrega.</p>
       </div>
       <CalendarView
         assignments={assignments}

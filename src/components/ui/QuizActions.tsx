@@ -52,7 +52,7 @@ export function ToggleQuizButton({ quizId, isPublished }: ToggleQuizButtonProps)
     <button
       onClick={handleToggle}
       disabled={isPending}
-      className="text-xs px-3 py-1.5 rounded-lg border border-black/10 hover:bg-black/5 transition text-[#050F1F]/70 font-medium disabled:opacity-60"
+      className="text-xs px-3 py-1.5 rounded-lg border border-black/10 hover:bg-black/5 transition text-[var(--ag-text)]/70 font-medium disabled:opacity-60"
     >
       {isPending ? '...' : isPublished ? 'Despublicar' : 'Publicar'}
     </button>

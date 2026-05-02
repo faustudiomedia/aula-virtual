@@ -141,16 +141,16 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
       {/* ── Calendar grid ─────────────────────────────── */}
       <div className="lg:col-span-2 bg-white rounded-2xl border border-black/5 shadow-sm p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-base font-semibold text-[#050F1F]">{MONTH_NAMES[month]} {year}</h2>
+          <h2 className="text-base font-semibold text-[var(--ag-text)]">{MONTH_NAMES[month]} {year}</h2>
           <div className="flex gap-1">
-            <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-black/10 flex items-center justify-center text-[#050F1F]/60 hover:bg-[#F0F9FF] transition-all">‹</button>
-            <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-black/10 flex items-center justify-center text-[#050F1F]/60 hover:bg-[#F0F9FF] transition-all">›</button>
+            <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-black/10 flex items-center justify-center text-[var(--ag-text-muted)] hover:bg-[rgba(30,58,95,0.06)] transition-all">‹</button>
+            <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-black/10 flex items-center justify-center text-[var(--ag-text-muted)] hover:bg-[rgba(30,58,95,0.06)] transition-all">›</button>
           </div>
         </div>
 
         <div className="grid grid-cols-7 mb-1">
           {DAY_NAMES.map(d => (
-            <div key={d} className="text-center text-xs font-medium text-[#050F1F]/30 py-1">{d}</div>
+            <div key={d} className="text-center text-xs font-medium text-[var(--ag-text)]/30 py-1">{d}</div>
           ))}
         </div>
 
@@ -169,16 +169,16 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                 key={`d-${day}`}
                 onClick={() => setSelected(isSelected ? null : day)}
                 className={`relative flex flex-col items-center justify-start pt-1.5 pb-1 min-h-[52px] rounded-xl text-sm transition-all ${
-                  isSelected ? 'bg-[#1A56DB] text-white shadow-md shadow-[#1A56DB]/20'
-                  : isToday   ? 'bg-[#EFF6FF] text-[#1A56DB] font-bold ring-1 ring-[#1A56DB]/20'
-                  : 'hover:bg-[#F8FAFC] text-[#050F1F]'
+                  isSelected ? 'bg-[var(--ag-navy)] text-white shadow-md '
+                  : isToday   ? 'bg-[rgba(30,58,95,0.08)] text-[var(--ag-navy)] font-bold ring-1 ring-[var(--ag-border-light)]'
+                  : 'hover:bg-white text-[var(--ag-text)]'
                 }`}
               >
                 <span className="text-xs font-semibold leading-none">{day}</span>
                 {hasItems && (
                   <div className="flex gap-0.5 mt-1.5 flex-wrap justify-center px-1">
                     {dayAssignments.slice(0, 2).map((_, j) => (
-                      <span key={`a-${j}`} className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isSelected ? 'bg-white/70' : 'bg-[#1A56DB]'}`} />
+                      <span key={`a-${j}`} className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isSelected ? 'bg-white/70' : 'bg-[var(--ag-navy)]'}`} />
                     ))}
                     {dayMeetings.slice(0, 2).map((_, j) => (
                       <span key={`m-${j}`} className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isSelected ? 'bg-white/70' : 'bg-green-500'}`} />
@@ -195,16 +195,16 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
 
         {/* Legend */}
         <div className="flex gap-4 mt-4 pt-4 border-t border-black/5">
-          <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
-            <span className="w-2 h-2 rounded-full bg-[#1A56DB] inline-block" /> Tareas
+          <div className="flex items-center gap-1.5 text-xs text-[var(--ag-text-muted)]">
+            <span className="w-2 h-2 rounded-full bg-[var(--ag-navy)] inline-block" /> Tareas
           </div>
           {meetings.length > 0 && (
-            <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--ag-text-muted)]">
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block" /> Reuniones
             </div>
           )}
           {events.length > 0 && (
-            <div className="flex items-center gap-1.5 text-xs text-[#050F1F]/40">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--ag-text-muted)]">
               <span className="w-2 h-2 rounded-full bg-purple-500 inline-block" /> Eventos
             </div>
           )}
@@ -213,9 +213,9 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
         {/* Selected day detail */}
         {selected !== null && (
           <div className="mt-5 pt-5 border-t border-black/5">
-            <p className="text-sm font-semibold text-[#050F1F] mb-3">{selected} de {MONTH_NAMES[month]}</p>
+            <p className="text-sm font-semibold text-[var(--ag-text)] mb-3">{selected} de {MONTH_NAMES[month]}</p>
             {(byDay.get(selected) ?? []).length === 0 && (meetingsByDay.get(selected) ?? []).length === 0 && (eventsByDay.get(selected) ?? []).length === 0 ? (
-              <p className="text-sm text-[#050F1F]/40">No hay eventos para este día.</p>
+              <p className="text-sm text-[var(--ag-text-muted)]">No hay eventos para este día.</p>
             ) : (
               <div className="space-y-2">
                 {(eventsByDay.get(selected) ?? []).map(e => (
@@ -226,9 +226,9 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                   >
                     <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: e.color }} />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-[#050F1F] truncate">📅 {e.title}</p>
-                      {e.description && <p className="text-xs text-[#050F1F]/50 truncate">{e.description}</p>}
-                      {e.eventTime && <p className="text-xs text-[#050F1F]/40">{e.eventTime.slice(0, 5)}</p>}
+                      <p className="text-sm font-medium text-[var(--ag-text)] truncate">📅 {e.title}</p>
+                      {e.description && <p className="text-xs text-[var(--ag-text-muted)] truncate">{e.description}</p>}
+                      {e.eventTime && <p className="text-xs text-[var(--ag-text-muted)]">{e.eventTime.slice(0, 5)}</p>}
                     </div>
                     {onDeleteEvent && role === 'teacher' && (
                       <button
@@ -246,7 +246,7 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                   >
                     <div className="w-9 h-9 rounded-xl bg-green-100 group-hover:bg-green-200 flex items-center justify-center text-base flex-shrink-0 transition-colors">🎥</div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-[#050F1F] truncate group-hover:text-green-700 transition-colors">{m.displayName}</p>
+                      <p className="text-sm font-semibold text-[var(--ag-text)] truncate group-hover:text-green-700 transition-colors">{m.displayName}</p>
                       <p className="text-xs text-green-600">{new Date(m.scheduledAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} hs</p>
                     </div>
                     <span className="text-green-400 group-hover:text-green-600 text-sm transition-colors">→</span>
@@ -256,12 +256,12 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                   <Link
                     key={a.id}
                     href={assignmentHref(a)}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-[#F0F9FF] hover:bg-[#E0F2FE] transition-all group"
+                    className="flex items-center gap-3 p-3 rounded-xl bg-[rgba(30,58,95,0.06)] hover:bg-[#E0F2FE] transition-all group"
                   >
-                    <div className="w-2 h-2 rounded-full bg-[#1A56DB] flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-[var(--ag-navy)] flex-shrink-0" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-[#050F1F] truncate group-hover:text-[#1A56DB]">{a.title}</p>
-                      <p className="text-xs text-[#050F1F]/50 truncate">{a.courseTitle}</p>
+                      <p className="text-sm font-medium text-[var(--ag-text)] truncate group-hover:text-[var(--ag-navy)]">{a.title}</p>
+                      <p className="text-xs text-[var(--ag-text-muted)] truncate">{a.courseTitle}</p>
                     </div>
                     <StatusBadge a={a} />
                   </Link>
@@ -278,7 +278,7 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
           <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
             <div className="flex items-center gap-2 px-5 pt-4 pb-3 border-b border-black/5">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <h3 className="text-sm font-semibold text-[#050F1F]">Próximas reuniones</h3>
+              <h3 className="text-sm font-semibold text-[var(--ag-text)]">Próximas reuniones</h3>
             </div>
             <div className="divide-y divide-black/5">
               {upcomingMeetings.map(m => {
@@ -297,7 +297,7 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                       <span className="text-base font-black text-green-500 leading-none">{dayNum}</span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-[#050F1F] line-clamp-1 group-hover:text-green-700 transition-colors">{m.displayName}</p>
+                      <p className="text-sm font-semibold text-[var(--ag-text)] line-clamp-1 group-hover:text-green-700 transition-colors">{m.displayName}</p>
                       <p className="text-xs text-green-600 mt-0.5">{timeStr} hs</p>
                     </div>
                     <span className="text-green-400 group-hover:text-green-600 text-xs transition-colors">→</span>
@@ -309,9 +309,9 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
         )}
 
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
-          <h3 className="text-sm font-semibold text-[#050F1F] mb-3">Próximas entregas</h3>
+          <h3 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Próximas entregas</h3>
           {upcomingAssignments.length === 0 ? (
-            <p className="text-sm text-[#050F1F]/40">No hay entregas próximas.</p>
+            <p className="text-sm text-[var(--ag-text-muted)]">No hay entregas próximas.</p>
           ) : (
             <div className="space-y-2">
               {upcomingAssignments.map(a => {
@@ -322,12 +322,12 @@ export function CalendarView({ assignments, role, meetings = [], events = [], on
                   <Link
                     key={a.id}
                     href={assignmentHref(a)}
-                    className="block p-3 rounded-xl border border-black/5 hover:border-[#38BDF8]/40 hover:bg-[#F8FAFC] transition-all"
+                    className="block p-3 rounded-xl border border-black/5 hover:border-[var(--ag-border-light)] hover:bg-white transition-all"
                   >
-                    <p className="text-sm font-medium text-[#050F1F] mb-0.5 line-clamp-1">{a.title}</p>
-                    <p className="text-xs text-[#050F1F]/40 truncate mb-2">{a.courseTitle}</p>
+                    <p className="text-sm font-medium text-[var(--ag-text)] mb-0.5 line-clamp-1">{a.title}</p>
+                    <p className="text-xs text-[var(--ag-text-muted)] truncate mb-2">{a.courseTitle}</p>
                     <div className="flex items-center justify-between gap-2">
-                      <span className={`text-xs font-medium ${overdue ? 'text-red-500' : isThisMonth ? 'text-[#1A56DB]' : 'text-amber-600'}`}>
+                      <span className={`text-xs font-medium ${overdue ? 'text-red-500' : isThisMonth ? 'text-[var(--ag-navy)]' : 'text-amber-600'}`}>
                         {d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: d.getFullYear() !== today.getFullYear() ? 'numeric' : undefined })}
                       </span>
                       <StatusBadge a={a} />

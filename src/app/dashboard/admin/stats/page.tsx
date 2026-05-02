@@ -59,7 +59,7 @@ export default async function AdminStatsPage() {
       label: "Institutos",
       value: totalInstitutes ?? 0,
       icon: "🏛️",
-      color: "#1A56DB",
+      color: "var(--ag-navy)",
       bg: "#EFF6FF",
     },
     {
@@ -133,22 +133,22 @@ export default async function AdminStatsPage() {
     {
       label: "En progreso (34–66%)",
       filter: (p) => p >= 34 && p <= 66,
-      color: "#38BDF8",
+      color: "var(--ag-navy)",
     },
     {
       label: "Avanzado (67–99%)",
       filter: (p) => p >= 67 && p <= 99,
-      color: "#1A56DB",
+      color: "var(--ag-navy)",
     },
     { label: "Completado (100%)", filter: (p) => p === 100, color: "#059669" },
   ];
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">
         Estadísticas globales
       </h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <p className="text-[var(--ag-text-muted)] mb-8">
         Métricas generales de toda la plataforma.
       </p>
 
@@ -163,7 +163,7 @@ export default async function AdminStatsPage() {
             <p className="text-3xl font-bold" style={{ color: stat.color }}>
               {stat.value}
             </p>
-            <p className="text-sm text-[#050F1F]/60 mt-1">{stat.label}</p>
+            <p className="text-sm text-[var(--ag-text-muted)] mt-1">{stat.label}</p>
           </div>
         ))}
       </div>

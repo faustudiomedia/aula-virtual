@@ -147,14 +147,14 @@ export function CourseBulkEnrollment({ courseId, courseTitle, currentEnrollments
       <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-[#1A56DB] text-[#1A56DB] rounded-xl text-sm font-semibold hover:bg-[#EFF6FF] transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-[var(--ag-navy)] text-[var(--ag-navy)] rounded-xl text-sm font-semibold hover:bg-[rgba(30,58,95,0.08)] transition-colors"
         >
           <Upload size={16} />
           Importar Excel
         </button>
         <button
           onClick={handleExport}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-black/10 text-[#050F1F]/70 rounded-xl text-sm font-semibold hover:bg-black/5 transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-black/10 text-[var(--ag-text)]/70 rounded-xl text-sm font-semibold hover:bg-black/5 transition-colors"
         >
           <Download size={16} />
           Exportar Lista
@@ -170,7 +170,7 @@ export function CourseBulkEnrollment({ courseId, courseTitle, currentEnrollments
 
       {/* Modal Confirmación */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#050F1F]/40 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[var(--ag-text)]/40 backdrop-blur-sm">
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 relative flex flex-col max-h-[90vh]">
             <button
               onClick={() => {
@@ -181,8 +181,8 @@ export function CourseBulkEnrollment({ courseId, courseTitle, currentEnrollments
               <X size={20} />
             </button>
 
-            <h2 className="text-xl font-bold text-[#050F1F] mb-1">Confirmar Importación</h2>
-            <p className="text-sm text-[#050F1F]/50 mb-4">
+            <h2 className="text-xl font-bold text-[var(--ag-text)] mb-1">Confirmar Importación</h2>
+            <p className="text-sm text-[var(--ag-text-muted)] mb-4">
               Se detectaron <strong>{previewData.length}</strong> alumnos válidos en el archivo.
             </p>
 
@@ -193,16 +193,16 @@ export function CourseBulkEnrollment({ courseId, courseTitle, currentEnrollments
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto mb-6 bg-[#F0F9FF]/50 border border-black/5 rounded-xl p-3">
+            <div className="flex-1 overflow-y-auto mb-6 bg-[rgba(30,58,95,0.06)]/50 border border-black/5 rounded-xl p-3">
               <ul className="text-sm divide-y divide-black/5">
                 {previewData.slice(0, 50).map((u, i) => (
                   <li key={i} className="py-2 flex justify-between gap-4">
                     <span className="font-medium truncate">{u.full_name}</span>
-                    <span className="text-[#050F1F]/50 truncate text-xs mt-0.5">{u.email}</span>
+                    <span className="text-[var(--ag-text-muted)] truncate text-xs mt-0.5">{u.email}</span>
                   </li>
                 ))}
                 {previewData.length > 50 && (
-                  <li className="py-2 text-center text-[#050F1F]/40 text-xs italic">
+                  <li className="py-2 text-center text-[var(--ag-text-muted)] text-xs italic">
                     ... y {previewData.length - 50} más.
                   </li>
                 )}
@@ -219,14 +219,14 @@ export function CourseBulkEnrollment({ courseId, courseTitle, currentEnrollments
               <button
                 onClick={() => setShowModal(false)}
                 disabled={isPending}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-[#050F1F]/60 border border-black/10 hover:bg-black/5 disabled:opacity-50 transition-colors"
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-[var(--ag-text-muted)] border border-black/10 hover:bg-black/5 disabled:opacity-50 transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleConfirmImport}
                 disabled={isPending || !!resultMsg?.success}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold text-white bg-[#1A56DB] hover:bg-[#1A56DB]/90 disabled:opacity-50 transition-colors shadow-lg shadow-[#1A56DB]/20"
+                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold text-white bg-[var(--ag-navy)] hover:bg-[var(--ag-navy)]/90 disabled:opacity-50 transition-colors shadow-lg "
               >
                 {isPending && <Loader2 size={16} className="animate-spin" />}
                 {isPending ? "Procesando..." : "Importar e Inscribir"}

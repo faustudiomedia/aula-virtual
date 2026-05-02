@@ -58,8 +58,8 @@ export default async function SuperAdminStatsPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Estadísticas globales</h1>
-        <p className="text-[#050F1F]/50 mt-1">Métricas generales de toda la plataforma Agorify</p>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Estadísticas globales</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">Métricas generales de toda la plataforma Agorify</p>
       </div>
 
       {/* ── KPIs ── */}
@@ -74,9 +74,9 @@ export default async function SuperAdminStatsPage() {
         ].map((kpi) => (
           <div key={kpi.label} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="text-2xl mb-2">{kpi.icon}</div>
-            <p className="text-3xl font-bold text-[#050F1F]">{kpi.value.toLocaleString()}</p>
-            <p className="text-sm font-medium text-[#050F1F] mt-1">{kpi.label}</p>
-            <p className="text-xs text-[#050F1F]/40 mt-0.5">{kpi.sub}</p>
+            <p className="text-3xl font-bold text-[var(--ag-text)]">{kpi.value.toLocaleString()}</p>
+            <p className="text-sm font-medium text-[var(--ag-text)] mt-1">{kpi.label}</p>
+            <p className="text-xs text-[var(--ag-text-muted)] mt-0.5">{kpi.sub}</p>
           </div>
         ))}
       </div>
@@ -84,22 +84,22 @@ export default async function SuperAdminStatsPage() {
       {/* ── Ratios visuales ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-[#050F1F] mb-4">Tasa de completitud</h2>
+          <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Tasa de completitud</h2>
           <div className="flex items-end gap-4">
-            <span className="text-5xl font-bold text-[#050F1F]">{completionRate}%</span>
-            <span className="text-sm text-[#050F1F]/50 mb-2">de inscripciones completadas</span>
+            <span className="text-5xl font-bold text-[var(--ag-text)]">{completionRate}%</span>
+            <span className="text-sm text-[var(--ag-text-muted)] mb-2">de inscripciones completadas</span>
           </div>
           <div className="mt-4 h-3 bg-black/5 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] rounded-full"
+            <div className="h-full bg-gradient-to-r bg-[var(--ag-navy)] rounded-full"
               style={{ width: `${completionRate}%` }} />
           </div>
         </div>
 
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-[#050F1F] mb-4">Cursos publicados</h2>
+          <h2 className="text-base font-semibold text-[var(--ag-text)] mb-4">Cursos publicados</h2>
           <div className="flex items-end gap-4">
-            <span className="text-5xl font-bold text-[#050F1F]">{publishedRate}%</span>
-            <span className="text-sm text-[#050F1F]/50 mb-2">del total de cursos</span>
+            <span className="text-5xl font-bold text-[var(--ag-text)]">{publishedRate}%</span>
+            <span className="text-sm text-[var(--ag-text-muted)] mb-2">del total de cursos</span>
           </div>
           <div className="mt-4 h-3 bg-black/5 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-[#6366F1] to-[#A78BFA] rounded-full"
@@ -111,7 +111,7 @@ export default async function SuperAdminStatsPage() {
       {/* ── Top institutos ── */}
       {topInstitutes.length > 0 && (
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-          <h2 className="text-base font-semibold text-[#050F1F] mb-5">Institutos por alumnos</h2>
+          <h2 className="text-base font-semibold text-[var(--ag-text)] mb-5">Institutos por alumnos</h2>
           <div className="space-y-3">
             {topInstitutes.map((inst, i) => {
               const maxStudents = topInstitutes[0]?.students || 1
@@ -119,16 +119,16 @@ export default async function SuperAdminStatsPage() {
               return (
                 <div key={inst.name}>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-sm text-[#050F1F] flex items-center gap-2">
-                      <span className="text-xs text-[#050F1F]/30 w-4">#{i + 1}</span>
+                    <span className="text-sm text-[var(--ag-text)] flex items-center gap-2">
+                      <span className="text-xs text-[var(--ag-text)]/30 w-4">#{i + 1}</span>
                       {inst.name}
                     </span>
-                    <span className="text-sm text-[#050F1F]/60">
+                    <span className="text-sm text-[var(--ag-text-muted)]">
                       {inst.students} alumnos · {inst.teachers} prof · {inst.admins} admin
                     </span>
                   </div>
                   <div className="h-2 bg-black/5 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#1A56DB] rounded-full" style={{ width: `${pct}%` }} />
+                    <div className="h-full bg-[var(--ag-navy)] rounded-full" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               )

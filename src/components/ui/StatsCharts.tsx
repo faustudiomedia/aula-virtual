@@ -29,17 +29,17 @@ export function StatsCharts({ enrollmentsByMonth, progressBuckets }: Props) {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
       {/* Area chart — enrollments over time */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-[#050F1F] mb-1">Inscripciones por mes</h2>
-        <p className="text-xs text-[#050F1F]/40 mb-4">Últimos 6 meses</p>
+        <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-1">Inscripciones por mes</h2>
+        <p className="text-xs text-[var(--ag-text-muted)] mb-4">Últimos 6 meses</p>
         {enrollmentsByMonth.length === 0 ? (
-          <div className="h-40 flex items-center justify-center text-[#050F1F]/30 text-sm">Sin datos</div>
+          <div className="h-40 flex items-center justify-center text-[var(--ag-text)]/30 text-sm">Sin datos</div>
         ) : (
           <ResponsiveContainer width="100%" height={180}>
             <AreaChart data={enrollmentsByMonth} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="enrollGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#1A56DB" stopOpacity={0.15} />
-                  <stop offset="95%" stopColor="#1A56DB" stopOpacity={0} />
+                  <stop offset="5%" stopColor="var(--ag-navy)" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="var(--ag-navy)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
@@ -52,10 +52,10 @@ export function StatsCharts({ enrollmentsByMonth, progressBuckets }: Props) {
                 type="monotone"
                 dataKey="count"
                 name="Inscripciones"
-                stroke="#1A56DB"
+                stroke="var(--ag-navy)"
                 strokeWidth={2}
                 fill="url(#enrollGrad)"
-                dot={{ fill: "#1A56DB", r: 3 }}
+                dot={{ fill: "var(--ag-navy)", r: 3 }}
                 activeDot={{ r: 5 }}
               />
             </AreaChart>
@@ -65,10 +65,10 @@ export function StatsCharts({ enrollmentsByMonth, progressBuckets }: Props) {
 
       {/* Pie chart — progress distribution */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">
-        <h2 className="text-sm font-semibold text-[#050F1F] mb-1">Distribución de progreso</h2>
-        <p className="text-xs text-[#050F1F]/40 mb-4">{total} inscripciones en total</p>
+        <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-1">Distribución de progreso</h2>
+        <p className="text-xs text-[var(--ag-text-muted)] mb-4">{total} inscripciones en total</p>
         {total === 0 ? (
-          <div className="h-40 flex items-center justify-center text-[#050F1F]/30 text-sm">Sin datos</div>
+          <div className="h-40 flex items-center justify-center text-[var(--ag-text)]/30 text-sm">Sin datos</div>
         ) : (
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>

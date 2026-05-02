@@ -27,8 +27,8 @@ export function CourseNavTabs({ courseId }: { courseId: string }) {
             href={href}
             className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 -mb-px transition-colors ${
               active
-                ? 'text-[#1A56DB] border-[#1A56DB]'
-                : 'text-[#050F1F]/50 border-transparent hover:text-[#050F1F] hover:border-black/10'
+                ? 'text-[var(--ag-navy)] border-[var(--ag-navy)]'
+                : 'text-[var(--ag-text-muted)] border-transparent hover:text-[var(--ag-text)] hover:border-black/10'
             }`}
           >
             {label}

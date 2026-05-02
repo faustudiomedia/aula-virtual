@@ -96,13 +96,13 @@ export default function QuizEditor({ courseId }: Props) {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Quiz title */}
       <div>
-        <label className="block text-sm font-semibold text-[#050F1F] mb-2">Título del quiz</label>
+        <label className="block text-sm font-semibold text-[var(--ag-text)] mb-2">Título del quiz</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Ej: Evaluación unidad 1"
-          className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 focus:border-[#1A56DB] transition"
+          className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition"
         />
       </div>
 
@@ -111,7 +111,7 @@ export default function QuizEditor({ courseId }: Props) {
         {questions.map((q, qIdx) => (
           <div key={q.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-[#1A56DB] bg-[#EFF6FF] px-2.5 py-1 rounded-full">
+              <span className="text-xs font-bold text-[var(--ag-navy)] bg-[rgba(30,58,95,0.08)] px-2.5 py-1 rounded-full">
                 Pregunta {qIdx + 1}
               </span>
               {questions.length > 1 && (
@@ -131,11 +131,11 @@ export default function QuizEditor({ courseId }: Props) {
               onChange={(e) => updateQuestion(qIdx, 'question', e.target.value)}
               placeholder="Escribí la pregunta aquí..."
               rows={2}
-              className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 focus:border-[#1A56DB] transition mb-4 resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition mb-4 resize-none"
             />
 
             {/* Options */}
-            <p className="text-xs font-semibold text-[#050F1F]/50 mb-2">Opciones — marcá la correcta</p>
+            <p className="text-xs font-semibold text-[var(--ag-text-muted)] mb-2">Opciones — marcá la correcta</p>
             <div className="space-y-2">
               {q.options.map((option, oIdx) => (
                 <div key={oIdx} className="flex items-center gap-2">
@@ -158,13 +158,13 @@ export default function QuizEditor({ courseId }: Props) {
                     value={option}
                     onChange={(e) => updateOption(qIdx, oIdx, e.target.value)}
                     placeholder={`Opción ${oIdx + 1}`}
-                    className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/20 focus:border-[#1A56DB] transition"
+                    className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-border-light)] focus:border-[var(--ag-navy)] transition"
                   />
                   {q.options.length > 2 && (
                     <button
                       type="button"
                       onClick={() => removeOption(qIdx, oIdx)}
-                      className="text-[#050F1F]/30 hover:text-red-500 transition text-sm"
+                      className="text-[var(--ag-text)]/30 hover:text-red-500 transition text-sm"
                     >
                       ✕
                     </button>
@@ -177,7 +177,7 @@ export default function QuizEditor({ courseId }: Props) {
               <button
                 type="button"
                 onClick={() => addOption(qIdx)}
-                className="mt-3 text-xs text-[#1A56DB] hover:underline font-medium"
+                className="mt-3 text-xs text-[var(--ag-navy)] hover:underline font-medium"
               >
                 + Agregar opción
               </button>
@@ -189,7 +189,7 @@ export default function QuizEditor({ courseId }: Props) {
       <button
         type="button"
         onClick={addQuestion}
-        className="w-full py-3 rounded-xl border-2 border-dashed border-[#BAE6FD] text-[#1A56DB] text-sm font-medium hover:bg-[#EFF6FF] transition"
+        className="w-full py-3 rounded-xl border-2 border-dashed border-[var(--ag-border-light)] text-[var(--ag-navy)] text-sm font-medium hover:bg-[rgba(30,58,95,0.08)] transition"
       >
         + Agregar pregunta
       </button>
@@ -200,14 +200,14 @@ export default function QuizEditor({ courseId }: Props) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 py-3 rounded-xl border border-black/10 text-sm font-semibold text-[#050F1F]/70 hover:bg-black/5 transition"
+          className="flex-1 py-3 rounded-xl border border-black/10 text-sm font-semibold text-[var(--ag-text)]/70 hover:bg-black/5 transition"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isPending}
-          className="flex-1 py-3 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-60"
+          className="flex-1 py-3 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:opacity-90 transition disabled:opacity-60"
         >
           {isPending ? 'Creando...' : 'Crear quiz'}
         </button>

@@ -62,12 +62,12 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <div className="flex items-center gap-2 mb-2 text-sm text-[#050F1F]/50">
-        <Link href="/dashboard/teacher" className="hover:text-[#050F1F] transition-colors">← Mis cursos</Link>
+      <div className="flex items-center gap-2 mb-2 text-sm text-[var(--ag-text-muted)]">
+        <Link href="/dashboard/teacher" className="hover:text-[var(--ag-text)] transition-colors">← Mis cursos</Link>
         <span>/</span>
-        <Link href={`/dashboard/teacher/courses/${courseId}/assignments`} className="hover:text-[#050F1F] transition-colors">Tareas</Link>
+        <Link href={`/dashboard/teacher/courses/${courseId}/assignments`} className="hover:text-[var(--ag-text)] transition-colors">Tareas</Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
 
       <CourseNavTabs courseId={courseId} />
 
@@ -75,11 +75,11 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-[#050F1F] mb-1">{a.title}</h2>
+            <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-1">{a.title}</h2>
             {a.description && (
-              <p className="text-sm text-[#050F1F]/60 whitespace-pre-wrap mb-2">{a.description}</p>
+              <p className="text-sm text-[var(--ag-text-muted)] whitespace-pre-wrap mb-2">{a.description}</p>
             )}
-            <div className="flex items-center gap-4 text-xs text-[#050F1F]/40">
+            <div className="flex items-center gap-4 text-xs text-[var(--ag-text-muted)]">
               <span>Puntaje máx: {a.max_score} pts</span>
               {a.due_date && (
                 <span>Vence: {new Date(a.due_date).toLocaleDateString('es-AR', { dateStyle: 'short' })}</span>
@@ -88,16 +88,16 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
           </div>
           <div className="flex gap-4 text-center flex-shrink-0">
             <div>
-              <p className="text-2xl font-bold text-[#1A56DB]">{submitted}</p>
-              <p className="text-xs text-[#050F1F]/40">Entregaron</p>
+              <p className="text-2xl font-bold text-[var(--ag-navy)]">{submitted}</p>
+              <p className="text-xs text-[var(--ag-text-muted)]">Entregaron</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-green-600">{graded}</p>
-              <p className="text-xs text-[#050F1F]/40">Calificados</p>
+              <p className="text-xs text-[var(--ag-text-muted)]">Calificados</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#050F1F]/30">{studentList.length - submitted}</p>
-              <p className="text-xs text-[#050F1F]/40">Sin entrega</p>
+              <p className="text-2xl font-bold text-[var(--ag-text)]/30">{studentList.length - submitted}</p>
+              <p className="text-xs text-[var(--ag-text-muted)]">Sin entrega</p>
             </div>
           </div>
         </div>
@@ -119,12 +119,12 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
         {studentList.map((student) => (
           <div key={student.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+              <div className="w-9 h-9 rounded-full bg-[var(--ag-navy)] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                 {(student.full_name || student.email || '?').charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-[#050F1F]">{student.full_name || 'Sin nombre'}</p>
-                <p className="text-xs text-[#050F1F]/40">{student.email}</p>
+                <p className="font-medium text-[var(--ag-text)]">{student.full_name || 'Sin nombre'}</p>
+                <p className="text-xs text-[var(--ag-text-muted)]">{student.email}</p>
               </div>
               {student.submission ? (
                 <span className="text-xs px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 font-medium flex-shrink-0">
@@ -142,27 +142,27 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                 {/* Submission content */}
                 {student.submission.content && (
                   <div className="mb-3">
-                    <p className="text-xs font-medium text-[#050F1F]/40 uppercase tracking-wide mb-1">Respuesta</p>
+                    <p className="text-xs font-medium text-[var(--ag-text-muted)] uppercase tracking-wide mb-1">Respuesta</p>
                     <div
-                      className="text-sm text-[#050F1F]/80 bg-[#F8FAFC] rounded-xl p-4 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_h3]:text-base [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_blockquote]:text-[#050F1F]/60 [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_pre]:bg-black/5 [&_pre]:rounded-lg [&_pre]:p-3 [&_mark]:bg-yellow-200"
+                      className="text-sm text-[var(--ag-text)]/80 bg-white rounded-xl p-4 prose prose-sm max-w-none [&_h1]:text-xl [&_h1]:font-bold [&_h2]:text-lg [&_h2]:font-bold [&_h3]:text-base [&_h3]:font-semibold [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_blockquote]:border-l-4 [&_blockquote]:border-black/20 [&_blockquote]:pl-3 [&_blockquote]:text-[var(--ag-text-muted)] [&_code]:bg-black/5 [&_code]:rounded [&_code]:px-1 [&_pre]:bg-black/5 [&_pre]:rounded-lg [&_pre]:p-3 [&_mark]:bg-yellow-200"
                       dangerouslySetInnerHTML={{ __html: student.submission.content }}
                     />
                   </div>
                 )}
                 {student.submission.file_url && (
                   <div className="mb-3">
-                    <p className="text-xs font-medium text-[#050F1F]/40 uppercase tracking-wide mb-1">Archivo</p>
+                    <p className="text-xs font-medium text-[var(--ag-text-muted)] uppercase tracking-wide mb-1">Archivo</p>
                     <a
                       href={student.submission.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#1A56DB] hover:underline"
+                      className="text-sm text-[var(--ag-navy)] hover:underline"
                     >
                       📎 Ver archivo adjunto
                     </a>
                   </div>
                 )}
-                <p className="text-xs text-[#050F1F]/30 mb-4">
+                <p className="text-xs text-[var(--ag-text)]/30 mb-4">
                   Entregado: {new Date(student.submission.submitted_at).toLocaleString('es-AR')}
                 </p>
 
@@ -172,7 +172,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                   <input type="hidden" name="assignment_id" value={assignmentId} />
                   <input type="hidden" name="course_id" value={courseId} />
                   <div>
-                    <label className="block text-xs font-medium text-[#050F1F]/60 mb-1">
+                    <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1">
                       Puntaje (máx {a.max_score})
                     </label>
                     <input
@@ -182,22 +182,22 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
                       max={a.max_score}
                       defaultValue={student.submission.score ?? ''}
                       placeholder="—"
-                      className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+                      className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
                     />
                   </div>
                   <div className="flex-1 min-w-[160px]">
-                    <label className="block text-xs font-medium text-[#050F1F]/60 mb-1">Devolución</label>
+                    <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1">Devolución</label>
                     <input
                       name="feedback"
                       type="text"
                       defaultValue={student.submission.feedback ?? ''}
                       placeholder="Comentario al alumno..."
-                      className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+                      className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-lg bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all"
+                    className="px-4 py-2 rounded-lg bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition-all"
                   >
                     {student.submission.graded_at ? 'Re-calificar' : 'Calificar'}
                   </button>
@@ -208,7 +208,7 @@ export default async function AssignmentSubmissionsPage({ params, searchParams }
         ))}
 
         {studentList.length === 0 && (
-          <div className="text-center py-12 text-[#050F1F]/40 text-sm">
+          <div className="text-center py-12 text-[var(--ag-text-muted)] text-sm">
             No hay alumnos inscriptos en este curso.
           </div>
         )}

@@ -56,35 +56,35 @@ export default async function AllStudentsPage() {
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">
         Alumnos
       </h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <p className="text-[var(--ag-text-muted)] mb-8">
         {students?.length ?? 0} alumno{(students?.length ?? 0) !== 1 ? "s" : ""}{" "}
         registrado{(students?.length ?? 0) !== 1 ? "s" : ""}
       </p>
 
       {(students ?? []).length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-          <p className="text-[#050F1F]/50">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
+          <p className="text-[var(--ag-text-muted)]">
             No hay alumnos registrados en este instituto.
           </p>
         </div>
       ) : (
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-[#F0F9FF] border-b border-black/5">
+            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
               <tr>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Alumno
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Cursos
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Progreso promedio
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Completados
                 </th>
                 <th className="px-5 py-3" />
@@ -99,11 +99,11 @@ export default async function AllStudentsPage() {
                 return (
                   <tr
                     key={student.id}
-                    className="hover:bg-[#F0F9FF]/50 transition-colors"
+                    className="hover:bg-[rgba(30,58,95,0.06)]/50 transition-colors"
                   >
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--ag-navy)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                           {student.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={student.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -112,32 +112,32 @@ export default async function AllStudentsPage() {
                           )}
                         </div>
                         <div>
-                          <p className="font-medium text-[#050F1F]">
+                          <p className="font-medium text-[var(--ag-text)]">
                             {student.full_name || "Sin nombre"}
                           </p>
-                          <p className="text-xs text-[#050F1F]/40">
+                          <p className="text-xs text-[var(--ag-text-muted)]">
                             {student.email}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]">
+                    <td className="px-5 py-3.5 text-[var(--ag-text)]">
                       {stats?.total ?? 0}
                     </td>
                     <td className="px-5 py-3.5 w-40">
                       {stats ? (
                         <ProgressBar value={avg} />
                       ) : (
-                        <span className="text-[#050F1F]/30 text-xs">—</span>
+                        <span className="text-[var(--ag-text)]/30 text-xs">—</span>
                       )}
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]">
+                    <td className="px-5 py-3.5 text-[var(--ag-text)]">
                       {stats?.completed ?? 0}
                     </td>
                     <td className="px-5 py-3.5 text-right">
                       <Link
                         href={`/dashboard/messages/${student.id}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-[var(--ag-navy)] border border-[var(--ag-navy)]/20 hover:bg-[var(--ag-navy)]/5 transition-all"
                       >
                         Mensaje
                       </Link>

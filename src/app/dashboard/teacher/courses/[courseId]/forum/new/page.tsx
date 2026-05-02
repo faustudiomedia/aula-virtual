@@ -27,41 +27,41 @@ export default async function NewThreadPage({ params }: Props) {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">{course.title}</h1>
       <CourseNavTabs courseId={courseId} />
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 max-w-2xl">
-        <h2 className="text-lg font-semibold text-[#050F1F] mb-5">Nuevo tema</h2>
+        <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-5">Nuevo tema</h2>
         <form action={handleCreate} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-[#050F1F]/70 mb-1.5">Título</label>
+            <label className="block text-sm font-medium text-[var(--ag-text)]/70 mb-1.5">Título</label>
             <input
               name="title"
               required
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               placeholder="Tema del hilo..."
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#050F1F]/70 mb-1.5">Contenido</label>
+            <label className="block text-sm font-medium text-[var(--ag-text)]/70 mb-1.5">Contenido</label>
             <textarea
               name="content"
               required
               rows={5}
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 resize-none"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
               placeholder="Descripción o pregunta..."
             />
           </div>
           <div className="flex gap-3">
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 transition-all"
             >
               Publicar
             </button>
             <a
               href={`/dashboard/teacher/courses/${courseId}/forum`}
-              className="px-5 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[#050F1F]/60 hover:bg-black/5 transition-all"
+              className="px-5 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
             >
               Cancelar
             </a>

@@ -40,7 +40,7 @@ export default function CourseStudentsView({ courseId }: Props) {
   if (!course) {
     return (
       <div className="p-8 max-w-4xl mx-auto">
-        <p className="text-[#050F1F]/50">Curso no encontrado.</p>
+        <p className="text-[var(--ag-text-muted)]">Curso no encontrado.</p>
       </div>
     );
   }
@@ -49,16 +49,16 @@ export default function CourseStudentsView({ courseId }: Props) {
     <div className="p-8 max-w-4xl mx-auto">
       <a
         href="/dashboard/teacher"
-        className="text-[#1A56DB] hover:underline text-sm"
+        className="text-[var(--ag-navy)] hover:underline text-sm"
       >
         ← Mis cursos
       </a>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F] mt-2 mb-1">
+          <h1 className="text-2xl font-bold text-[var(--ag-text)] mt-2 mb-1">
             {course.title}
           </h1>
-          <p className="text-[#050F1F]/50">
+          <p className="text-[var(--ag-text-muted)]">
             {enrollments.length} alumno{enrollments.length !== 1 ? "s" : ""}{" "}
             inscripto{enrollments.length !== 1 ? "s" : ""}
           </p>
@@ -71,24 +71,24 @@ export default function CourseStudentsView({ courseId }: Props) {
       </div>
 
       {enrollments.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
-          <p className="text-[#050F1F]/50">Ningún alumno inscripto todavía.</p>
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
+          <p className="text-[var(--ag-text-muted)]">Ningún alumno inscripto todavía.</p>
         </div>
       ) : (
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-[#F0F9FF] border-b border-black/5">
+            <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
               <tr>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Alumno
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Progreso
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Estado
                 </th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">
                   Inscripción
                 </th>
               </tr>
@@ -97,11 +97,11 @@ export default function CourseStudentsView({ courseId }: Props) {
               {typedEnrollments.map((e) => (
                 <tr
                   key={e.id}
-                  className="hover:bg-[#F0F9FF]/50 transition-colors"
+                  className="hover:bg-[rgba(30,58,95,0.06)]/50 transition-colors"
                 >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-[var(--ag-navy)] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                         {e.profiles?.avatar_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={e.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
@@ -110,10 +110,10 @@ export default function CourseStudentsView({ courseId }: Props) {
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-[#050F1F]">
+                        <p className="font-medium text-[var(--ag-text)]">
                           {e.profiles?.full_name || "Sin nombre"}
                         </p>
-                        <p className="text-xs text-[#050F1F]/40">
+                        <p className="text-xs text-[var(--ag-text-muted)]">
                           {e.profiles?.email}
                         </p>
                       </div>
@@ -133,7 +133,7 @@ export default function CourseStudentsView({ courseId }: Props) {
                       {e.completed ? "Completado" : "En curso"}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5 text-[#050F1F]/50">
+                  <td className="px-5 py-3.5 text-[var(--ag-text-muted)]">
                     {new Date(e.enrolled_at).toLocaleDateString("es-AR", {
                       dateStyle: "short",
                     })}

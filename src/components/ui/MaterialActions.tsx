@@ -37,10 +37,10 @@ export function DeleteMaterialButton({
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
           <p className="text-4xl mb-3">🗑️</p>
-          <h2 className="text-lg font-bold text-[#050F1F] mb-2">
+          <h2 className="text-lg font-bold text-[var(--ag-text)] mb-2">
             ¿Eliminar material?
           </h2>
-          <p className="text-sm text-[#050F1F]/60 mb-4">
+          <p className="text-sm text-[var(--ag-text-muted)] mb-4">
             Se eliminará <strong>{materialTitle}</strong>. Esta acción no se
             puede deshacer.
           </p>
@@ -55,7 +55,7 @@ export function DeleteMaterialButton({
             </button>
             <button
               onClick={() => setConfirming(false)}
-              className="flex-1 py-2 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
             >
               Cancelar
             </button>
@@ -115,7 +115,7 @@ export function EditMaterialButton({ material }: { material: Material }) {
       {editing && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
-            <h2 className="text-lg font-bold text-[#050F1F] mb-4">
+            <h2 className="text-lg font-bold text-[var(--ag-text)] mb-4">
               Editar material
             </h2>
             <form onSubmit={handleSubmit} className="space-y-3">
@@ -126,7 +126,7 @@ export function EditMaterialButton({ material }: { material: Material }) {
                     name="title"
                     defaultValue={material.title}
                     placeholder="Título *"
-                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] ${fieldErrors.title ? "border-red-400" : "border-black/10"}`}
+                    className={`w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 ${fieldErrors.title ? "border-red-400" : "border-black/10"}`}
                   />
                   {fieldErrors.title && (
                     <p className="text-xs text-red-600 mt-1">
@@ -137,7 +137,7 @@ export function EditMaterialButton({ material }: { material: Material }) {
                 <select
                   name="file_type"
                   defaultValue={material.file_type ?? ""}
-                  className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] bg-white"
+                  className="px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 bg-white"
                 >
                   <option value="">Tipo de archivo</option>
                   <option value="pdf">PDF</option>
@@ -150,14 +150,14 @@ export function EditMaterialButton({ material }: { material: Material }) {
                 name="description"
                 defaultValue={material.description ?? ""}
                 placeholder="Descripción (opcional)"
-                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+                className="w-full px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
               />
               <div className="flex gap-3">
                 <input
                   name="file_url"
                   defaultValue={material.file_url ?? ""}
                   placeholder="URL del archivo o enlace"
-                  className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+                  className="flex-1 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                 />
                 <input
                   name="order_index"
@@ -165,21 +165,21 @@ export function EditMaterialButton({ material }: { material: Material }) {
                   min="0"
                   defaultValue={material.order_index}
                   placeholder="Orden"
-                  className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+                  className="w-24 px-3 py-2 rounded-lg border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                 />
               </div>
               <div className="flex gap-3 pt-1">
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="flex-1 py-2 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60"
+                  className="flex-1 py-2 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60"
                 >
                   {isPending ? "Guardando..." : "Guardar"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
-                  className="flex-1 py-2 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm hover:bg-black/5 transition"
+                  className="flex-1 py-2 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
                 >
                   Cancelar
                 </button>

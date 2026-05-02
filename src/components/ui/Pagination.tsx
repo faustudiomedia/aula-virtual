@@ -20,26 +20,26 @@ export function Pagination({ totalPages }: { totalPages: number }) {
     <div className="flex gap-2 items-center justify-center p-4 border-t border-black/5">
       <Link
         href={createPageURL(Math.max(1, currentPage - 1))}
-        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[#050F1F]/70 transition-all ${
+        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
           currentPage <= 1
             ? "pointer-events-none opacity-50"
-            : "hover:bg-black/5 hover:text-[#050F1F]"
+            : "hover:bg-black/5 hover:text-[var(--ag-text)]"
         }`}
       >
         Anterior
       </Link>
 
-      <span className="text-sm font-medium text-[#050F1F]">
+      <span className="text-sm font-medium text-[var(--ag-text)]">
         {currentPage}{" "}
-        <span className="text-[#050F1F]/40 font-normal">de {totalPages}</span>
+        <span className="text-[var(--ag-text-muted)] font-normal">de {totalPages}</span>
       </span>
 
       <Link
         href={createPageURL(Math.min(totalPages, currentPage + 1))}
-        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[#050F1F]/70 transition-all ${
+        className={`px-3 py-1.5 border border-black/10 rounded-lg text-sm text-[var(--ag-text)]/70 transition-all ${
           currentPage >= totalPages
             ? "pointer-events-none opacity-50"
-            : "hover:bg-black/5 hover:text-[#050F1F]"
+            : "hover:bg-black/5 hover:text-[var(--ag-text)]"
         }`}
       >
         Siguiente

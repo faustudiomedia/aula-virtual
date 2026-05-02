@@ -30,7 +30,7 @@ export default async function DashboardLayout({
     cookieStore.get("active_institute_id")?.value ?? profile.institute_id ?? null;
 
   let instituteName = "Agorify";
-  let primaryColor = "#1A56DB";
+  let primaryColor = "var(--ag-navy)";
   let logoUrl: string | null = null;
 
   if (activeInstituteId) {
@@ -42,7 +42,7 @@ export default async function DashboardLayout({
 
     if (institute) {
       instituteName = institute.name;
-      primaryColor = institute.primary_color ?? "#1A56DB";
+      primaryColor = institute.primary_color ?? "var(--ag-navy)";
       logoUrl = institute.logo_url ?? null;
     }
   }

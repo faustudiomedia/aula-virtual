@@ -98,8 +98,8 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Certificados</h1>
-        <p className="text-[#050F1F]/50 mt-1">
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Certificados</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">
           Gestioná todas las solicitudes de certificado del instituto.
         </p>
       </div>
@@ -109,7 +109,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
         {[
           { label: "Pendientes", value: pending,          color: "#D97706", bg: "#FFFBEB", border: "#FDE68A" },
           { label: "Aprobados",  value: approved,         color: "#059669", bg: "#ECFDF5", border: "#A7F3D0" },
-          { label: "Total",      value: requests.length,  color: "#1A56DB", bg: "#EFF6FF", border: "#BFDBFE" },
+          { label: "Total",      value: requests.length,  color: "var(--ag-navy)", bg: "#EFF6FF", border: "#BFDBFE" },
         ].map(s => (
           <div key={s.label} className="rounded-2xl p-5 border" style={{ background: s.bg, borderColor: s.border }}>
             <p className="text-3xl font-bold" style={{ color: s.color }}>{s.value}</p>
@@ -126,14 +126,14 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
             onClick={() => setActiveStatus(t.key)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               activeStatus === t.key
-                ? "bg-white text-[#050F1F] shadow-sm"
-                : "text-[#050F1F]/50 hover:text-[#050F1F]"
+                ? "bg-white text-[var(--ag-text)] shadow-sm"
+                : "text-[var(--ag-text-muted)] hover:text-[var(--ag-text)]"
             }`}
           >
             {t.label}
             {t.count !== undefined && t.count > 0 && (
               <span className={`w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold ${
-                t.key === "pending" ? "bg-amber-500 text-white" : "bg-[#1A56DB] text-white"
+                t.key === "pending" ? "bg-amber-500 text-white" : "bg-[var(--ag-navy)] text-white"
               }`}>
                 {t.count > 9 ? "9+" : t.count}
               </span>
@@ -150,9 +150,9 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-10 text-center">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-10 text-center">
           <p className="text-4xl mb-3">🎓</p>
-          <p className="text-[#050F1F]/50 text-sm">
+          <p className="text-[var(--ag-text-muted)] text-sm">
             {activeStatus === "pending"
               ? "No hay solicitudes pendientes."
               : "No hay solicitudes en esta categoría."}
@@ -161,13 +161,13 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
       ) : (
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-[#F8FAFC] border-b border-black/5">
+            <thead className="bg-white border-b border-black/5">
               <tr>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Alumno</th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Curso</th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Profesor</th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Estado</th>
-                <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Fecha</th>
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Alumno</th>
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Curso</th>
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Profesor</th>
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Estado</th>
+                <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Fecha</th>
                 <th className="px-5 py-3" />
               </tr>
             </thead>
@@ -183,15 +183,15 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                 const st = STATUS_LABEL[req.status] ?? STATUS_LABEL.pending;
                 const isActing = isPending && actionId === req.id;
                 return (
-                  <tr key={req.id} className="hover:bg-[#F8FAFC]/60 transition-colors">
+                  <tr key={req.id} className="hover:bg-white/60 transition-colors">
                     <td className="px-5 py-3.5">
-                      <p className="font-medium text-[#050F1F]">{req.profiles?.full_name ?? "—"}</p>
-                      <p className="text-xs text-[#050F1F]/40">{req.profiles?.email}</p>
+                      <p className="font-medium text-[var(--ag-text)]">{req.profiles?.full_name ?? "—"}</p>
+                      <p className="text-xs text-[var(--ag-text-muted)]">{req.profiles?.email}</p>
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/70 text-xs">
+                    <td className="px-5 py-3.5 text-[var(--ag-text)]/70 text-xs">
                       {req.courses?.title ?? "—"}
                     </td>
-                    <td className="px-5 py-3.5 text-[#050F1F]/70 text-xs">
+                    <td className="px-5 py-3.5 text-[var(--ag-text)]/70 text-xs">
                       {req.courses?.teacher?.full_name ?? "—"}
                     </td>
                     <td className="px-5 py-3.5">
@@ -199,7 +199,7 @@ export default function AdminCertificatesView({ adminId, role, instituteId }: Pr
                         {st.label}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 text-xs text-[#050F1F]/40">
+                    <td className="px-5 py-3.5 text-xs text-[var(--ag-text-muted)]">
                       {new Date(req.created_at).toLocaleDateString("es-AR", {
                         day: "numeric", month: "short", year: "numeric",
                       })}

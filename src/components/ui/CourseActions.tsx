@@ -54,32 +54,32 @@ export function EditCourseForm({
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
-        <h2 className="text-lg font-bold text-[#050F1F] mb-4">Editar curso</h2>
+        <h2 className="text-lg font-bold text-[var(--ag-text)] mb-4">Editar curso</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormError message={error} />
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Título <span className="text-red-500">*</span>
             </label>
             <input
               name="title"
               defaultValue={course.title}
               required
-              className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition ${fieldErrors.title ? "border-red-400 bg-red-50" : "border-black/10"}`}
+              className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition ${fieldErrors.title ? "border-red-400 bg-red-50" : "border-black/10"}`}
             />
             {fieldErrors.title && (
               <p className="text-xs text-red-600 mt-1">{fieldErrors.title}</p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Descripción
             </label>
             <textarea
               name="description"
               rows={3}
               defaultValue={course.description ?? ""}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
             />
           </div>
           <div className="flex items-center gap-3">
@@ -88,11 +88,11 @@ export function EditCourseForm({
               id="published"
               name="published"
               defaultChecked={course.published}
-              className="w-4 h-4 rounded accent-[#1A56DB]"
+              className="w-4 h-4 rounded accent-[var(--ag-navy)]"
             />
             <label
               htmlFor="published"
-              className="text-sm font-medium text-[#050F1F]"
+              className="text-sm font-medium text-[var(--ag-text)]"
             >
               Publicado
             </label>
@@ -101,14 +101,14 @@ export function EditCourseForm({
             <button
               type="submit"
               disabled={isPending}
-              className="flex-1 py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60"
+              className="flex-1 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:opacity-90 transition disabled:opacity-60"
             >
               {isPending ? "Guardando..." : "Guardar cambios"}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
             >
               Cancelar
             </button>
@@ -151,10 +151,10 @@ export function DeleteCourseButton({
       <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center">
           <p className="text-4xl mb-3">🗑️</p>
-          <h2 className="text-lg font-bold text-[#050F1F] mb-2">
+          <h2 className="text-lg font-bold text-[var(--ag-text)] mb-2">
             ¿Eliminar curso?
           </h2>
-          <p className="text-sm text-[#050F1F]/60 mb-4">
+          <p className="text-sm text-[var(--ag-text-muted)] mb-4">
             Se eliminará <strong>{courseTitle}</strong> y todos sus materiales.
             Esta acción no se puede deshacer.
           </p>
@@ -169,7 +169,7 @@ export function DeleteCourseButton({
             </button>
             <button
               onClick={() => setConfirming(false)}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm hover:bg-black/5 transition"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm hover:bg-black/5 transition"
             >
               Cancelar
             </button>

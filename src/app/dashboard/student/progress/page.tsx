@@ -22,14 +22,14 @@ export default async function StudentProgressPage() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-2">Mi progreso</h1>
-      <p className="text-[#050F1F]/50 mb-8">
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-2">Mi progreso</h1>
+      <p className="text-[var(--ag-text-muted)] mb-8">
         Seguimiento detallado de todos tus cursos.
       </p>
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
-          <p className="text-[#050F1F]/50">No hay datos de progreso todavía.</p>
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
+          <p className="text-[var(--ag-text-muted)]">No hay datos de progreso todavía.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -39,7 +39,7 @@ export default async function StudentProgressPage() {
               className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm"
             >
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#050F1F]">
+                <h3 className="font-semibold text-[var(--ag-text)]">
                   {e.courses.title}
                 </h3>
                 <span
@@ -59,7 +59,7 @@ export default async function StudentProgressPage() {
                 </span>
               </div>
               <ProgressBar value={e.progress} />
-              <p className="text-xs text-[#050F1F]/40 mt-2">
+              <p className="text-xs text-[var(--ag-text-muted)] mt-2">
                 Inscripto el{" "}
                 {new Date(e.enrolled_at).toLocaleDateString("es-AR", {
                   dateStyle: "medium",

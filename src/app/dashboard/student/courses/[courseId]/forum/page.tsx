@@ -38,31 +38,31 @@ export default async function StudentForumPage({ params }: Props) {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-1">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">{course.title}</h1>
       <StudentCourseNavTabs courseId={courseId} />
 
-      <h2 className="text-lg font-semibold text-[#050F1F] mb-4">Foro del curso</h2>
+      <h2 className="text-lg font-semibold text-[var(--ag-text)] mb-4">Foro del curso</h2>
 
       {/* Create thread form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
-        <h3 className="text-sm font-semibold text-[#050F1F] mb-3">Crear nuevo tema</h3>
+        <h3 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Crear nuevo tema</h3>
         <form action={handleCreate} className="space-y-3">
           <input
             name="title"
             required
-            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
             placeholder="Título del tema..."
           />
           <textarea
             name="content"
             required
             rows={3}
-            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 resize-none"
+            className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
             placeholder="¿Cuál es tu pregunta o comentario?"
           />
           <button
             type="submit"
-            className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 transition-all"
           >
             Publicar
           </button>
@@ -70,7 +70,7 @@ export default async function StudentForumPage({ params }: Props) {
       </div>
 
       {(!threads || threads.length === 0) ? (
-        <div className="text-center py-16 text-[#050F1F]/40">
+        <div className="text-center py-16 text-[var(--ag-text-muted)]">
           <p className="text-4xl mb-3">💬</p>
           <p className="text-sm">No hay temas en el foro todavía. ¡Sé el primero en publicar!</p>
         </div>
@@ -82,16 +82,16 @@ export default async function StudentForumPage({ params }: Props) {
               <Link
                 key={t.id}
                 href={`/dashboard/student/courses/${courseId}/forum/${t.id}`}
-                className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:border-[#1A56DB]/20 hover:shadow-md transition-all"
+                className="block bg-white rounded-2xl border border-black/5 shadow-sm p-5 hover:border-[var(--ag-navy)]/20 hover:shadow-md transition-all"
               >
                 <div className="flex items-center gap-2 mb-1">
                   {t.pinned && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 font-medium">📌 Fijado</span>
                   )}
-                  <p className="text-base font-semibold text-[#050F1F] hover:text-[#1A56DB]">{t.title}</p>
+                  <p className="text-base font-semibold text-[var(--ag-text)] hover:text-[var(--ag-navy)]">{t.title}</p>
                 </div>
-                <p className="text-sm text-[#050F1F]/50 line-clamp-2 mb-2">{t.content}</p>
-                <p className="text-xs text-[#050F1F]/30">
+                <p className="text-sm text-[var(--ag-text-muted)] line-clamp-2 mb-2">{t.content}</p>
+                <p className="text-xs text-[var(--ag-text)]/30">
                   {author?.full_name ?? 'Desconocido'} · {new Date(t.created_at).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </p>
               </Link>

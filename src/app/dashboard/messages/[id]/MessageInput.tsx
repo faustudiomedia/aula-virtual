@@ -37,14 +37,14 @@ export function MessageInput({ recipientId }: { recipientId: string }) {
         rows={1}
         autoComplete="off"
         onKeyDown={handleKeyDown}
-        className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 resize-none"
+        className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
         placeholder="Escribe un mensaje… (Enter para enviar, Shift+Enter para nueva línea)"
         disabled={pending}
       />
       <button
         type="submit"
         disabled={pending}
-        className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 disabled:opacity-50 transition-all flex-shrink-0"
+        className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 disabled:opacity-50 transition-all flex-shrink-0"
       >
         {pending ? '...' : 'Enviar'}
       </button>

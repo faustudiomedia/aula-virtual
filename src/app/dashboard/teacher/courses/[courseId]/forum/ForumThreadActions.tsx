@@ -27,14 +27,14 @@ export function ForumThreadActions({ threadId, courseId, pinned }: Props) {
       <button
         onClick={handlePin}
         disabled={isPinPending}
-        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all disabled:opacity-50"
+        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-amber-50 hover:text-amber-600 hover:border-amber-200 transition-all disabled:opacity-50"
       >
         {isPinPending ? '...' : pinned ? 'Desfijar' : 'Fijar'}
       </button>
       <button
         onClick={handleDelete}
         disabled={isDelPending}
-        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[#050F1F]/50 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all disabled:opacity-50"
+        className="text-xs px-3 py-1.5 rounded-lg border border-black/10 text-[var(--ag-text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all disabled:opacity-50"
       >
         {isDelPending ? '...' : 'Eliminar'}
       </button>

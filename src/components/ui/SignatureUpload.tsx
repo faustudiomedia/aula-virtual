@@ -19,18 +19,18 @@ export function SignatureUpload({ currentUrl }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <label className="block text-sm font-medium text-[#050F1F]">Firma Electrónica</label>
+      <label className="block text-sm font-medium text-[var(--ag-text)]">Firma Electrónica</label>
       <div className="flex items-start gap-4">
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="relative w-48 h-20 rounded-xl border-2 border-dashed border-[#1A56DB]/30 bg-[#EFF6FF] overflow-hidden flex items-center justify-center group transition-colors hover:border-[#1A56DB] hover:bg-white"
+          className="relative w-48 h-20 rounded-xl border-2 border-dashed border-[var(--ag-navy)]/30 bg-[rgba(30,58,95,0.08)] overflow-hidden flex items-center justify-center group transition-colors hover:border-[var(--ag-navy)] hover:bg-white"
         >
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Firma" className="max-w-full max-h-full object-contain p-2 mix-blend-multiply" />
           ) : (
-            <div className="flex flex-col items-center gap-1 text-[#1A56DB]/60 mix-blend-multiply">
+            <div className="flex flex-col items-center gap-1 text-[var(--ag-navy)]/60 mix-blend-multiply">
               <FileSignature size={24} />
               <span className="text-xs font-semibold">Subir PNG sin fondo</span>
             </div>
@@ -40,14 +40,14 @@ export function SignatureUpload({ currentUrl }: Props) {
           </div>
         </button>
         <div className="flex-1 mt-1">
-          <p className="text-xs text-[#050F1F]/50 mb-2 leading-relaxed">
+          <p className="text-xs text-[var(--ag-text-muted)] mb-2 leading-relaxed">
             Subí una imagen de tu firma (idealmente en formato <strong>PNG transparente</strong>). 
             Se utilizará para validar certificados digitales aprobados.
           </p>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="text-xs px-4 py-2 rounded-lg font-semibold border-2 border-black/5 text-[#050F1F]/60 hover:bg-black/5 transition-all"
+            className="text-xs px-4 py-2 rounded-lg font-semibold border-2 border-black/5 text-[var(--ag-text-muted)] hover:bg-black/5 transition-all"
           >
             Elegir archivo local
           </button>

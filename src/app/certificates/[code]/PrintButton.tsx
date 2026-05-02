@@ -4,7 +4,7 @@ export function PrintButton() {
   return (
     <button
       onClick={() => window.print()}
-      className="text-xs text-[#1A56DB] font-medium hover:underline"
+      className="text-xs text-[var(--ag-navy)] font-medium hover:underline"
     >
       Imprimir / Descargar PDF
     </button>

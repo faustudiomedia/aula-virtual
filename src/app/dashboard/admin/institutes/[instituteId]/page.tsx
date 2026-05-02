@@ -106,13 +106,13 @@ export default async function InstituteDetailPage({ params }: Props) {
 
   return (
     <div className="p-4 sm:p-8 max-w-4xl mx-auto">
-      <a href="/dashboard/admin" className="text-[#1A56DB] hover:underline text-sm">
+      <a href="/dashboard/admin" className="text-[var(--ag-navy)] hover:underline text-sm">
         ← Institutos
       </a>
       <div className="flex items-start justify-between mt-3 mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">{institute.name}</h1>
-          <p className="text-[#050F1F]/50 text-sm mt-0.5">/{institute.slug}</p>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">{institute.name}</h1>
+          <p className="text-[var(--ag-text-muted)] text-sm mt-0.5">/{institute.slug}</p>
         </div>
         {isSuperAdmin && (
           <form action={deleteInstituteAction}>
@@ -130,60 +130,60 @@ export default async function InstituteDetailPage({ params }: Props) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         {[
-          { label: "Alumnos",   value: students,         bg: "#EFF6FF", color: "#1A56DB" },
+          { label: "Alumnos",   value: students,         bg: "#EFF6FF", color: "var(--ag-navy)" },
           { label: "Profesores", value: teachers,        bg: "#F5F3FF", color: "#7C3AED" },
           { label: "Cursos",    value: courseList.length, bg: "#FFFBEB", color: "#D97706" },
         ].map(s => (
           <div key={s.label} className="rounded-xl p-4 border border-black/5" style={{ background: s.bg }}>
             <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
-            <p className="text-xs text-[#050F1F]/50 mt-1">{s.label}</p>
+            <p className="text-xs text-[var(--ag-text-muted)] mt-1">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Edit form */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
-        <h2 className="text-sm font-semibold text-[#050F1F] mb-4">Configuración</h2>
+        <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-4">Configuración</h2>
         <form action={boundUpdate} className="space-y-4" encType="multipart/form-data">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Nombre *</label>
+              <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre *</label>
               <input name="name" required defaultValue={institute.name}
-                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
+                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Slug</label>
+              <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Slug</label>
               <input value={institute.slug} disabled
-                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm bg-black/5 text-[#050F1F]/40 font-mono" />
+                className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm bg-black/5 text-[var(--ag-text-muted)] font-mono" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Dominio personalizado</label>
+            <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Dominio personalizado</label>
             <input name="domain" defaultValue={institute.domain ?? ""}
               placeholder="Ej: miinstituto.edu.ar"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Color primario</label>
+              <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Color primario</label>
               <input type="color" name="primary_color" defaultValue={institute.primary_color}
                 className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Color secundario</label>
+              <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Color secundario</label>
               <input type="color" name="secondary_color" defaultValue={institute.secondary_color}
                 className="w-full h-10 rounded-xl border border-black/10 cursor-pointer p-1" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">Nombre del Director/a</label>
+            <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">Nombre del Director/a</label>
             <input name="director_name" defaultValue={institute.director_name ?? ""}
               placeholder="Ej: Lic. María González"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition" />
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#050F1F]/60 mb-1.5">
-              Firma del Director/a <span className="text-[#050F1F]/30">(PNG transparente, aparece en diplomas)</span>
+            <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1.5">
+              Firma del Director/a <span className="text-[var(--ag-text)]/30">(PNG transparente, aparece en diplomas)</span>
             </label>
             <div className="flex items-center gap-4">
               {institute.director_signature_url && (
@@ -198,17 +198,17 @@ export default async function InstituteDetailPage({ params }: Props) {
                 type="file"
                 name="director_signature"
                 accept="image/png"
-                className="text-xs text-[#050F1F]/60 file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-black/10 file:text-xs file:font-medium file:bg-white file:text-[#050F1F]/70 hover:file:bg-black/5 transition"
+                className="text-xs text-[var(--ag-text-muted)] file:mr-3 file:px-3 file:py-1.5 file:rounded-lg file:border file:border-black/10 file:text-xs file:font-medium file:bg-white file:text-[var(--ag-text)]/70 hover:file:bg-black/5 transition"
               />
             </div>
           </div>
           <div className="flex items-center gap-3">
             <input type="checkbox" id="active" name="active" defaultChecked={institute.active}
-              className="w-4 h-4 rounded accent-[#1A56DB]" />
-            <label htmlFor="active" className="text-sm font-medium text-[#050F1F]">Instituto activo</label>
+              className="w-4 h-4 rounded accent-[var(--ag-navy)]" />
+            <label htmlFor="active" className="text-sm font-medium text-[var(--ag-text)]">Instituto activo</label>
           </div>
           <button type="submit"
-            className="w-full py-2.5 rounded-xl bg-[#1A56DB] text-white font-semibold text-sm hover:opacity-90 transition shadow-lg shadow-[#1A56DB]/20">
+            className="w-full py-2.5 rounded-xl bg-[var(--ag-navy)] text-white font-semibold text-sm hover:opacity-90 transition shadow-lg ">
             Guardar cambios
           </button>
         </form>
@@ -217,28 +217,28 @@ export default async function InstituteDetailPage({ params }: Props) {
       {/* Members */}
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-[#050F1F]">Usuarios del instituto</h2>
+          <h2 className="text-sm font-semibold text-[var(--ag-text)]">Usuarios del instituto</h2>
           <a href={`/dashboard/admin/users/new`}
-            className="text-xs px-3 py-1.5 rounded-lg bg-[#1A56DB] text-white font-medium hover:bg-[#1A56DB]/90 transition-all">
+            className="text-xs px-3 py-1.5 rounded-lg bg-[var(--ag-navy)] text-white font-medium hover:bg-[var(--ag-navy)]/90 transition-all">
             + Agregar usuario
           </a>
         </div>
 
         {memberList.length === 0 ? (
-          <p className="text-sm text-[#050F1F]/40 py-4 text-center">Sin usuarios registrados.</p>
+          <p className="text-sm text-[var(--ag-text-muted)] py-4 text-center">Sin usuarios registrados.</p>
         ) : (
           <div className="space-y-2">
             {memberList.map(m => (
               <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-black/5 hover:bg-black/[0.01]">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                  style={{ background: "#1A56DB" }}>
+                  style={{ background: "var(--ag-navy)" }}>
                   {(m.full_name || m.email || "?").charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#050F1F] truncate">{m.full_name || "(sin nombre)"}</p>
-                  <p className="text-xs text-[#050F1F]/40 truncate">{m.email}</p>
+                  <p className="text-sm font-medium text-[var(--ag-text)] truncate">{m.full_name || "(sin nombre)"}</p>
+                  <p className="text-xs text-[var(--ag-text-muted)] truncate">{m.email}</p>
                 </div>
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLOR[m.role] ?? "bg-black/5 text-[#050F1F]/50"}`}>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLOR[m.role] ?? "bg-black/5 text-[var(--ag-text-muted)]"}`}>
                   {ROLE_LABEL[m.role] ?? m.role}
                 </span>
                 {m.role !== "admin" && m.role !== "super_admin" && (
@@ -265,7 +265,7 @@ export default async function InstituteDetailPage({ params }: Props) {
                     <form action={removeUserFromInstituteAction}>
                       <input type="hidden" name="userId" value={m.id} />
                       <button type="submit"
-                        className="text-xs px-2 py-1 rounded-lg border border-black/10 text-[#050F1F]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
+                        className="text-xs px-2 py-1 rounded-lg border border-black/10 text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
                         ✕
                       </button>
                     </form>
@@ -280,11 +280,11 @@ export default async function InstituteDetailPage({ params }: Props) {
       {/* Courses */}
       {courseList.length > 0 && (
         <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
-          <h2 className="text-sm font-semibold text-[#050F1F] mb-3">Cursos</h2>
+          <h2 className="text-sm font-semibold text-[var(--ag-text)] mb-3">Cursos</h2>
           <div className="space-y-2">
             {courseList.map(c => (
               <div key={c.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-black/5 text-sm">
-                <span className="font-medium text-[#050F1F] truncate">{c.title}</span>
+                <span className="font-medium text-[var(--ag-text)] truncate">{c.title}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${c.published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
                   {c.published ? "Publicado" : "Borrador"}
                 </span>

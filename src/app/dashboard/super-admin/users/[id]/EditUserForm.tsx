@@ -66,24 +66,24 @@ export default function EditUserForm({
 
       {/* Personal info */}
       <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-[#050F1F]/60 uppercase tracking-wider">
+        <h2 className="text-sm font-semibold text-[var(--ag-text-muted)] uppercase tracking-wider">
           Información personal
         </h2>
 
         <div>
-          <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+          <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
             Email
           </label>
           <input
             value={profile.email}
             disabled
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F]/40 bg-black/[0.02] cursor-not-allowed"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] bg-black/[0.02] cursor-not-allowed"
           />
-          <p className="text-xs text-[#050F1F]/30 mt-1">El email no se puede cambiar desde aquí.</p>
+          <p className="text-xs text-[var(--ag-text)]/30 mt-1">El email no se puede cambiar desde aquí.</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+          <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
             Nombre completo <span className="text-red-500">*</span>
           </label>
           <input
@@ -91,14 +91,14 @@ export default function EditUserForm({
             required
             defaultValue={profile.full_name ?? ""}
             placeholder="Ej: María García"
-            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition"
           />
         </div>
       </div>
 
       {/* Role selector */}
       <div className="space-y-3">
-        <h2 className="text-sm font-semibold text-[#050F1F]/60 uppercase tracking-wider">
+        <h2 className="text-sm font-semibold text-[var(--ag-text-muted)] uppercase tracking-wider">
           Rol
         </h2>
         <input type="hidden" name="role" value={selectedRole} />
@@ -111,7 +111,7 @@ export default function EditUserForm({
               className={`text-left p-3 rounded-xl border-2 transition-all ${
                 selectedRole === r.value
                   ? ROLE_COLORS[r.value]
-                  : "border-black/10 hover:border-black/20 text-[#050F1F]/70"
+                  : "border-black/10 hover:border-black/20 text-[var(--ag-text)]/70"
               }`}
             >
               <p className="text-sm font-semibold">{r.label}</p>
@@ -124,11 +124,11 @@ export default function EditUserForm({
       {/* Institute selector */}
       {needsInstitute && (
         <div>
-          <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+          <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
             Instituto <span className="text-red-500">*</span>
           </label>
           {institutes.length === 0 ? (
-            <p className="text-sm text-[#050F1F]/50 bg-amber-50 border border-amber-200 rounded-xl p-3">
+            <p className="text-sm text-[var(--ag-text-muted)] bg-amber-50 border border-amber-200 rounded-xl p-3">
               No hay institutos activos.
             </p>
           ) : (
@@ -136,7 +136,7 @@ export default function EditUserForm({
               name="institute_id"
               required={needsInstitute}
               defaultValue={profile.institute_id ?? ""}
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition bg-white"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition bg-white"
             >
               <option value="">Seleccionar instituto...</option>
               {institutes.map((inst) => (
@@ -161,13 +161,13 @@ export default function EditUserForm({
         <button
           type="submit"
           disabled={isPending}
-          className="flex-1 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#1A56DB]/20"
+          className="flex-1 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-lg "
         >
           {isPending ? "Guardando..." : "Guardar cambios"}
         </button>
         <a
           href="/dashboard/super-admin/users"
-          className="px-4 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[#050F1F]/60 hover:bg-black/5 transition text-center"
+          className="px-4 py-2.5 rounded-xl border border-black/10 text-sm font-medium text-[var(--ag-text-muted)] hover:bg-black/5 transition text-center"
         >
           Cancelar
         </a>

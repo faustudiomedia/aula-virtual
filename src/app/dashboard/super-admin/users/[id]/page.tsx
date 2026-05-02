@@ -46,19 +46,19 @@ export default async function EditUserPage({ params }: Props) {
       <div className="flex items-center gap-3 mb-8">
         <Link
           href="/dashboard/super-admin/users"
-          className="text-[#050F1F]/40 hover:text-[#050F1F] transition-colors text-sm"
+          className="text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors text-sm"
         >
           ← Usuarios
         </Link>
-        <span className="text-[#050F1F]/20">/</span>
-        <span className="text-sm text-[#050F1F]/60 truncate">
+        <span className="text-[var(--ag-text)]/20">/</span>
+        <span className="text-sm text-[var(--ag-text-muted)] truncate">
           {targetProfile.full_name || targetProfile.email}
         </span>
       </div>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Editar usuario</h1>
-        <p className="text-[#050F1F]/50 mt-1">{targetProfile.email}</p>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Editar usuario</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">{targetProfile.email}</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6">

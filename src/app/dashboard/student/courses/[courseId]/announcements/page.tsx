@@ -36,28 +36,28 @@ export default async function StudentAnnouncementsPage({ params }: Props) {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/student" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/student" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
 
       <StudentCourseNavTabs courseId={courseId} />
 
       <div className="space-y-4">
         {(announcements as Announcement[] ?? []).map((a) => (
           <div key={a.id} className="bg-white rounded-2xl border border-black/5 shadow-sm p-5">
-            <h3 className="font-semibold text-[#050F1F] mb-1">{a.title}</h3>
+            <h3 className="font-semibold text-[var(--ag-text)] mb-1">{a.title}</h3>
             {a.content && (
-              <p className="text-sm text-[#050F1F]/70 whitespace-pre-wrap">{a.content}</p>
+              <p className="text-sm text-[var(--ag-text)]/70 whitespace-pre-wrap">{a.content}</p>
             )}
-            <p className="text-xs text-[#050F1F]/30 mt-3">
+            <p className="text-xs text-[var(--ag-text)]/30 mt-3">
               {new Date(a.created_at).toLocaleDateString('es-AR', { dateStyle: 'long' })}
             </p>
           </div>
         ))}
         {(announcements ?? []).length === 0 && (
-          <div className="text-center py-16 text-[#050F1F]/40 text-sm">
+          <div className="text-center py-16 text-[var(--ag-text-muted)] text-sm">
             No hay anuncios todavía.
           </div>
         )}

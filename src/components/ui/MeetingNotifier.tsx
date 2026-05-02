@@ -48,26 +48,26 @@ export function MeetingNotifier() {
       {alerts.map(alert => (
         <div
           key={alert.id}
-          className="bg-white border border-[#1A56DB]/20 rounded-2xl shadow-xl shadow-[#1A56DB]/10 p-4 flex items-start gap-3 animate-in slide-in-from-right-4"
+          className="bg-white border border-[var(--ag-navy)]/20 rounded-2xl shadow-xl  p-4 flex items-start gap-3 animate-in slide-in-from-right-4"
         >
-          <div className="w-10 h-10 rounded-xl bg-[#EFF6FF] flex items-center justify-center text-xl flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[rgba(30,58,95,0.08)] flex items-center justify-center text-xl flex-shrink-0">
             🎥
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-[#1A56DB] uppercase tracking-wide mb-0.5">
+            <p className="text-xs font-semibold text-[var(--ag-navy)] uppercase tracking-wide mb-0.5">
               Reunión iniciada
             </p>
             <button
               onClick={() => join(alert.id)}
-              className="text-sm font-bold text-[#050F1F] hover:text-[#1A56DB] transition-colors text-left leading-tight"
+              className="text-sm font-bold text-[var(--ag-text)] hover:text-[var(--ag-navy)] transition-colors text-left leading-tight"
             >
               {alert.display_name} →
             </button>
-            <p className="text-xs text-[#050F1F]/40 mt-1">Tocá el nombre para unirte</p>
+            <p className="text-xs text-[var(--ag-text-muted)] mt-1">Tocá el nombre para unirte</p>
           </div>
           <button
             onClick={() => dismiss(alert.id)}
-            className="text-[#050F1F]/30 hover:text-[#050F1F] transition-colors flex-shrink-0 text-lg leading-none"
+            className="text-[var(--ag-text)]/30 hover:text-[var(--ag-text)] transition-colors flex-shrink-0 text-lg leading-none"
           >
             ×
           </button>

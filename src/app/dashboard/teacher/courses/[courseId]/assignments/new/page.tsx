@@ -38,16 +38,16 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-2">
-        <Link href="/dashboard/teacher" className="text-sm text-[#050F1F]/50 hover:text-[#050F1F] transition-colors">
+        <Link href="/dashboard/teacher" className="text-sm text-[var(--ag-text-muted)] hover:text-[var(--ag-text)] transition-colors">
           ← Mis cursos
         </Link>
       </div>
-      <h1 className="text-2xl font-bold text-[#050F1F] mb-6">{course.title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-6">{course.title}</h1>
 
       <CourseNavTabs courseId={courseId} />
 
       <div className="bg-white rounded-2xl border border-black/5 shadow-sm p-6 max-w-2xl">
-        <h2 className="text-base font-semibold text-[#050F1F] mb-5">Nueva tarea</h2>
+        <h2 className="text-base font-semibold text-[var(--ag-text)] mb-5">Nueva tarea</h2>
 
         {error && (
           <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
@@ -57,45 +57,45 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
 
         <form action={handleCreate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
               Título <span className="text-red-500">*</span>
             </label>
             <input
               name="title"
               required
               placeholder="Ej: Trabajo práctico N°1"
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Consigna</label>
+            <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Consigna</label>
             <textarea
               name="description"
               rows={6}
               placeholder="Describí la tarea, los objetivos y los criterios de evaluación..."
-              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] resize-none focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] resize-none focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Fecha de entrega</label>
+              <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Fecha de entrega</label>
               <input
                 name="due_date"
                 type="datetime-local"
-                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#050F1F] mb-1.5">Puntaje máximo</label>
+              <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">Puntaje máximo</label>
               <input
                 name="max_score"
                 type="number"
                 min={1}
                 max={1000}
                 defaultValue={100}
-                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all"
+                className="w-full px-4 py-2.5 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 transition-all"
               />
             </div>
           </div>
@@ -104,7 +104,7 @@ export default async function NewAssignmentPage({ params, searchParams }: Props)
             <SubmitButton label="Crear tarea" loadingLabel="Creando..." />
             <Link
               href={`/dashboard/teacher/courses/${courseId}/assignments`}
-              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[#050F1F]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
+              className="flex-1 py-2.5 rounded-xl border border-black/10 text-[var(--ag-text)]/70 font-semibold text-sm text-center hover:bg-black/5 transition-all"
             >
               Cancelar
             </Link>

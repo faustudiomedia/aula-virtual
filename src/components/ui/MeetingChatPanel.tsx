@@ -78,27 +78,27 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
   return (
     <div className="flex flex-col h-full bg-white rounded-2xl border border-black/10 overflow-hidden">
       <div className="px-4 py-3 border-b border-black/5">
-        <p className="text-sm font-semibold text-[#050F1F]">Chat de la reunión</p>
+        <p className="text-sm font-semibold text-[var(--ag-text)]">Chat de la reunión</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
         {messages.length === 0 && (
-          <p className="text-xs text-[#050F1F]/30 text-center py-6">No hay mensajes todavía.</p>
+          <p className="text-xs text-[var(--ag-text)]/30 text-center py-6">No hay mensajes todavía.</p>
         )}
         {messages.map(m => {
           const isMine = m.sender_id === userId
           return (
             <div key={m.id} className={`flex flex-col ${isMine ? 'items-end' : 'items-start'}`}>
               {!isMine && (
-                <p className="text-[10px] text-[#050F1F]/40 mb-0.5 px-1">
+                <p className="text-[10px] text-[var(--ag-text-muted)] mb-0.5 px-1">
                   {m.profiles?.full_name ?? 'Desconocido'}
                 </p>
               )}
               <div className={`max-w-[85%] rounded-xl px-3 py-2 text-sm ${
-                isMine ? 'bg-[#1A56DB] text-white rounded-br-sm' : 'bg-[#F0F9FF] text-[#050F1F] rounded-bl-sm'
+                isMine ? 'bg-[var(--ag-navy)] text-white rounded-br-sm' : 'bg-[rgba(30,58,95,0.06)] text-[var(--ag-text)] rounded-bl-sm'
               }`}>
                 <p className="break-words whitespace-pre-wrap">{m.content}</p>
-                <p className={`text-[9px] mt-0.5 ${isMine ? 'text-white/60' : 'text-[#050F1F]/30'}`}>
+                <p className={`text-[9px] mt-0.5 ${isMine ? 'text-white/60' : 'text-[var(--ag-text)]/30'}`}>
                   {new Date(m.created_at).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
@@ -114,13 +114,13 @@ export function MeetingChatPanel({ meetingId, userId, displayName }: Props) {
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Mensaje... (Enter para enviar)"
-          className="flex-1 px-3 py-2 rounded-xl border border-black/10 text-xs focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+          className="flex-1 px-3 py-2 rounded-xl border border-black/10 text-xs focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           disabled={sending}
         />
         <button
           onClick={send}
           disabled={sending || !input.trim()}
-          className="px-3 py-2 rounded-xl bg-[#1A56DB] text-white text-xs font-semibold hover:bg-[#1A56DB]/90 disabled:opacity-40 transition-all"
+          className="px-3 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-xs font-semibold hover:bg-[var(--ag-navy)]/90 disabled:opacity-40 transition-all"
         >
           ↑
         </button>

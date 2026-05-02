@@ -47,12 +47,12 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
       {/* ── Header ── */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Usuarios</h1>
-          <p className="text-[#050F1F]/50 mt-1">{count ?? 0} usuarios en la plataforma</p>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Usuarios</h1>
+          <p className="text-[var(--ag-text-muted)] mt-1">{count ?? 0} usuarios en la plataforma</p>
         </div>
         <Link
           href="/dashboard/super-admin/users/new"
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all shadow-lg shadow-[#1A56DB]/20"
+          className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition-all shadow-lg "
         >
           + Nuevo usuario
         </Link>
@@ -65,12 +65,12 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
             name="q"
             defaultValue={q}
             placeholder="Buscar por nombre o email..."
-            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            className="flex-1 min-w-48 px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           />
           <select
             name="role"
             defaultValue={role}
-            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#38BDF8]"
+            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
           >
             <option value="all">Todos los roles</option>
             <option value="alumno">Alumnos</option>
@@ -79,12 +79,12 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
             <option value="super_admin">Super Admin</option>
           </select>
           <button type="submit"
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1A56DB] hover:bg-[#1A56DB]/90 transition-all">
+            className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[var(--ag-navy)] hover:bg-[var(--ag-navy)]/90 transition-all">
             Buscar
           </button>
           {(q || role !== 'all') && (
             <Link href="/dashboard/super-admin/users"
-              className="px-4 py-2 rounded-xl text-sm font-medium text-[#050F1F]/60 border border-black/10 hover:bg-black/5 transition-all">
+              className="px-4 py-2 rounded-xl text-sm font-medium text-[var(--ag-text-muted)] border border-black/10 hover:bg-black/5 transition-all">
               Limpiar
             </Link>
           )}
@@ -97,17 +97,17 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
 
           <div className="py-16 text-center">
             <p className="text-4xl mb-3">👥</p>
-            <p className="text-[#050F1F]/50">No se encontraron usuarios</p>
+            <p className="text-[var(--ag-text-muted)]">No se encontraron usuarios</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
           <table className="w-full min-w-[650px] text-sm">
             <thead>
               <tr className="border-b border-black/5 bg-black/[0.02]">
-                <th className="text-left px-6 py-3.5 font-semibold text-[#050F1F]/60">Usuario</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Rol</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Instituto</th>
-                <th className="text-left px-4 py-3.5 font-semibold text-[#050F1F]/60">Registrado</th>
+                <th className="text-left px-6 py-3.5 font-semibold text-[var(--ag-text-muted)]">Usuario</th>
+                <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Rol</th>
+                <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Instituto</th>
+                <th className="text-left px-4 py-3.5 font-semibold text-[var(--ag-text-muted)]">Registrado</th>
                 <th className="px-4 py-3.5" />
               </tr>
             </thead>
@@ -122,12 +122,12 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                   <tr key={u.id} className="border-b border-black/5 last:border-0 hover:bg-black/[0.01]">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#1A56DB]/10 flex items-center justify-center text-sm font-bold text-[#1A56DB] flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[var(--ag-navy)]/10 flex items-center justify-center text-sm font-bold text-[var(--ag-navy)] flex-shrink-0">
                           {(u.full_name || u.email || '?').charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="font-medium text-[#050F1F]">{u.full_name || '(sin nombre)'}</p>
-                          <p className="text-xs text-[#050F1F]/40">{u.email}</p>
+                          <p className="font-medium text-[var(--ag-text)]">{u.full_name || '(sin nombre)'}</p>
+                          <p className="text-xs text-[var(--ag-text-muted)]">{u.email}</p>
                         </div>
                       </div>
                     </td>
@@ -136,13 +136,13 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
                         {roleInfo.label}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-[#050F1F]/60 text-sm">{instituteName}</td>
-                    <td className="px-4 py-4 text-[#050F1F]/40 text-xs">{date}</td>
+                    <td className="px-4 py-4 text-[var(--ag-text-muted)] text-sm">{instituteName}</td>
+                    <td className="px-4 py-4 text-[var(--ag-text-muted)] text-xs">{date}</td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-2 justify-end">
                         <Link
                           href={`/dashboard/super-admin/users/${u.id}/edit`}
-                          className="px-3 py-1 rounded-lg text-xs font-medium text-[#1A56DB] border border-[#1A56DB]/20 hover:bg-[#1A56DB]/5 transition-all"
+                          className="px-3 py-1 rounded-lg text-xs font-medium text-[var(--ag-navy)] border border-[var(--ag-navy)]/20 hover:bg-[var(--ag-navy)]/5 transition-all"
                         >
                           Editar
                         </Link>
@@ -164,7 +164,7 @@ export default async function SuperAdminUsersPage({ searchParams }: Props) {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <Link key={p} href={`?q=${q}&role=${role}&page=${p}`}
               className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${
-                p === currentPage ? 'text-white bg-[#050F1F]' : 'text-[#050F1F]/60 hover:bg-black/5'
+                p === currentPage ? 'text-white bg-[var(--ag-text)]' : 'text-[var(--ag-text-muted)] hover:bg-black/5'
               }`}>
               {p}
             </Link>

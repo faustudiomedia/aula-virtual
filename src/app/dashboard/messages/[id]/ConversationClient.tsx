@@ -104,9 +104,9 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-[#F8FAFC]">
+      <div className="flex-1 overflow-y-auto p-5 space-y-3 bg-white">
         {messages.length === 0 && (
-          <p className="text-center text-sm text-[#050F1F]/40 py-8">
+          <p className="text-center text-sm text-[var(--ag-text-muted)] py-8">
             No hay mensajes todavía. ¡Iniciá la conversación!
           </p>
         )}
@@ -118,12 +118,12 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm shadow-sm transition-opacity duration-300 ${
                   isMine
-                    ? 'bg-[#1A56DB] text-white rounded-br-sm'
-                    : 'bg-white text-[#050F1F] border border-black/5 rounded-bl-sm'
+                    ? 'bg-[var(--ag-navy)] text-white rounded-br-sm'
+                    : 'bg-white text-[var(--ag-text)] border border-black/5 rounded-bl-sm'
                 } ${isTemp ? 'opacity-60' : 'opacity-100'}`}
               >
                 <p className="whitespace-pre-wrap break-words">{m.content}</p>
-                <p className={`text-[10px] mt-1 ${isMine ? 'text-white/60' : 'text-[#050F1F]/30'}`}>
+                <p className={`text-[10px] mt-1 ${isMine ? 'text-white/60' : 'text-[var(--ag-text)]/30'}`}>
                   {new Date(m.created_at).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
                   {isMine && isTemp && ' · Enviando…'}
                   {isMine && !isTemp && m.read_at && ' · Leído'}
@@ -147,12 +147,12 @@ export function ConversationClient({ currentUserId, otherUserId, initialMessages
           rows={1}
           autoComplete="off"
           onKeyDown={handleKeyDown}
-          className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 resize-none"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-black/10 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 resize-none"
           placeholder="Escribe un mensaje… (Enter para enviar)"
         />
         <button
           type="submit"
-          className="px-5 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:bg-[#1A56DB]/90 transition-all flex-shrink-0"
+          className="px-5 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:bg-[var(--ag-navy)]/90 transition-all flex-shrink-0"
         >
           Enviar
         </button>

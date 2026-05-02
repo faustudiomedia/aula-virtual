@@ -50,8 +50,8 @@ export default async function AuditPage({
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#050F1F]">Registro de auditoría</h1>
-        <p className="text-[#050F1F]/50 mt-1">Historial completo de acciones en la plataforma.</p>
+        <h1 className="text-2xl font-bold text-[var(--ag-text)]">Registro de auditoría</h1>
+        <p className="text-[var(--ag-text-muted)] mt-1">Historial completo de acciones en la plataforma.</p>
       </div>
 
       {/* Filters */}
@@ -59,7 +59,7 @@ export default async function AuditPage({
         <select
           name="entity_type"
           defaultValue={params.entity_type ?? ''}
-          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 focus:border-[#1A56DB] transition bg-white"
+          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-white"
         >
           <option value="">Todas las entidades</option>
           {['course', 'institute', 'user', 'material', 'quiz'].map((e) => (
@@ -70,7 +70,7 @@ export default async function AuditPage({
         <select
           name="action"
           defaultValue={params.action ?? ''}
-          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F] focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 focus:border-[#1A56DB] transition bg-white"
+          className="px-3 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text)] focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-[var(--ag-navy)] transition bg-white"
         >
           <option value="">Todas las acciones</option>
           {['CREATE', 'UPDATE', 'DELETE'].map((a) => (
@@ -80,7 +80,7 @@ export default async function AuditPage({
 
         <button
           type="submit"
-          className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-medium hover:opacity-90 transition"
+          className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-medium hover:opacity-90 transition"
         >
           Filtrar
         </button>
@@ -88,7 +88,7 @@ export default async function AuditPage({
         {(params.entity_type || params.action) && (
           <a
             href="/dashboard/admin/audit"
-            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[#050F1F]/60 hover:bg-black/5 transition"
+            className="px-4 py-2 rounded-xl border border-black/10 text-sm text-[var(--ag-text-muted)] hover:bg-black/5 transition"
           >
             Limpiar
           </a>
@@ -97,10 +97,10 @@ export default async function AuditPage({
 
       {/* Log table */}
       {logList.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+        <div className="rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
           <p className="text-4xl mb-3">🔍</p>
-          <p className="text-[#050F1F]/50">No hay registros de auditoría todavía.</p>
-          <p className="text-xs text-[#050F1F]/30 mt-2">
+          <p className="text-[var(--ag-text-muted)]">No hay registros de auditoría todavía.</p>
+          <p className="text-xs text-[var(--ag-text)]/30 mt-2">
             Los registros aparecen cuando se crean, editan o eliminan entidades en la plataforma.
           </p>
         </div>
@@ -108,12 +108,12 @@ export default async function AuditPage({
         <>
           <div className="bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden mb-4">
             <table className="w-full text-sm">
-              <thead className="bg-[#F0F9FF] border-b border-black/5">
+              <thead className="bg-[rgba(30,58,95,0.06)] border-b border-black/5">
                 <tr>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Usuario</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Acción</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Entidad</th>
-                  <th className="text-left px-5 py-3 text-[#050F1F]/50 font-medium">Fecha</th>
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Usuario</th>
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Acción</th>
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Entidad</th>
+                  <th className="text-left px-5 py-3 text-[var(--ag-text-muted)] font-medium">Fecha</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
@@ -121,14 +121,14 @@ export default async function AuditPage({
                   const actionMeta = ACTION_LABELS[log.action]
                   const prof = log.profiles
                   return (
-                    <tr key={log.id} className="hover:bg-[#F0F9FF]/50 transition-colors">
+                    <tr key={log.id} className="hover:bg-[rgba(30,58,95,0.06)]/50 transition-colors">
                       <td className="px-5 py-3.5">
                         <div>
-                          <p className="font-medium text-[#050F1F] text-xs">
+                          <p className="font-medium text-[var(--ag-text)] text-xs">
                             {prof?.full_name || prof?.email || 'Sistema'}
                           </p>
                           {prof?.full_name && (
-                            <p className="text-xs text-[#050F1F]/40">{prof.email}</p>
+                            <p className="text-xs text-[var(--ag-text-muted)]">{prof.email}</p>
                           )}
                         </div>
                       </td>
@@ -143,15 +143,15 @@ export default async function AuditPage({
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-1.5">
                           <span>{ENTITY_ICONS[log.entity_type] ?? '•'}</span>
-                          <span className="text-[#050F1F]/70 capitalize">{log.entity_type}</span>
+                          <span className="text-[var(--ag-text)]/70 capitalize">{log.entity_type}</span>
                           {log.entity_id && (
-                            <span className="text-[#050F1F]/30 text-xs font-mono truncate max-w-[100px]">
+                            <span className="text-[var(--ag-text)]/30 text-xs font-mono truncate max-w-[100px]">
                               {log.entity_id.slice(0, 8)}…
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="px-5 py-3.5 text-[#050F1F]/50 text-xs">
+                      <td className="px-5 py-3.5 text-[var(--ag-text-muted)] text-xs">
                         {new Date(log.created_at).toLocaleString('es-AR', {
                           dateStyle: 'short',
                           timeStyle: 'short',
@@ -175,7 +175,7 @@ export default async function AuditPage({
                   ← Anterior
                 </a>
               )}
-              <span className="text-sm text-[#050F1F]/50">Página {page} de {totalPages}</span>
+              <span className="text-sm text-[var(--ag-text-muted)]">Página {page} de {totalPages}</span>
               {page < totalPages && (
                 <a
                   href={`/dashboard/admin/audit?page=${page + 1}${params.entity_type ? `&entity_type=${params.entity_type}` : ''}${params.action ? `&action=${params.action}` : ''}`}

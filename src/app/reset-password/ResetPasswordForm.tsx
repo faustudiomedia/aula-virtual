@@ -13,7 +13,7 @@ function SubmitButton() {
       className={`w-full py-2.5 px-4 rounded-lg text-white font-semibold text-sm shadow-lg transition-all mt-2 ${
         pending
           ? "bg-white/20 cursor-not-allowed shadow-none"
-          : "bg-gradient-to-r from-[#1A56DB] to-[#38BDF8] shadow-[#1A56DB]/30 hover:opacity-90 active:scale-[0.98]"
+          : "bg-gradient-to-r bg-[var(--ag-navy)]  hover:opacity-90 active:scale-[0.98]"
       }`}
     >
       {pending ? "Guardando..." : "Guardar nueva contraseña"}
@@ -32,7 +32,7 @@ export default function ResetPasswordForm() {
         </div>
       )}
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
+        <label htmlFor="password" className="block text-sm font-medium text-white/80 mb-1.5">
           Nueva contraseña
         </label>
         <input
@@ -43,11 +43,11 @@ export default function ResetPasswordForm() {
           minLength={6}
           placeholder="Mínimo 6 caracteres"
           className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
-                     focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all text-sm"
+                     focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm"
         />
       </div>
       <div>
-        <label htmlFor="confirm" className="block text-sm font-medium text-[#BAE6FD] mb-1.5">
+        <label htmlFor="confirm" className="block text-sm font-medium text-white/80 mb-1.5">
           Confirmar contraseña
         </label>
         <input
@@ -58,7 +58,7 @@ export default function ResetPasswordForm() {
           minLength={6}
           placeholder="Repetí la nueva contraseña"
           className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30
-                     focus:outline-none focus:ring-2 focus:ring-[#38BDF8] focus:border-transparent transition-all text-sm"
+                     focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 focus:border-transparent transition-all text-sm"
         />
       </div>
       <SubmitButton />

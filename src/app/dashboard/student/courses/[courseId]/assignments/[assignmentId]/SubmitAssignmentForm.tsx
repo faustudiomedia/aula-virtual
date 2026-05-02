@@ -48,7 +48,7 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
       )}
 
       <div>
-        <label className="block text-sm font-medium text-[#050F1F] mb-2">Tu respuesta</label>
+        <label className="block text-sm font-medium text-[var(--ag-text)] mb-2">Tu respuesta</label>
         <RichTextEditor
           content={defaultContent}
           onChange={setEditorContent}
@@ -58,8 +58,8 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-[#050F1F] mb-1.5">
-          Archivo adjunto <span className="text-[#050F1F]/40 font-normal">(opcional)</span>
+        <label className="block text-sm font-medium text-[var(--ag-text)] mb-1.5">
+          Archivo adjunto <span className="text-[var(--ag-text-muted)] font-normal">(opcional)</span>
         </label>
         <FileUpload
           folder="submissions"
@@ -73,7 +73,7 @@ export function SubmitAssignmentForm({ assignmentId, defaultContent = '', isResu
       <button
         type="submit"
         disabled={isPending}
-        className="px-6 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-all disabled:opacity-50 shadow-lg shadow-[#1A56DB]/20"
+        className="px-6 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-semibold hover:bg-[var(--ag-navy)]/90 transition-all disabled:opacity-50 shadow-lg "
       >
         {isPending ? 'Enviando...' : isResubmit ? 'Re-entregar tarea' : 'Entregar tarea'}
       </button>

@@ -65,8 +65,8 @@ export default async function TeacherCalendarPage() {
     <div className="p-8 max-w-6xl mx-auto">
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F] mb-1">Calendario</h1>
-          <p className="text-[#050F1F]/50">Fechas de entrega, reuniones y eventos del instituto.</p>
+          <h1 className="text-2xl font-bold text-[var(--ag-text)] mb-1">Calendario</h1>
+          <p className="text-[var(--ag-text-muted)]">Fechas de entrega, reuniones y eventos del instituto.</p>
         </div>
         <CreateEventForm />
       </div>

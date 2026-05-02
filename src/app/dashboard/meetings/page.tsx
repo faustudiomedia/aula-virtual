@@ -31,8 +31,8 @@ export default async function MeetingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#050F1F]">Reuniones</h1>
-          <p className="text-[#050F1F]/50 mt-0.5 text-sm">
+          <h1 className="text-2xl font-bold text-[var(--ag-text)]">Reuniones</h1>
+          <p className="text-[var(--ag-text-muted)] mt-0.5 text-sm">
             {active.length > 0
               ? `${active.length} reunión en curso ahora`
               : scheduled.length > 0
@@ -48,7 +48,7 @@ export default async function MeetingsPage() {
               EN VIVO
             </span>
           )}
-          <span className="px-3 py-1.5 rounded-full bg-black/5 text-[#050F1F]/50 text-xs font-medium">
+          <span className="px-3 py-1.5 rounded-full bg-black/5 text-[var(--ag-text-muted)] text-xs font-medium">
             {(meetings ?? []).length} total
           </span>
         </div>
@@ -75,7 +75,7 @@ export default async function MeetingsPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#050F1F]/40">Programadas</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--ag-text-muted)]">Programadas</h2>
           </div>
           <div className="space-y-3">
             {scheduled.map(m => {
@@ -88,10 +88,10 @@ export default async function MeetingsPage() {
 
       {/* ── No meetings at all ─────────────────────────── */}
       {active.length === 0 && scheduled.length === 0 && (
-        <div className="mb-8 rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+        <div className="mb-8 rounded-2xl border-2 border-dashed border-[var(--ag-border-light)] p-12 text-center">
           <p className="text-4xl mb-3">🎥</p>
-          <p className="font-semibold text-[#050F1F] mb-1">No hay reuniones activas</p>
-          <p className="text-sm text-[#050F1F]/40">
+          <p className="font-semibold text-[var(--ag-text)] mb-1">No hay reuniones activas</p>
+          <p className="text-sm text-[var(--ag-text-muted)]">
             {isTeacher ? 'Creá una reunión para empezar.' : 'Cuando un profesor inicie una reunión aparecerá aquí.'}
           </p>
         </div>
@@ -99,36 +99,36 @@ export default async function MeetingsPage() {
 
       {/* ── Create form — teachers only ─────────────────── */}
       {isTeacher && (
-        <div className="mb-8 bg-gradient-to-br from-[#1A56DB]/5 to-[#38BDF8]/5 rounded-2xl border border-[#1A56DB]/10 p-5">
+        <div className="mb-8 bg-[var(--ag-navy)]/5 to-[var(--ag-navy)]/5 rounded-2xl border border-[var(--ag-navy)]/10 p-5">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-[#1A56DB]/10 flex items-center justify-center text-base">📅</div>
-            <h2 className="text-sm font-bold text-[#050F1F]">Nueva reunión</h2>
+            <div className="w-8 h-8 rounded-lg bg-[var(--ag-navy)]/10 flex items-center justify-center text-base">📅</div>
+            <h2 className="text-sm font-bold text-[var(--ag-text)]">Nueva reunión</h2>
           </div>
           <form action={createMeeting} className="space-y-3">
             <input
               name="display_name"
               required
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 placeholder:text-[#050F1F]/30"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
               placeholder="Nombre: ej. Clase de Historia, Repaso Final…"
             />
             <input
               name="external_url"
               type="url"
-              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30 placeholder:text-[#050F1F]/30"
+              className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30 placeholder:text-[var(--ag-text)]/30"
               placeholder="Link externo: Zoom, Meet, Teams… (opcional)"
             />
             <div className="flex flex-col sm:flex-row gap-3 sm:items-end">
               <div className="flex-1">
-                <label className="block text-xs font-medium text-[#050F1F]/40 mb-1">Programar para (opcional)</label>
+                <label className="block text-xs font-medium text-[var(--ag-text-muted)] mb-1">Programar para (opcional)</label>
                 <input
                   type="datetime-local"
                   name="scheduled_at"
-                  className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1A56DB]/30"
+                  className="w-full px-3 py-2.5 rounded-xl border border-black/10 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ag-navy)]/30"
                 />
               </div>
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-[#1A56DB] text-white text-sm font-bold hover:bg-[#1648c4] transition-all shadow-lg shadow-[#1A56DB]/20 whitespace-nowrap"
+                className="px-6 py-2.5 rounded-xl bg-[var(--ag-navy)] text-white text-sm font-bold hover:bg-[#1648c4] transition-all shadow-lg  whitespace-nowrap"
               >
                 Crear sala →
               </button>
@@ -141,8 +141,8 @@ export default async function MeetingsPage() {
       {past.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#050F1F]/20" />
-            <h2 className="text-xs font-bold uppercase tracking-widest text-[#050F1F]/30">Historial</h2>
+            <span className="w-2 h-2 rounded-full bg-[var(--ag-text)]/20" />
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--ag-text)]/30">Historial</h2>
           </div>
           <div className="space-y-2">
             {past.map(m => {
@@ -248,8 +248,8 @@ function ScheduledMeetingCard({ m, host, userId, isTeacher }: {
         <div className="flex items-center gap-3 flex-1 min-w-0 px-4 py-4">
           <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-xl flex-shrink-0">🗓️</div>
           <div className="min-w-0 flex-1">
-            <p className="font-bold text-[#050F1F] truncate">{m.display_name}</p>
-            <p className="text-xs text-[#050F1F]/40 capitalize truncate">
+            <p className="font-bold text-[var(--ag-text)] truncate">{m.display_name}</p>
+            <p className="text-xs text-[var(--ag-text-muted)] capitalize truncate">
               {dayStr} · {host?.full_name ?? 'Desconocido'}
             </p>
           </div>
@@ -269,14 +269,14 @@ function ScheduledMeetingCard({ m, host, userId, isTeacher }: {
               href={m.external_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-xs font-bold hover:bg-[#1648c4] transition-all whitespace-nowrap"
+              className="px-4 py-2 rounded-xl bg-[var(--ag-navy)] text-white text-xs font-bold hover:bg-[#1648c4] transition-all whitespace-nowrap"
             >
               Abrir →
             </a>
           ) : (
             <Link
               href={`/dashboard/meetings/${m.id}`}
-              className="px-4 py-2 rounded-xl bg-[#EFF6FF] text-[#1A56DB] text-xs font-bold hover:bg-[#DBEAFE] transition-all border border-[#BFDBFE] whitespace-nowrap"
+              className="px-4 py-2 rounded-xl bg-[rgba(30,58,95,0.08)] text-[var(--ag-navy)] text-xs font-bold hover:bg-[#DBEAFE] transition-all border border-[#BFDBFE] whitespace-nowrap"
             >
               Ver sala
             </Link>
@@ -301,12 +301,12 @@ function PastMeetingRow({ m, host, userId, isTeacher }: {
     <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-black/5 bg-white/50 hover:bg-white transition-all group opacity-60 hover:opacity-90">
       <div className="w-7 h-7 rounded-lg bg-black/5 flex items-center justify-center text-sm flex-shrink-0">🎬</div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-[#050F1F] truncate">{m.display_name}</p>
-        <p className="text-xs text-[#050F1F]/40">{host?.full_name ?? 'Desconocido'} · {dateStr}</p>
+        <p className="text-sm font-medium text-[var(--ag-text)] truncate">{m.display_name}</p>
+        <p className="text-xs text-[var(--ag-text-muted)]">{host?.full_name ?? 'Desconocido'} · {dateStr}</p>
       </div>
       {(isHost || isTeacher) && (
         <form action={deleteMeeting.bind(null, m.id)}>
-          <button type="submit" className="opacity-0 group-hover:opacity-100 text-xs px-2 py-1 rounded-lg border border-black/10 text-[#050F1F]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
+          <button type="submit" className="opacity-0 group-hover:opacity-100 text-xs px-2 py-1 rounded-lg border border-black/10 text-[var(--ag-text)]/30 hover:bg-red-50 hover:text-red-500 hover:border-red-200 transition-all">
             ✕
           </button>
         </form>
