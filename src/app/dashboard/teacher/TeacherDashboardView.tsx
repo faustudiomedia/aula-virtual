@@ -7,6 +7,7 @@ import {
   EditCourseButton,
   DeleteCourseButton,
 } from "@/components/ui/CourseActions";
+import { BookOpen, Users, TrendingUp, Activity } from "lucide-react";
 
 interface Props {
   teacherId: string;
@@ -22,19 +23,47 @@ export default function TeacherDashboardView({
   const { data: countMap = {} } = useEnrollmentCounts(courseIds);
   const { data: activeThisWeek = 0 } = useActiveStudentsThisWeek(courseIds);
 
-  const totalStudents = Object.values(countMap as Record<string, number>).reduce((a: number, b: number) => a + b, 0);
+  const totalStudents = Object.values(countMap as Record<string, number>).reduce(
+    (a: number, b: number) => a + b,
+    0
+  );
+
+  const stats = [
+    {
+      label: "Cursos activos",
+      value: courses.filter((c: Course) => c.published).length,
+      icon: BookOpen,
+    },
+    {
+      label: "Cursos totales",
+      value: courses.length,
+      icon: TrendingUp,
+    },
+    {
+      label: "Alumnos inscriptos",
+      value: totalStudents,
+      icon: Users,
+    },
+    {
+      label: "Activos esta semana",
+      value: activeThisWeek,
+      icon: Activity,
+    },
+  ];
 
   const header = (
     <div className="flex items-center justify-between mb-8">
       <div>
-        <h1 className="text-2xl font-bold text-[#050F1F]">Panel del Profesor</h1>
-        <p className="text-[#050F1F]/50 mt-1">
+        <h1 className="text-2xl font-bold" style={{ color: "var(--ag-text)" }}>
+          Panel del Profesor
+        </h1>
+        <p className="text-sm mt-1" style={{ color: "var(--ag-text-muted)" }}>
           Gestioná tus cursos y seguí el progreso de tus alumnos.
         </p>
       </div>
       <Link
         href="/dashboard/teacher/courses/new"
-        className="px-4 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:bg-[#1A56DB]/90 transition-colors shadow-lg shadow-[#1A56DB]/20"
+        className="ag-btn-primary px-4 py-2 text-sm"
       >
         + Nuevo curso
       </Link>
@@ -45,11 +74,20 @@ export default function TeacherDashboardView({
     return (
       <div className="p-4 md:p-8 max-w-5xl mx-auto">
         {header}
-        <div className="grid gap-4">
-          {[...Array(3)].map((_, i) => (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-black/5 p-5 shadow-sm animate-pulse h-24"
+              className="skeleton-shimmer rounded-xl h-24"
+            />
+          ))}
+        </div>
+        <div className="grid gap-4">
+          {[...Array(2)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-xl border h-20 skeleton-shimmer"
+              style={{ borderColor: "var(--ag-border-light)" }}
             />
           ))}
         </div>
@@ -63,121 +101,154 @@ export default function TeacherDashboardView({
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-        {[
-          {
-            label: "Cursos activos",
-            value: courses.filter((c: Course) => c.published).length,
-            color: "#1A56DB",
-            bg: "#EFF6FF",
-            border: "#BFDBFE",
-          },
-          {
-            label: "Cursos totales",
-            value: courses.length,
-            color: "#7C3AED",
-            bg: "#F5F3FF",
-            border: "#DDD6FE",
-          },
-          {
-            label: "Alumnos inscriptos",
-            value: totalStudents,
-            color: "#059669",
-            bg: "#ECFDF5",
-            border: "#A7F3D0",
-          },
-          {
-            label: "Activos esta semana",
-            value: activeThisWeek,
-            color: "#D97706",
-            bg: "#FFFBEB",
-            border: "#FDE68A",
-          },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="rounded-2xl p-5 border"
-            style={{ background: stat.bg, borderColor: stat.border }}
-          >
-            <p className="text-3xl font-bold" style={{ color: stat.color }}>
-              {stat.value}
-            </p>
-            <p className="text-sm font-medium mt-1" style={{ color: stat.color + "99" }}>
-              {stat.label}
-            </p>
-          </div>
-        ))}
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <div
+              key={stat.label}
+              className="bg-white rounded-xl p-5 flex flex-col gap-3"
+              style={{
+                border: "1px solid var(--ag-border-light)",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: "rgba(30,58,95,0.08)" }}
+              >
+                <Icon size={16} style={{ color: "var(--ag-navy)" }} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold" style={{ color: "var(--ag-navy)" }}>
+                  {stat.value}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--ag-text-muted)" }}>
+                  {stat.label}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Courses */}
-      <h2 className="text-lg font-semibold text-[#050F1F] mb-4">Mis cursos</h2>
+      <h2 className="text-base font-semibold mb-4" style={{ color: "var(--ag-text)" }}>
+        Mis cursos
+      </h2>
+
       {courses.length === 0 ? (
-        <div className="rounded-2xl border-2 border-dashed border-[#BAE6FD] p-12 text-center">
+        <div
+          className="rounded-xl p-12 text-center bg-white"
+          style={{ border: "2px dashed var(--ag-border-light)" }}
+        >
           <p className="text-4xl mb-3">🎓</p>
-          <p className="text-[#050F1F]/50 mb-4">
-            Todavía no creaste ningún curso.
+          <p className="text-sm mb-4" style={{ color: "var(--ag-text-muted)" }}>
+            Todavia no creaste ningun curso.
           </p>
           <Link
             href="/dashboard/teacher/courses/new"
-            className="inline-flex px-5 py-2 rounded-xl bg-[#1A56DB] text-white text-sm font-semibold hover:opacity-90 transition"
+            className="ag-btn-primary inline-flex px-5 py-2 text-sm"
           >
             Crear primer curso
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {courses.map((course: Course) => (
-            <div
-              key={course.id}
-              className="bg-white rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-shadow"
-            >
-              {/* Info row */}
-              <div className="flex items-center gap-4 p-5">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#1A56DB] to-[#38BDF8] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
-                  {course.title.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-semibold text-[#050F1F]">
-                      {course.title}
-                    </h3>
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${
-                        course.published
-                          ? "bg-green-100 text-green-700"
-                          : "bg-amber-100 text-amber-700"
-                      }`}
-                    >
-                      {course.published ? "Publicado" : "Borrador"}
-                    </span>
+        <div className="grid gap-3">
+          {courses.map((course: Course, idx: number) => {
+            const initial = course.title.charAt(0).toUpperCase();
+            const hues = [
+              "var(--ag-navy)",
+              "#2D6A4F",
+              "#6B3FA0",
+              "#1D6F8E",
+              "#8B4513",
+              "#1A5F4A",
+            ];
+            const accentColor = hues[idx % hues.length];
+
+            return (
+              <div
+                key={course.id}
+                className="bg-white rounded-xl overflow-hidden transition-shadow hover:shadow-md"
+                style={{
+                  border: "1px solid var(--ag-border-light)",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+                }}
+              >
+                {/* Info row */}
+                <div className="flex items-center gap-4 p-4">
+                  <div
+                    className="w-11 h-11 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                    style={{ background: accentColor }}
+                  >
+                    {initial}
                   </div>
-                  <p className="text-sm text-[#050F1F]/50 mt-0.5 truncate">
-                    {course.description ?? "Sin descripción"}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3
+                        className="font-semibold text-sm"
+                        style={{ color: "var(--ag-text)" }}
+                      >
+                        {course.title}
+                      </h3>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[11px] font-medium flex-shrink-0 ${
+                          course.published
+                            ? "bg-green-100 text-green-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {course.published ? "Publicado" : "Borrador"}
+                      </span>
+                    </div>
+                    <p
+                      className="text-xs mt-0.5 truncate"
+                      style={{ color: "var(--ag-text-muted)" }}
+                    >
+                      {course.description ?? "Sin descripcion"}
+                    </p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p
+                      className="text-xl font-bold"
+                      style={{ color: "var(--ag-navy)" }}
+                    >
+                      {countMap[course.id] ?? 0}
+                    </p>
+                    <p className="text-xs" style={{ color: "var(--ag-text-muted)" }}>
+                      alumnos
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="text-2xl font-bold text-[#1A56DB]">
-                    {countMap[course.id] ?? 0}
-                  </p>
-                  <p className="text-xs text-[#050F1F]/40">alumnos</p>
-                </div>
-              </div>
-              {/* Actions row */}
-              <div className="flex items-center justify-between gap-3 px-5 py-3 border-t border-black/5 flex-wrap">
-                <div className="flex items-center gap-2 flex-wrap">
+
+                {/* Actions row */}
+                <div
+                  className="flex items-center gap-2 px-4 py-2.5 flex-wrap"
+                  style={{ borderTop: "1px solid var(--ag-border-light)" }}
+                >
                   <Link
                     href={`/dashboard/teacher/courses/${course.id}/materials`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                    style={{
+                      background: "rgba(30,58,95,0.06)",
+                      color: "var(--ag-navy)",
+                      border: "1px solid rgba(30,58,95,0.12)",
+                    }}
                   >
                     Materiales
                   </Link>
                   <Link
                     href={`/dashboard/teacher/courses/${course.id}/students`}
-                    className="px-3 py-1.5 rounded-lg bg-[#F0F9FF] hover:bg-[#BAE6FD]/40 text-[#1A56DB] text-xs font-medium transition-colors border border-[#BAE6FD]"
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                    style={{
+                      background: "rgba(30,58,95,0.06)",
+                      color: "var(--ag-navy)",
+                      border: "1px solid rgba(30,58,95,0.12)",
+                    }}
                   >
                     Alumnos
                   </Link>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex-1" />
                   <EditCourseButton course={course} />
                   <DeleteCourseButton
                     courseId={course.id}
@@ -185,8 +256,8 @@ export default function TeacherDashboardView({
                   />
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
