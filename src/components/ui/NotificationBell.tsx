@@ -78,7 +78,10 @@ export function NotificationBell({ userId }: { userId: string }) {
   function handleClick(notif: Notif) {
     if (!notif.is_read) {
       setNotifs(prev => prev.map(n => n.id === notif.id ? { ...n, is_read: true } : n));
-      startTransition(() => markNotificationAsRead(notif.id));
+      startTransition(async () => {
+        await markNotificationAsRead(notif.id);
+        router.refresh();
+      });
     }
     setOpen(false);
     if (notif.link_url) router.push(notif.link_url);
@@ -86,7 +89,10 @@ export function NotificationBell({ userId }: { userId: string }) {
 
   function handleMarkAll() {
     setNotifs(prev => prev.map(n => ({ ...n, is_read: true })));
-    startTransition(() => markAllNotificationsAsRead());
+    startTransition(async () => {
+      await markAllNotificationsAsRead();
+      router.refresh();
+    });
   }
 
   function timeAgo(date: string) {
