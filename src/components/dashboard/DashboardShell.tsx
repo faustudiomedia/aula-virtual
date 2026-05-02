@@ -23,7 +23,7 @@ export default function DashboardShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen" style={{ background: "var(--ag-content-bg)" }}>
+    <div className="flex min-h-screen" style={{ background: "var(--ag-bg)" }}>
 
       {/* Mobile backdrop */}
       {sidebarOpen && (
@@ -48,22 +48,43 @@ export default function DashboardShell({
       <div className="flex-1 flex flex-col min-w-0">
 
         {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-white/80 backdrop-blur-md border-b border-slate-200/70 shadow-sm">
+        <header className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-white/80 backdrop-blur-md border-b shadow-sm"
+          style={{ borderColor: "var(--ag-border-light)" }}>
           <button onClick={() => setSidebarOpen(true)}
-            className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors text-slate-500"
+            className="md:hidden p-2 rounded-xl hover:bg-black/5 transition-colors"
+            style={{ color: "var(--ag-text-muted)" }}
             aria-label="Abrir menú">
             <Menu size={20} />
           </button>
 
           {/* Mobile institute name */}
-          <span className="font-semibold text-slate-800 text-sm truncate flex-1 md:hidden">
+          <span className="font-semibold text-sm truncate flex-1 md:hidden"
+            style={{ color: "var(--ag-text)" }}>
             {instituteName}
           </span>
 
-          {/* Desktop spacer */}
+          {/* Desktop search */}
           <div className="hidden md:flex flex-1 items-center gap-3">
             <div className="relative max-w-sm w-full">
-              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2"
+                style={{ color: "var(--ag-text-light)" }} />
               <input
                 placeholder="Buscar..."
-                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl bg-slate-100 border border-transparent focus:border-vio
+                className="w-full pl-9 pr-4 py-2 text-sm rounded-xl focus:outline-none transition-colors"
+                style={{
+                  background: "var(--ag-surface-alt)",
+                  border: "1px solid var(--ag-border)",
+                  color: "var(--ag-text)",
+                }}
+              />
+            </div>
+          </div>
+
+          <NotificationBell userId={userId} />
+        </header>
+
+        <main className="flex-1 overflow-auto">{children}</main>
+      </div>
+    </div>
+  );
+}

@@ -291,4 +291,3 @@ export default function StudentCoursesCatalogView({ instituteId, userId }: Props
     </div>
   );
 }
-           
